@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@mohasinac/http";
-import type { WishlistResponse } from "../types";
+import type { WishlistItem, WishlistResponse } from "../types";
 
 interface UseWishlistOptions {
   initialData?: WishlistResponse;
@@ -17,7 +17,7 @@ export function useWishlist(userId: string, opts?: UseWishlistOptions) {
     enabled: opts?.enabled !== false && !!userId,
   });
 
-  const ids = new Set((query.data?.items ?? []).map((i) => i.productId));
+  const ids = new Set((query.data?.items ?? []).map((i: WishlistItem) => i.productId));
 
   return {
     items: query.data?.items ?? [],
