@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output — never commit dist
+**/dist/
+
+# TypeScript incremental cache
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# npm
+npm-debug.log*
+.npm/
+
+# pnpm
+.pnpm-store/
+
+# Turbo
+.turbo/

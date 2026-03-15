@@ -1,0 +1,57 @@
+name: Manual Publish
+
+# Allows triggering a publish from the GitHub Actions UI without pushing a tag.
+# Useful for re-publishing a specific version after a failed run.
+on:
+  workflow_dispatch:
+    inputs:
+      filter:
+        description: "Comma-separated package names to publish (leave blank for all)"
+        required: false
+        default: ""
+      dry_run:
+        description: "Dry run — print what would be published without actually publishing"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  publish:
+    name: Manual Publish (@mohasinac/*)
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+          cache: "npm"
+
+      - name: Install root dependencies
+        run: npm install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Build packages
+        run: |
+          if [ -n "${{ inputs.filter }}" ]; then
+            node scripts/build-all.mjs --filter=${{ inputs.filter }}
+          else
+            node scripts/build-all.mjs
+          fi
+
+      - name: Publish packages
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          if [ -n "${{ inputs.filter }}" ]; then ARGS="$ARGS --filter=${{ inputs.filter }}"; fi
+          node scripts/publish-all.mjs $ARGS
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
