@@ -28,7 +28,9 @@
     "react-dom": ">=18.0.0",
     "next": ">=14.0.0",
     "next-intl": ">=3.0.0",
-    "@tanstack/react-query": ">=5.0.0"
+    "@tanstack/react-query": ">=5.0.0",
+    "@mohasinac/contracts": "^0.1.0",
+    "@mohasinac/http": "^0.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.6",
