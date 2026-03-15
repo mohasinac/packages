@@ -34,6 +34,10 @@ const BUILD_ORDER = [
   "feat-payments", "feat-checkout", "feat-orders",
   "feat-admin", "feat-events", "feat-auctions", "feat-promotions",
   "feat-seller", "feat-stores", "feat-pre-orders",
+  // Layer 5b — licorice-specific feature packages
+  "feat-consultation", "feat-concern", "feat-corporate", "feat-before-after",
+  // Layer 5c — hobson-specific feature packages
+  "feat-loyalty", "feat-collections", "feat-preorders", "feat-whatsapp-bot",
   // Layer 6 — CLI and scaffolding
   "cli", "eslint-plugin-letitrip", "create-app",
 ];
