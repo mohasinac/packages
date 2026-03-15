@@ -1,22 +1,22 @@
 {
-  "name": "@mohasinac/packages",
-  "version": "0.0.0",
-  "private": true,
-  "description": "Pluggable feature library for Next.js — SOLID + Provider/Adapter pattern",
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "node scripts/build-all.mjs",
-    "typecheck": "tsc --noEmit",
-    "publish:all": "node scripts/publish-all.mjs",
-    "clean": "node -e \"const{readdirSync,rmSync,existsSync}=require('fs');readdirSync('packages').forEach(p=>{const d='packages/'+p+'/dist';if(existsSync(d))rmSync(d,{recursive:true});});console.log('Cleaned all dist/');\""
-  },
-  "devDependencies": {
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.3",
-    "@types/node": "^22.0.0",
-    "@types/react": "^19.1.6",
-    "@types/react-dom": "^19.1.6"
-  }
+    "name": "@mohasinac/packages",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Pluggable feature library for Next.js — SOLID + Provider/Adapter pattern",
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "node scripts/build-all.mjs",
+        "typecheck": "tsc --noEmit",
+        "publish:all": "node scripts/publish-all.mjs",
+        "clean": "node -e \"const{readdirSync,rmSync,existsSync}=require('fs');readdirSync('packages').forEach(p=>{const d='packages/'+p+'/dist';if(existsSync(d))rmSync(d,{recursive:true});});console.log('Cleaned all dist/');\""
+    },
+    "devDependencies": {
+        "tsup": "^8.5.0",
+        "typescript": "^5.9.3",
+        "@types/node": "^22.0.0",
+        "@types/react": "^19.1.6",
+        "@types/react-dom": "^19.1.6"
+    }
 }
