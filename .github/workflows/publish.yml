@@ -19,25 +19,25 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read  # checkout only — no write needed
+      contents: write  # needed to create GitHub Releases
+      id-token: write  # needed for provenance attestation (optional but good practice)
 
     steps:
       # ── 1. Checkout ──────────────────────────────────────────────────────
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ── 2. Node with npm auth ─────────────────────────────────────────────
+      # ── 2. Node with npm auth + cache ────────────────────────────────────
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
+          cache: "npm"
 
       # ── 3. Install root devDeps (tsup, typescript, @types/*) ─────────────
       - name: Install root dependencies
-        run: npm install
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm ci
 
       # ── 4. Build all packages ─────────────────────────────────────────────
       - name: Build all packages

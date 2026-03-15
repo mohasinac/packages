@@ -122,18 +122,51 @@ npx @mohasinac/cli add feat-blog
 
 ---
 
-## Publishing
+## GitHub Actions
 
-### Automated (via GitHub Actions)
+Four workflows live in `.github/workflows/`:
 
-Tag a release — Actions builds + publishes all packages:
+| Workflow | Trigger | What it does |
+|----------|---------|--------------|
+| `ci.yml` | push to `main`, pull requests | Typecheck + build all 47 packages |
+| `publish.yml` | tag push `v*.*.*` | Build + publish all packages + create GitHub Release |
+| `manual-publish.yml` | workflow_dispatch | Publish with optional `filter` + `dry_run` inputs |
+| `version-bump.yml` | workflow_dispatch | Bump version in all `package.json` files, commit, tag (triggers publish) |
+
+### One-time setup
+
+**1. Add `NPM_TOKEN` secret**  
+Generate an npm **Automation** token (bypasses 2FA) at:  
+`https://www.npmjs.com/settings/<username>/tokens`  
+
+Add it at:  
+`https://github.com/mohasinac/packages/settings/secrets/actions` → New repository secret → Name: `NPM_TOKEN`
+
+**2. (Optional) Add `PAT_TOKEN` secret**  
+The `version-bump.yml` workflow pushes a commit + tag. If you want that tag-push to  
+**trigger `publish.yml`**, a Personal Access Token with `repo` scope is needed (pushes  
+from `GITHUB_TOKEN` do not re-trigger workflows). Create one at:  
+`https://github.com/settings/tokens` then add as `PAT_TOKEN` secret.  
+If omitted, manually re-run `publish.yml` after the version bump commit.
+
+### Release workflow (recommended)
 
 ```bash
+# Option A — via GitHub UI (no local setup needed)
+# 1. Actions → Version Bump → Run workflow → pick bump_type (patch/minor/major)
+# 2. Version Bump commits + tags → publish.yml auto-triggers → all 47 packages published
+
+# Option B — via git tag (local)
+node scripts/bump-version.mjs 0.2.0   # updates all package.json files
+git add packages/*/package.json
+git commit -m "chore: bump to v0.2.0"
 git tag v0.2.0
-git push --tags
+git push origin main --follow-tags     # publish.yml triggers on tag push
 ```
 
-### Manual
+---
+
+## Publishing (manual / local)
 
 ```bash
 # 1. Set npm token
@@ -142,7 +175,7 @@ echo "//registry.npmjs.org/:_authToken=npm_YOUR_TOKEN" >> ~/.npmrc
 # 2. Build
 node scripts/build-all.mjs
 
-# 3. Publish
+# 3. Publish (skips already-published versions automatically)
 node scripts/publish-all.mjs
 
 # Dry run first
@@ -159,17 +192,18 @@ node scripts/publish-all.mjs --filter=contracts,core,errors
 All packages share `tsconfig.json` path aliases — no `npm link` required:
 
 ```bash
-npm install           # hoists tsup + typescript to root node_modules
-node scripts/build-all.mjs   # build all in dependency order
+npm ci                         # hoists tsup + typescript to root node_modules
+node scripts/build-all.mjs     # build all in dependency order
 ```
 
 ---
 
-## GitHub Secrets required
+## Required GitHub Secrets
 
-| Secret | Description |
-|--------|-------------|
-| `NPM_TOKEN` | npm Automation token — generate at https://www.npmjs.com/settings/tokens |
+| Secret | Required | Description |
+|--------|----------|-------------|
+| `NPM_TOKEN` | **Yes** | npm Automation token — generate at npmjs.com/settings/tokens |
+| `PAT_TOKEN` | Optional | GitHub PAT with `repo` scope — allows `version-bump.yml` push to trigger `publish.yml` |
 
 ---
 

@@ -9,8 +9,7 @@
     "scripts": {
         "build": "node scripts/build-all.mjs",
         "typecheck": "tsc --noEmit",
-        "publish:all": "node scripts/publish-all.mjs",
-        "clean": "node -e \"const{readdirSync,rmSync,existsSync}=require('fs');readdirSync('packages').forEach(p=>{const d='packages/'+p+'/dist';if(existsSync(d))rmSync(d,{recursive:true});});console.log('Cleaned all dist/');\""
+        "publish:all": "node scripts/publish-all.mjs",        "bump": "node scripts/bump-version.mjs",        "clean": "node -e \"const{readdirSync,rmSync,existsSync}=require('fs');readdirSync('packages').forEach(p=>{const d='packages/'+p+'/dist';if(existsSync(d))rmSync(d,{recursive:true});});console.log('Cleaned all dist/');\""
     },
     "devDependencies": {
         "tsup": "^8.5.0",
