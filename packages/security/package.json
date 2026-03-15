@@ -26,7 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mohasinac/errors": "workspace:*"
+    "@mohasinac/errors": "^0.1.0"
   },
   "peerDependencies": {
     "next": ">=14.0.0"
