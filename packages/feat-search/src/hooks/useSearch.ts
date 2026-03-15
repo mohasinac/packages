@@ -27,7 +27,7 @@ export function useSearch(searchParams: string, options?: UseSearchOptions) {
     queryKey: ["search", searchParams],
     queryFn: () => apiClient.get<SearchResponse>(`/api/search?${searchParams}`),
     enabled: searchParams.length > 0,
-    placeholderData: (prev: SearchResponse | undefined) => prev,
+    placeholderData: (prev) => prev,
   });
 
   return {

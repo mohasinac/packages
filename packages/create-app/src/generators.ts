@@ -45,7 +45,10 @@ export default getRequestConfig(async ({ locale }) => {
 
 // ─── middleware.ts ────────────────────────────────────────────────────────────
 
-export function generateMiddleware(locales: string[], auth: ProviderSelections["auth"]): string {
+export function generateMiddleware(
+  locales: string[],
+  auth: ProviderSelections["auth"],
+): string {
   const localeList = JSON.stringify(locales);
   const defaultLocale = locales[0] ?? "en";
 
@@ -97,7 +100,10 @@ export const config = {
 
 // ─── constants/site.ts ────────────────────────────────────────────────────────
 
-export function generateSiteConfig(projectName: string, locales: string[]): string {
+export function generateSiteConfig(
+  projectName: string,
+  locales: string[],
+): string {
   const defaultLocale = locales[0] ?? "en";
   return `import type { SiteConfig } from "@mohasinac/contracts";
 
@@ -167,7 +173,10 @@ ${lines.join("\n")}
 
 // ─── app/layout.tsx ───────────────────────────────────────────────────────────
 
-export function generateRootLayout(projectName: string, locales: string[]): string {
+export function generateRootLayout(
+  projectName: string,
+  locales: string[],
+): string {
   const defaultLocale = locales[0] ?? "en";
   return `import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";

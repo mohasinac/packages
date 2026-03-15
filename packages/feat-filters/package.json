@@ -27,9 +27,7 @@
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
-    "@mohasinac/contracts": "^0.1.0",
-    "@mohasinac/http": "^0.1.0"
+    "react-dom": ">=18.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

@@ -41,7 +41,10 @@ function isEmptyDir(dir: string): boolean {
 
 function confirm(question: string): Promise<boolean> {
   return new Promise((resolve) => {
-    const rl = createInterface({ input: process.stdin, output: process.stdout });
+    const rl = createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
     rl.question(question, (ans) => {
       rl.close();
       resolve(["y", "yes"].includes(ans.trim().toLowerCase()));
@@ -52,7 +55,8 @@ function confirm(question: string): Promise<boolean> {
 // ─── main ─────────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
-  const { projectName, locales, providers, features, targetDir } = await runPrompts();
+  const { projectName, locales, providers, features, targetDir } =
+    await runPrompts();
   const absTarget = resolve(process.cwd(), targetDir);
 
   if (existsSync(absTarget) && !isEmptyDir(absTarget)) {
@@ -76,14 +80,14 @@ async function main(): Promise<void> {
   }
 
   // ── Config files ──────────────────────────────────────────────────────────
-  gen("providers.config.ts",     generateProvidersConfig(providers));
-  gen("features.config.ts",      generateFeaturesConfig(features));
-  gen("next.config.js",          generateNextConfig());
-  gen(".env.example",            generateEnvExample(providers));
-  gen("constants/site.ts",       generateSiteConfig(projectName, locales));
-  gen("constants/theme.ts",      generateThemeConfig());
-  gen("i18n/request.ts",         generateI18nRequest(locales));
-  gen("middleware.ts",           generateMiddleware(locales, providers.auth));
+  gen("providers.config.ts", generateProvidersConfig(providers));
+  gen("features.config.ts", generateFeaturesConfig(features));
+  gen("next.config.js", generateNextConfig());
+  gen(".env.example", generateEnvExample(providers));
+  gen("constants/site.ts", generateSiteConfig(projectName, locales));
+  gen("constants/theme.ts", generateThemeConfig());
+  gen("i18n/request.ts", generateI18nRequest(locales));
+  gen("middleware.ts", generateMiddleware(locales, providers.auth));
   gen("app/[locale]/layout.tsx", generateRootLayout(projectName, locales));
 
   // ── Locale message stubs ──────────────────────────────────────────────────

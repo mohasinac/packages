@@ -90,7 +90,9 @@
       "@mohasinac/seo": ["../../packages/seo/src"],
       "@mohasinac/seo/*": ["../../packages/seo/src/*"],
       "@mohasinac/storage-firebase": ["../../packages/storage-firebase/src"],
-      "@mohasinac/storage-firebase/*": ["../../packages/storage-firebase/src/*"],
+      "@mohasinac/storage-firebase/*": [
+        "../../packages/storage-firebase/src/*"
+      ],
       "@mohasinac/tokens": ["../../packages/tokens/src"],
       "@mohasinac/tokens/*": ["../../packages/tokens/src/*"],
       "@mohasinac/ui": ["../../packages/ui/src"],

@@ -32,7 +32,6 @@
     "eslint": "^9.37.0"
   },
   "peerDependencies": {
-    "@mohasinac/contracts": "^0.1.0",
-    "@mohasinac/tokens": "^0.1.0"
+    "@mohasinac/contracts": "workspace:*"
   }
 }

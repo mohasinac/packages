@@ -26,7 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mohasinac/contracts": "^0.1.0"
+    "@mohasinac/contracts": "workspace:*"
   },
   "peerDependencies": {
     "resend": ">=3.0.0"

@@ -97,7 +97,7 @@ async function tryLoadFeatureMessages(
   try {
     const pkg = `@mohasinac/feat-${featureKey}`;
     const mod = await _dynamicImport(`${pkg}/messages/${locale}.json`);
-    return ((mod.default ?? mod) as Messages);
+    return (mod.default ?? mod) as Messages;
   } catch {
     // Package not installed or locale file missing — safe to ignore
     return {};
@@ -134,7 +134,7 @@ export async function mergeFeatureMessages(
   let projectMessages: Messages = {};
   try {
     const mod = await _dynamicImport(`../../messages/${locale}.json`);
-    projectMessages = ((mod.default ?? mod) as Messages);
+    projectMessages = (mod.default ?? mod) as Messages;
   } catch {
     // Tolerate missing file in edge cases (e.g. test environments)
   }

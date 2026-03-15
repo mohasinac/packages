@@ -14,9 +14,9 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "files": [
@@ -27,7 +27,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@mohasinac/contracts": "^0.1.0"
+    "@mohasinac/contracts": "workspace:*"
   },
   "devDependencies": {
     "tsup": "^8.0.0",

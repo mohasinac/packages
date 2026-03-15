@@ -15,39 +15,105 @@ export interface FeatureDef {
 }
 
 export const ALL_FEATURES: FeatureDef[] = [
-  { key: "layout",     label: "Layout",     hint: "Navbar, footer, sidebar, bottom nav" },
-  { key: "forms",      label: "Forms",      hint: "Input, Textarea, Select, Checkbox, Radio, Slider" },
-  { key: "filters",    label: "Filters",    hint: "FilterPanel, RangeFilter, SwitchFilter" },
-  { key: "media",      label: "Media",      hint: "MediaImage, MediaVideo, MediaAvatar, MediaLightbox" },
-  { key: "auth",       label: "Auth",       hint: "Sign-in, sign-up, guards, useAuth hook" },
-  { key: "account",    label: "Account",    hint: "Profile, addresses, order history" },
-  { key: "products",   label: "Products",   hint: "Product grid, detail, variants" },
+  {
+    key: "layout",
+    label: "Layout",
+    hint: "Navbar, footer, sidebar, bottom nav",
+  },
+  {
+    key: "forms",
+    label: "Forms",
+    hint: "Input, Textarea, Select, Checkbox, Radio, Slider",
+  },
+  {
+    key: "filters",
+    label: "Filters",
+    hint: "FilterPanel, RangeFilter, SwitchFilter",
+  },
+  {
+    key: "media",
+    label: "Media",
+    hint: "MediaImage, MediaVideo, MediaAvatar, MediaLightbox",
+  },
+  {
+    key: "auth",
+    label: "Auth",
+    hint: "Sign-in, sign-up, guards, useAuth hook",
+  },
+  {
+    key: "account",
+    label: "Account",
+    hint: "Profile, addresses, order history",
+  },
+  {
+    key: "products",
+    label: "Products",
+    hint: "Product grid, detail, variants",
+  },
   { key: "categories", label: "Categories", hint: "Category grid and helpers" },
-  { key: "cart",       label: "Cart",       hint: "Cart drawer, line items, totals" },
-  { key: "wishlist",   label: "Wishlist",   hint: "Wishlist page/button/hooks" },
-  { key: "checkout",   label: "Checkout",   hint: "Multi-step checkout stepper" },
-  { key: "orders",     label: "Orders",     hint: "Order list, order detail, timeline" },
-  { key: "payments",   label: "Payments",   hint: "Payment method selector, webhooks" },
-  { key: "blog",       label: "Blog",       hint: "Blog list, blog post, categories" },
-  { key: "reviews",    label: "Reviews",    hint: "Review list, write review, moderation" },
-  { key: "faq",        label: "FAQ",        hint: "Accordion FAQ section" },
-  { key: "search",     label: "Search",     hint: "Global search UI with filters" },
-  { key: "homepage",   label: "Homepage",   hint: "Hero section, featured products" },
-  { key: "admin",      label: "Admin",      hint: "Admin dashboard, data tables, stats" },
-  { key: "events",     label: "Events",     hint: "Events list, detail, entries, leaderboard (letitrip only)" },
-  { key: "auctions",   label: "Auctions",   hint: "Auction cards, live countdown, bid feed (letitrip only)" },
-  { key: "promotions", label: "Promotions", hint: "Coupon cards, apply coupon (letitrip only)" },
-  { key: "seller",     label: "Seller",     hint: "Seller dashboard, payouts, analytics (letitrip only)" },
-  { key: "stores",     label: "Stores",     hint: "Store list, store header, store products (letitrip only)" },
-  { key: "pre-orders", label: "Pre-orders", hint: "Pre-order badge, status tracking (letitrip only)" },
+  { key: "cart", label: "Cart", hint: "Cart drawer, line items, totals" },
+  { key: "wishlist", label: "Wishlist", hint: "Wishlist page/button/hooks" },
+  { key: "checkout", label: "Checkout", hint: "Multi-step checkout stepper" },
+  {
+    key: "orders",
+    label: "Orders",
+    hint: "Order list, order detail, timeline",
+  },
+  {
+    key: "payments",
+    label: "Payments",
+    hint: "Payment method selector, webhooks",
+  },
+  { key: "blog", label: "Blog", hint: "Blog list, blog post, categories" },
+  {
+    key: "reviews",
+    label: "Reviews",
+    hint: "Review list, write review, moderation",
+  },
+  { key: "faq", label: "FAQ", hint: "Accordion FAQ section" },
+  { key: "search", label: "Search", hint: "Global search UI with filters" },
+  {
+    key: "homepage",
+    label: "Homepage",
+    hint: "Hero section, featured products",
+  },
+  { key: "admin", label: "Admin", hint: "Admin dashboard, data tables, stats" },
+  {
+    key: "events",
+    label: "Events",
+    hint: "Events list, detail, entries, leaderboard (letitrip only)",
+  },
+  {
+    key: "auctions",
+    label: "Auctions",
+    hint: "Auction cards, live countdown, bid feed (letitrip only)",
+  },
+  {
+    key: "promotions",
+    label: "Promotions",
+    hint: "Coupon cards, apply coupon (letitrip only)",
+  },
+  {
+    key: "seller",
+    label: "Seller",
+    hint: "Seller dashboard, payouts, analytics (letitrip only)",
+  },
+  {
+    key: "stores",
+    label: "Stores",
+    hint: "Store list, store header, store products (letitrip only)",
+  },
+  {
+    key: "pre-orders",
+    label: "Pre-orders",
+    hint: "Pre-order badge, status tracking (letitrip only)",
+  },
 ];
 
 // ─── features.config.ts generator ────────────────────────────────────────────
 
 /** Generate features.config.ts content from a list of enabled feature keys. */
-export function generateFeaturesConfig(
-  enabled: Set<string>,
-): string {
+export function generateFeaturesConfig(enabled: Set<string>): string {
   const lines = ALL_FEATURES.map(({ key }) => {
     const value = enabled.has(key) ? "true " : "false";
     return `  "${key}": ${value},`;
@@ -66,7 +132,10 @@ export default features;
 // ─── Route stub helpers ───────────────────────────────────────────────────────
 
 /** Write a file only if it does not already exist. */
-function writeIfMissing(filePath: string, content: string): "created" | "skipped" {
+function writeIfMissing(
+  filePath: string,
+  content: string,
+): "created" | "skipped" {
   if (existsSync(filePath)) return "skipped";
   mkdirSync(dirname(filePath), { recursive: true });
   writeFileSync(filePath, content, "utf-8");
@@ -84,25 +153,25 @@ function pageStub(featureKey: string): string {
  * after scaffolding for the full set of routes and API stubs.
  */
 const FEATURE_PAGE_SEGMENTS: Record<string, string[]> = {
-  auth:       ["[locale]/(auth)/sign-in", "[locale]/(auth)/sign-up"],
-  account:    ["[locale]/account"],
-  products:   ["[locale]/products", "[locale]/products/[slug]"],
+  auth: ["[locale]/(auth)/sign-in", "[locale]/(auth)/sign-up"],
+  account: ["[locale]/account"],
+  products: ["[locale]/products", "[locale]/products/[slug]"],
   categories: ["[locale]/categories", "[locale]/categories/[slug]"],
-  cart:       [],                                            // cart is usually a drawer, no page
-  wishlist:   ["[locale]/wishlist"],
-  checkout:   ["[locale]/checkout"],
-  orders:     ["[locale]/orders", "[locale]/orders/[id]"],
-  blog:       ["[locale]/blog", "[locale]/blog/[slug]"],
-  reviews:    [],                                            // embedded on product pages
-  faq:        ["[locale]/faq"],
-  search:     ["[locale]/search"],
-  homepage:   ["[locale]"],
-  admin:      ["[locale]/(admin)/admin"],
-  events:     ["[locale]/events", "[locale]/events/[slug]"],
-  auctions:   ["[locale]/auctions", "[locale]/auctions/[slug]"],
+  cart: [], // cart is usually a drawer, no page
+  wishlist: ["[locale]/wishlist"],
+  checkout: ["[locale]/checkout"],
+  orders: ["[locale]/orders", "[locale]/orders/[id]"],
+  blog: ["[locale]/blog", "[locale]/blog/[slug]"],
+  reviews: [], // embedded on product pages
+  faq: ["[locale]/faq"],
+  search: ["[locale]/search"],
+  homepage: ["[locale]"],
+  admin: ["[locale]/(admin)/admin"],
+  events: ["[locale]/events", "[locale]/events/[slug]"],
+  auctions: ["[locale]/auctions", "[locale]/auctions/[slug]"],
   promotions: ["[locale]/promotions"],
-  seller:     ["[locale]/seller", "[locale]/seller/dashboard"],
-  stores:     ["[locale]/stores", "[locale]/stores/[slug]"],
+  seller: ["[locale]/seller", "[locale]/seller/dashboard"],
+  stores: ["[locale]/stores", "[locale]/stores/[slug]"],
   "pre-orders": ["[locale]/pre-orders"],
 };
 

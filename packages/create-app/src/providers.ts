@@ -50,7 +50,7 @@ export const ENV_KEYS: Record<string, string[]> = {
   "db.mongodb": ["MONGODB_URI"],
 
   // Auth
-  "auth.firebase": [],                                        // shares DB Firebase keys
+  "auth.firebase": [], // shares DB Firebase keys
   "auth.nextauth": ["NEXTAUTH_SECRET", "NEXTAUTH_URL"],
   "auth.clerk": [
     "CLERK_SECRET_KEY",
@@ -61,12 +61,18 @@ export const ENV_KEYS: Record<string, string[]> = {
 
   // Email
   "email.resend": ["RESEND_API_KEY"],
-  "email.nodemailer": ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASSWORD", "SMTP_FROM"],
+  "email.nodemailer": [
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_PASSWORD",
+    "SMTP_FROM",
+  ],
   "email.sendgrid": ["SENDGRID_API_KEY"],
   "email.postmark": ["POSTMARK_SERVER_TOKEN"],
 
   // Storage
-  "storage.firebase": [],                                     // shares DB Firebase keys
+  "storage.firebase": [], // shares DB Firebase keys
   "storage.s3": [
     "AWS_ACCESS_KEY_ID",
     "AWS_SECRET_ACCESS_KEY",
@@ -96,8 +102,16 @@ export const ENV_KEYS: Record<string, string[]> = {
   "search.meilisearch": ["MEILISEARCH_HOST", "MEILISEARCH_MASTER_KEY"],
 
   // Payment
-  "payment.razorpay": ["RAZORPAY_KEY_ID", "RAZORPAY_KEY_SECRET", "RAZORPAY_WEBHOOK_SECRET"],
-  "payment.stripe": ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"],
+  "payment.razorpay": [
+    "RAZORPAY_KEY_ID",
+    "RAZORPAY_KEY_SECRET",
+    "RAZORPAY_WEBHOOK_SECRET",
+  ],
+  "payment.stripe": [
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+  ],
 
   // Shipping
   "shipping.shiprocket": ["SHIPROCKET_EMAIL", "SHIPROCKET_PASSWORD"],
@@ -121,9 +135,12 @@ export function collectEnvKeys(selections: ProviderSelections): string[] {
   add(ENV_KEYS[`auth.${selections.auth}`] ?? []);
   add(ENV_KEYS[`email.${selections.email}`] ?? []);
   add(ENV_KEYS[`storage.${selections.storage}`] ?? []);
-  if (selections.search !== "none") add(ENV_KEYS[`search.${selections.search}`] ?? []);
-  if (selections.payment !== "none") add(ENV_KEYS[`payment.${selections.payment}`] ?? []);
-  if (selections.shipping !== "none") add(ENV_KEYS[`shipping.${selections.shipping}`] ?? []);
+  if (selections.search !== "none")
+    add(ENV_KEYS[`search.${selections.search}`] ?? []);
+  if (selections.payment !== "none")
+    add(ENV_KEYS[`payment.${selections.payment}`] ?? []);
+  if (selections.shipping !== "none")
+    add(ENV_KEYS[`shipping.${selections.shipping}`] ?? []);
 
   return result;
 }
@@ -238,15 +255,19 @@ function sessionValue(auth: AuthProvider): string {
 
 function emailValue(email: EmailProvider): string {
   if (email === "resend") return "createResendProvider({})";
-  if (email === "nodemailer") return `createNodemailerProvider({\n  host: process.env.SMTP_HOST!,\n  port: Number(process.env.SMTP_PORT ?? 587),\n  user: process.env.SMTP_USER!,\n  password: process.env.SMTP_PASSWORD!,\n  from: process.env.SMTP_FROM!,\n})`;
-  if (email === "sendgrid") return "createSendGridProvider({ apiKey: process.env.SENDGRID_API_KEY! })";
+  if (email === "nodemailer")
+    return `createNodemailerProvider({\n  host: process.env.SMTP_HOST!,\n  port: Number(process.env.SMTP_PORT ?? 587),\n  user: process.env.SMTP_USER!,\n  password: process.env.SMTP_PASSWORD!,\n  from: process.env.SMTP_FROM!,\n})`;
+  if (email === "sendgrid")
+    return "createSendGridProvider({ apiKey: process.env.SENDGRID_API_KEY! })";
   return "createPostmarkProvider({ serverToken: process.env.POSTMARK_SERVER_TOKEN! })";
 }
 
 function storageValue(storage: StorageProvider): string {
   if (storage === "firebase") return "firebaseStorageProvider";
-  if (storage === "s3") return `createS3Provider({\n  region: process.env.AWS_REGION!,\n  bucket: process.env.AWS_S3_BUCKET!,\n  accessKeyId: process.env.AWS_ACCESS_KEY_ID!,\n  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,\n})`;
-  if (storage === "cloudinary") return `createCloudinaryProvider({\n  cloudName: process.env.CLOUDINARY_CLOUD_NAME!,\n  apiKey: process.env.CLOUDINARY_API_KEY!,\n  apiSecret: process.env.CLOUDINARY_API_SECRET!,\n})`;
+  if (storage === "s3")
+    return `createS3Provider({\n  region: process.env.AWS_REGION!,\n  bucket: process.env.AWS_S3_BUCKET!,\n  accessKeyId: process.env.AWS_ACCESS_KEY_ID!,\n  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,\n})`;
+  if (storage === "cloudinary")
+    return `createCloudinaryProvider({\n  cloudName: process.env.CLOUDINARY_CLOUD_NAME!,\n  apiKey: process.env.CLOUDINARY_API_KEY!,\n  apiSecret: process.env.CLOUDINARY_API_SECRET!,\n})`;
   return `createUploadThingProvider({\n  secret: process.env.UPLOADTHING_SECRET!,\n  appId: process.env.UPLOADTHING_APP_ID!,\n})`;
 }
 
@@ -256,26 +277,30 @@ function cssValue(css: CssProvider): string {
 
 function searchLines(search: SearchProvider): string {
   if (search === "none") return "";
-  if (search === "algolia") return `  search: createAlgoliaProvider({\n    appId: process.env.ALGOLIA_APP_ID!,\n    apiKey: process.env.ALGOLIA_API_KEY!,\n  }),`;
-  if (search === "typesense") return `  search: createTypesenseProvider({\n    host: process.env.TYPESENSE_HOST!,\n    port: Number(process.env.TYPESENSE_PORT ?? 8108),\n    protocol: process.env.TYPESENSE_PROTOCOL ?? "http",\n    apiKey: process.env.TYPESENSE_API_KEY!,\n  }),`;
+  if (search === "algolia")
+    return `  search: createAlgoliaProvider({\n    appId: process.env.ALGOLIA_APP_ID!,\n    apiKey: process.env.ALGOLIA_API_KEY!,\n  }),`;
+  if (search === "typesense")
+    return `  search: createTypesenseProvider({\n    host: process.env.TYPESENSE_HOST!,\n    port: Number(process.env.TYPESENSE_PORT ?? 8108),\n    protocol: process.env.TYPESENSE_PROTOCOL ?? "http",\n    apiKey: process.env.TYPESENSE_API_KEY!,\n  }),`;
   return `  search: createMeilisearchProvider({\n    host: process.env.MEILISEARCH_HOST!,\n    masterKey: process.env.MEILISEARCH_MASTER_KEY,\n  }),`;
 }
 
 function paymentLines(payment: PaymentProvider): string {
   if (payment === "none") return "";
-  if (payment === "razorpay") return `  payment: createRazorpayProvider({\n    keyId: process.env.RAZORPAY_KEY_ID!,\n    keySecret: process.env.RAZORPAY_KEY_SECRET!,\n    webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET!,\n  }),`;
+  if (payment === "razorpay")
+    return `  payment: createRazorpayProvider({\n    keyId: process.env.RAZORPAY_KEY_ID!,\n    keySecret: process.env.RAZORPAY_KEY_SECRET!,\n    webhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET!,\n  }),`;
   return `  payment: createStripeProvider({\n    secretKey: process.env.STRIPE_SECRET_KEY!,\n    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,\n  }),`;
 }
 
 function shippingLines(shipping: ShippingProvider): string {
   if (shipping === "none") return "";
-  if (shipping === "shiprocket") return `  shipping: createShiprocketProvider({\n    email: process.env.SHIPROCKET_EMAIL!,\n    password: process.env.SHIPROCKET_PASSWORD!,\n  }),`;
+  if (shipping === "shiprocket")
+    return `  shipping: createShiprocketProvider({\n    email: process.env.SHIPROCKET_EMAIL!,\n    password: process.env.SHIPROCKET_PASSWORD!,\n  }),`;
   return `  shipping: createShippoProvider({ apiKey: process.env.SHIPPO_API_KEY! }),`;
 }
 
 /** Generate providers.config.ts content from provider selections. */
 export function generateProvidersConfig(s: ProviderSelections): string {
-  const lines = [
+  const lines: string[] = [
     `import { registerProviders } from "@mohasinac/contracts";`,
     importLine(`auth.${s.auth}`),
     importLine(`email.${s.email}`),

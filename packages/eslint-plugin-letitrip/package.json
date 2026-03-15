@@ -13,6 +13,9 @@
   "files": [
     "index.js"
   ],
+  "scripts": {
+    "build": "node -e ''"
+  },
   "peerDependencies": {
     "eslint": ">=9"
   }
