@@ -24,3 +24,38 @@ export interface WebhookVerifyInput {
   signature: string;
   secret: string;
 }
+
+export interface IncomingWebhookPayload {
+  /** Digits-only phone number, e.g. "919876543210" */
+  from: string;
+  body: string;
+}
+
+export interface SendWhatsAppInput {
+  /** Digits-only phone number, e.g. "919876543210" */
+  toPhone: string;
+  message: string;
+  accountSid: string;
+  authToken: string;
+  /** Twilio from number, e.g. "whatsapp:+14155238886" */
+  fromNumber: string;
+}
+
+/** Known order status values — extend as needed per project. */
+export type OrderStatusKey =
+  | "pending_payment"
+  | "payment_confirmed"
+  | "processing"
+  | "shipped"
+  | "out_for_delivery"
+  | "delivered"
+  | "cancelled"
+  | "refund_initiated"
+  | string;
+
+export interface StatusMessageInput {
+  orderId: string;
+  status: OrderStatusKey;
+  trackingNumber?: string;
+  courierName?: string;
+}

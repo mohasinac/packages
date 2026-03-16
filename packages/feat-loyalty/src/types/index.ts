@@ -1,4 +1,4 @@
-export interface LoyaltyConfig {
+﻿export interface LoyaltyConfig {
   coinsPerRupee: number;
   rupeePerCoin: number;
   minCoinsToRedeem: number;
@@ -40,4 +40,4 @@ export interface RedeemCoinsResult {
   discountAmount: number;
 }
 
-export { calculateCoinsEarned, calculateMaxRedeemable, coinsToRupees } from "./loyalty-math";
+export { calculateCoinsEarned, calculateMaxRedeemable, coinsToRupees, applyCoinsToOrder } from "./loyalty-math";

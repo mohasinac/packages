@@ -20,3 +20,17 @@ export function coinsToRupees(coins: number, config: LoyaltyConfig): number {
   if (coins <= 0) return 0;
   return Math.floor(coins * config.rupeePerCoin);
 }
+
+/**
+ * Calculate the INR discount for a given coin redemption.
+ * Ensures the discount never exceeds the order total.
+ */
+export function applyCoinsToOrder(
+  coinsToRedeem: number,
+  orderTotal: number,
+  config: LoyaltyConfig,
+): number {
+  if (!config.active || coinsToRedeem <= 0 || orderTotal <= 0) return 0;
+  const discount = coinsToRupees(coinsToRedeem, config);
+  return Math.min(discount, orderTotal);
+}
