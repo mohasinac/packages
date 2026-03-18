@@ -36,6 +36,20 @@ export { FirebaseRepository } from "./base.js";
 export { FirebaseSieveRepository } from "./sieve.js";
 export { FirebaseRealtimeRepository } from "./realtime.js";
 
+// IDbProvider implementation — registers Firebase as the database backend.
+// Wire once in providers.config.ts: db: firebaseDbProvider
+import { FirebaseRepository } from "./base.js";
+import type { IDbProvider, IRepository } from "@mohasinac/contracts";
+import type { DocumentData } from "firebase-admin/firestore";
+
+export const firebaseDbProvider: IDbProvider = {
+  getRepository<T>(collection: string): IRepository<T> {
+    return new FirebaseRepository<T & DocumentData>(
+      collection,
+    ) as unknown as IRepository<T>;
+  },
+};
+
 // Types re-exported for consumers
 export type {
   SieveModel,

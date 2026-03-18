@@ -75,3 +75,13 @@ export interface IRealtimeRepository<T> extends IRepository<T> {
     cb: (items: T[]) => void,
   ): () => void;
 }
+
+/**
+ * Database provider — creates IRepository<T> instances on demand.
+ * Registered once in providers.config.ts; feature packages call
+ * `getProviders().db.getRepository<T>(collection)` so they never
+ * import a concrete adapter (FirebaseRepository, PrismaRepository, …).
+ */
+export interface IDbProvider {
+  getRepository<T>(collection: string): IRepository<T>;
+}

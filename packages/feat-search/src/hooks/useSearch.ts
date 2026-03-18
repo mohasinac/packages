@@ -18,7 +18,7 @@ export function useSearch(searchParams: string, options?: UseSearchOptions) {
   const { data: categories } = useQuery<SearchCategoryOption[]>({
     queryKey: ["search", "categories"],
     queryFn: () =>
-      apiClient.get<SearchCategoryOption[]>("/api/categories/flat"),
+      apiClient.get<SearchCategoryOption[]>("/api/categories?flat=true"),
     initialData: options?.initialCategories,
     staleTime: 1000 * 60 * 5, // 5 min
   });

@@ -35,7 +35,7 @@ import type {
 import { getAdminDb } from "./admin.js";
 import { prepareForFirestore, deserializeTimestamps } from "./helpers.js";
 
-export abstract class FirebaseRepository<
+export class FirebaseRepository<
   T extends DocumentData,
 > implements IRepository<T> {
   protected readonly collection: string;

@@ -2,6 +2,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@mohasinac/http";
 import type { BlogPost, BlogListResponse, BlogListParams } from "../types";
+import type { BlogPostDetailResponse } from "../api/[slug]/route.js";
+
+export type { BlogListResponse };
 
 interface UseBlogPostsOptions {
   initialData?: BlogListResponse;
@@ -32,38 +35,34 @@ export function useBlogPosts(
   });
 
   return {
-    posts: query.data?.items ?? [],
-    total: query.data?.total ?? 0,
-    totalPages: query.data?.totalPages ?? 1,
-    page: query.data?.page ?? 1,
+    posts: query.data?.posts ?? [],
+    meta: query.data?.meta,
+    total: query.data?.meta?.total ?? 0,
+    totalPages: query.data?.meta?.totalPages ?? 1,
+    page: query.data?.meta?.page ?? 1,
     isLoading: query.isLoading,
     error: query.error,
   };
 }
 
 interface UseBlogPostOptions {
-  initialData?: BlogPost;
+  initialData?: BlogPostDetailResponse;
   enabled?: boolean;
 }
 
 export function useBlogPost(slug: string, opts?: UseBlogPostOptions) {
-  const postQuery = useQuery<BlogPost>({
-    queryKey: ["blog", slug],
-    queryFn: () => apiClient.get<BlogPost>(`/api/blog/${slug}`),
+  const query = useQuery<BlogPostDetailResponse>({
+    queryKey: ["blog", "post", slug],
+    queryFn: () =>
+      apiClient.get<BlogPostDetailResponse>(`/api/blog/${slug}`),
     initialData: opts?.initialData,
     enabled: opts?.enabled !== false && !!slug,
   });
 
-  const relatedQuery = useQuery<BlogPost[]>({
-    queryKey: ["blog", slug, "related"],
-    queryFn: () => apiClient.get<BlogPost[]>(`/api/blog/${slug}/related`),
-    enabled: !!postQuery.data?.id,
-  });
-
   return {
-    post: postQuery.data,
-    relatedPosts: relatedQuery.data ?? [],
-    isLoading: postQuery.isLoading,
-    error: postQuery.error,
+    post: query.data?.post ?? null,
+    related: query.data?.related ?? [],
+    isLoading: query.isLoading,
+    error: query.error,
   };
 }

@@ -8,15 +8,35 @@ import type {
   LeaderboardEntry,
 } from "../types";
 
-export function useEvent(id: string, opts?: { enabled?: boolean }) {
+interface UseEventOptions<T extends EventItem = EventItem> {
+  enabled?: boolean;
+  initialData?: EventItem;
+  /**
+   * Map the API item to a richer app-level type without forking the package.
+   * @example
+   * const { event } = useEvent<EventDocument>(id, {
+   *   transform: (raw) => ({ ...raw, registrationCount: 0 }),
+   * });
+   */
+  transform?: (item: EventItem) => T;
+}
+
+export function useEvent<T extends EventItem = EventItem>(
+  id: string,
+  opts?: UseEventOptions<T>,
+) {
   const { data, isLoading, error, refetch } = useQuery<EventItem | null>({
     queryKey: ["event", id],
     queryFn: () => apiClient.get<EventItem>(`/api/events/${id}`),
     enabled: (opts?.enabled ?? true) && !!id,
+    initialData: opts?.initialData,
   });
 
+  const event =
+    data && opts?.transform ? opts.transform(data) : (data as T | null);
+
   return {
-    event: data ?? null,
+    event: event ?? null,
     isLoading,
     error: error instanceof Error ? error.message : null,
     refetch,

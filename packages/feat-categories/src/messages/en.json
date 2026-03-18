@@ -4,5 +4,11 @@
   "noCategories": "No categories found",
   "exploreAll": "Explore All",
   "items": "{{count}} items",
-  "viewAll": "View All"
+  "viewAll": "View All",
+  "concern": {
+    "title": "Shop by Concern",
+    "subtitle": "Find products tailored to your skin and hair needs",
+    "seeAll": "See all concerns",
+    "noProducts": "No products found for this concern"
+  }
 }

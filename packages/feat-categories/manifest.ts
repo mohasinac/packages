@@ -10,6 +10,8 @@ export const manifest: FeatureManifest = {
       segment: "[locale]/categories/[slug]",
       exports: { default: "CategoryDetailView" },
     },
+    { segment: "[locale]/concern", exports: { default: "ConcernListPageView" } },
+    { segment: "[locale]/concern/[slug]", exports: { default: "ConcernPageView" } },
   ],
   apiRoutes: [
     { segment: "api/categories", methods: ["GET", "POST"] },

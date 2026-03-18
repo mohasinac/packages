@@ -51,8 +51,9 @@ export interface ProductListResponse {
   items: ProductItem[];
   total: number;
   page: number;
-  perPage: number;
+  pageSize: number;
   totalPages: number;
+  hasMore: boolean;
 }
 
 export interface ProductListParams {

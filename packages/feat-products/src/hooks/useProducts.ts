@@ -7,14 +7,27 @@ import type {
   ProductListParams,
 } from "../types";
 
-interface UseProductsOptions {
+// ─── useProducts ──────────────────────────────────────────────────────────────
+
+interface UseProductsOptions<T extends ProductItem = ProductItem> {
   initialData?: ProductListResponse;
   enabled?: boolean;
+  /**
+   * Map each API item to a richer app-level type.
+   * The API always returns `ProductItem`; use this to project it to your own
+   * extended type (e.g. `ProductDocument`) without forking the package.
+   *
+   * @example
+   * const { products } = useProducts<ProductDocument>(params, {
+   *   transform: (raw) => ({ ...raw, brand: raw.attributes?.brand ?? "" }),
+   * });
+   */
+  transform?: (item: ProductItem) => T;
 }
 
-export function useProducts(
+export function useProducts<T extends ProductItem = ProductItem>(
   params: ProductListParams = {},
-  opts?: UseProductsOptions,
+  opts?: UseProductsOptions<T>,
 ) {
   const sp = new URLSearchParams();
   if (params.q) sp.set("q", params.q);
@@ -29,9 +42,9 @@ export function useProducts(
   if (params.isAuction !== undefined)
     sp.set("isAuction", String(params.isAuction));
   if (params.sellerId) sp.set("sellerId", params.sellerId);
-  if (params.sort) sp.set("sort", params.sort);
+  if (params.sort) sp.set("sorts", params.sort);
   if (params.page) sp.set("page", String(params.page));
-  if (params.perPage) sp.set("perPage", String(params.perPage));
+  if (params.perPage) sp.set("pageSize", String(params.perPage));
   if (params.featured !== undefined)
     sp.set("featured", String(params.featured));
   const qs = sp.toString();
@@ -44,22 +57,41 @@ export function useProducts(
     enabled: opts?.enabled,
   });
 
+  const rawItems = query.data?.items ?? [];
+  const products = (
+    opts?.transform ? rawItems.map(opts.transform) : rawItems
+  ) as T[];
+
   return {
-    products: query.data?.items ?? [],
+    products,
     total: query.data?.total ?? 0,
     totalPages: query.data?.totalPages ?? 1,
     page: query.data?.page ?? 1,
+    hasMore: query.data?.hasMore ?? false,
     isLoading: query.isLoading,
     error: query.error,
   };
 }
 
-interface UseProductOptions {
+// ─── useProduct ───────────────────────────────────────────────────────────────
+
+interface UseProductOptions<T extends ProductItem = ProductItem> {
   initialData?: ProductItem;
   enabled?: boolean;
+  /**
+   * Map the API item to a richer app-level type.
+   * @example
+   * const { product } = useProduct<ProductDocument>(slug, {
+   *   transform: (raw) => ({ ...raw, brand: raw.attributes?.brand ?? "" }),
+   * });
+   */
+  transform?: (item: ProductItem) => T;
 }
 
-export function useProduct(slug: string, opts?: UseProductOptions) {
+export function useProduct<T extends ProductItem = ProductItem>(
+  slug: string,
+  opts?: UseProductOptions<T>,
+) {
   const query = useQuery<ProductItem>({
     queryKey: ["products", slug],
     queryFn: () => apiClient.get<ProductItem>(`/api/products/${slug}`),
@@ -67,8 +99,13 @@ export function useProduct(slug: string, opts?: UseProductOptions) {
     enabled: opts?.enabled !== false && !!slug,
   });
 
+  const product =
+    query.data && opts?.transform
+      ? opts.transform(query.data)
+      : (query.data as T | undefined);
+
   return {
-    product: query.data,
+    product,
     isLoading: query.isLoading,
     error: query.error,
   };

@@ -36,8 +36,9 @@ export function useReviews(
     reviews: query.data?.items ?? [],
     total: query.data?.total ?? 0,
     totalPages: query.data?.totalPages ?? 1,
+    hasMore: query.data?.hasMore ?? false,
     averageRating: query.data?.averageRating,
-    ratingBreakdown: query.data?.ratingBreakdown,
+    ratingDistribution: query.data?.ratingDistribution,
     isLoading: query.isLoading,
     error: query.error,
   };

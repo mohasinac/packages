@@ -3,3 +3,5 @@ export * from "./hooks/useReviews";
 export * from "./components";
 export { ReviewsRepository } from "./repository/reviews.repository";
 export { manifest } from "../manifest";
+// Next.js App Router route handlers
+export { GET as reviewsGET, GET } from "./api/route";

@@ -6,6 +6,7 @@ import type { IShippingProvider } from "./shipping.js";
 import type { ISearchProvider } from "./search.js";
 import type { ICacheProvider, IQueueProvider, IEventBus } from "./infra.js";
 import type { IStyleAdapter } from "./style.js";
+import type { IDbProvider } from "./repository.js";
 
 // ─── Provider Registry ────────────────────────────────────────────────────────
 
@@ -20,6 +21,8 @@ export interface ProviderRegistry {
   email: IEmailProvider;
   storage: IStorageProvider;
   style: IStyleAdapter;
+  /** Optional — database provider; enables true 2-line API route stubs in feat-* packages */
+  db?: IDbProvider;
   /** Optional — only required for projects with payment flows */
   payment?: IPaymentProvider;
   /** Optional — only required for projects with order shipping */

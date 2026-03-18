@@ -55,4 +55,5 @@ export interface SearchCategoryOption {
   id: string;
   name: string;
   slug?: string;
+  tier?: number;
 }

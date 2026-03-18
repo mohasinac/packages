@@ -30,12 +30,17 @@ export interface BlogPost {
   updatedAt?: string;
 }
 
-export interface BlogListResponse {
-  items: BlogPost[];
+export interface BlogListMeta {
   total: number;
   page: number;
-  perPage: number;
+  pageSize: number;
   totalPages: number;
+  hasMore: boolean;
+}
+
+export interface BlogListResponse {
+  posts: BlogPost[];
+  meta: BlogListMeta;
 }
 
 export interface BlogListParams {

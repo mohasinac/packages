@@ -2,11 +2,27 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@mohasinac/http";
-import type { EventListResponse, EventListParams } from "../types";
+import type { EventItem, EventListResponse, EventListParams } from "../types";
 
-export function useEvents(
+interface UseEventsOptions<T extends EventItem = EventItem> {
+  enabled?: boolean;
+  initialData?: EventListResponse;
+  /**
+   * Map each API item to a richer app-level type.
+   * The API always returns `EventItem`; use this to project it to your own
+   * extended type without forking the package.
+   *
+   * @example
+   * const { events } = useEvents<EventDocument>(params, {
+   *   transform: (raw) => ({ ...raw, localizedTitle: t(raw.title) }),
+   * });
+   */
+  transform?: (item: EventItem) => T;
+}
+
+export function useEvents<T extends EventItem = EventItem>(
   params: EventListParams = {},
-  opts?: { enabled?: boolean },
+  opts?: UseEventsOptions<T>,
 ) {
   const sp = new URLSearchParams();
   if (params.status) sp.set("status", params.status);
@@ -23,10 +39,16 @@ export function useEvents(
     queryFn: () =>
       apiClient.get<EventListResponse>(`/api/events${qs ? `?${qs}` : ""}`),
     enabled: opts?.enabled ?? true,
+    initialData: opts?.initialData,
   });
 
+  const rawItems = data?.items ?? [];
+  const events = (
+    opts?.transform ? rawItems.map(opts.transform) : rawItems
+  ) as T[];
+
   return {
-    events: data?.items ?? [],
+    events,
     total: data?.total ?? 0,
     totalPages: data?.totalPages ?? 0,
     hasMore: data?.hasMore ?? false,

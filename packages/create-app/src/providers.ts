@@ -300,7 +300,7 @@ function shippingLines(shipping: ShippingProvider): string {
 
 /** Generate providers.config.ts content from provider selections. */
 export function generateProvidersConfig(s: ProviderSelections): string {
-  const lines: string[] = [
+  const lines = [
     `import { registerProviders } from "@mohasinac/contracts";`,
     importLine(`auth.${s.auth}`),
     importLine(`email.${s.email}`),

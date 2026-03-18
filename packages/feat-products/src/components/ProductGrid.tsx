@@ -1,21 +1,23 @@
 import React from "react";
 import type { ProductItem } from "../types";
 
-interface ProductCardProps {
-  product: ProductItem;
-  onClick?: (product: ProductItem) => void;
+// ─── ProductCard ──────────────────────────────────────────────────────────────
+
+interface ProductCardProps<T extends ProductItem = ProductItem> {
+  product: T;
+  onClick?: (product: T) => void;
   onAddToWishlist?: (productId: string) => void;
   isWishlisted?: boolean;
   className?: string;
 }
 
-export function ProductCard({
+export function ProductCard<T extends ProductItem = ProductItem>({
   product,
   onClick,
   onAddToWishlist,
   isWishlisted,
   className = "",
-}: ProductCardProps) {
+}: ProductCardProps<T>) {
   const discount =
     product.originalPrice && product.originalPrice > product.price
       ? Math.round(
@@ -106,42 +108,93 @@ export function ProductCard({
   );
 }
 
-interface ProductGridProps {
-  products: ProductItem[];
-  onProductClick?: (product: ProductItem) => void;
+// ─── ProductCardContext (passed to renderCard slot) ───────────────────────────
+
+export interface ProductCardContext<T extends ProductItem = ProductItem> {
+  onClick?: (product: T) => void;
+  onWishlistToggle?: (productId: string) => void;
+  isWishlisted: boolean;
+}
+
+// ─── ProductGrid ──────────────────────────────────────────────────────────────
+
+interface ProductGridProps<T extends ProductItem = ProductItem> {
+  products: T[];
+  /**
+   * Custom card renderer. When provided, replaces the built-in `ProductCard`.
+   * Receives the item and a context object with click/wishlist handlers.
+   *
+   * @example
+   * <ProductGrid<ProductDocument>
+   *   products={docs}
+   *   renderCard={(p, ctx) => (
+   *     <MyRichCard product={p} onWishlist={ctx.onWishlistToggle} />
+   *   )}
+   * />
+   */
+  renderCard?: (product: T, ctx: ProductCardContext<T>) => React.ReactNode;
+  onProductClick?: (product: T) => void;
   onWishlistToggle?: (productId: string) => void;
   wishlistedIds?: Set<string>;
+  /** Text shown when the list is empty and no `emptySlot` is provided. */
   emptyLabel?: string;
+  /** Replaces the default empty-state paragraph. */
+  emptySlot?: React.ReactNode;
+  /** Rendered above the grid (e.g. filter bar, heading). */
+  headerSlot?: React.ReactNode;
+  /** Rendered below the grid (e.g. pagination). */
+  footerSlot?: React.ReactNode;
   className?: string;
 }
 
-export function ProductGrid({
+export function ProductGrid<T extends ProductItem = ProductItem>({
   products,
+  renderCard,
   onProductClick,
   onWishlistToggle,
   wishlistedIds,
   emptyLabel = "No products found",
+  emptySlot,
+  headerSlot,
+  footerSlot,
   className = "",
-}: ProductGridProps) {
-  if (products.length === 0) {
-    return (
-      <p className="py-12 text-center text-sm text-neutral-500">{emptyLabel}</p>
-    );
-  }
+}: ProductGridProps<T>) {
+  const isEmpty = products.length === 0;
 
   return (
-    <div
-      className={`grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ${className}`}
-    >
-      {products.map((p) => (
-        <ProductCard
-          key={p.id}
-          product={p}
-          onClick={onProductClick}
-          onAddToWishlist={onWishlistToggle}
-          isWishlisted={wishlistedIds?.has(p.id)}
-        />
-      ))}
+    <div>
+      {headerSlot}
+      {isEmpty ? (
+        emptySlot ?? (
+          <p className="py-12 text-center text-sm text-neutral-500">
+            {emptyLabel}
+          </p>
+        )
+      ) : (
+        <div
+          className={`grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ${className}`}
+        >
+          {products.map((p) => {
+            const ctx: ProductCardContext<T> = {
+              onClick: onProductClick,
+              onWishlistToggle,
+              isWishlisted: wishlistedIds?.has(p.id) ?? false,
+            };
+            return renderCard ? (
+              <React.Fragment key={p.id}>{renderCard(p, ctx)}</React.Fragment>
+            ) : (
+              <ProductCard<T>
+                key={p.id}
+                product={p}
+                onClick={onProductClick}
+                onAddToWishlist={onWishlistToggle}
+                isWishlisted={ctx.isWishlisted}
+              />
+            );
+          })}
+        </div>
+      )}
+      {footerSlot}
     </div>
   );
 }

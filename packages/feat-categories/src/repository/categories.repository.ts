@@ -3,13 +3,25 @@ import type {
   PagedResult,
   SieveQuery,
 } from "@mohasinac/contracts";
-import type { CategoryItem } from "../types";
+import type { CategoryItem, CategoryType } from "../types";
 
 export class CategoriesRepository {
   constructor(private readonly repo: IRepository<CategoryItem>) {}
 
   async findAll(query?: SieveQuery): Promise<PagedResult<CategoryItem>> {
     return this.repo.findAll(query ?? {});
+  }
+
+  async findByType(type: CategoryType, perPage = 100): Promise<CategoryItem[]> {
+    const result = await this.repo.findAll({
+      filters: `type==${type}`,
+      perPage,
+    });
+    return result.data;
+  }
+
+  async findConcerns(perPage = 100): Promise<CategoryItem[]> {
+    return this.findByType("concern", perPage);
   }
 
   async findBySlug(slug: string): Promise<CategoryItem | null> {

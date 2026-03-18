@@ -1,5 +1,13 @@
 export * from "./types";
 export * from "./hooks/useProducts";
 export * from "./components";
+export * from "./schemas";
 export { ProductsRepository } from "./repository/products.repository";
 export { manifest } from "../manifest";
+// Next.js App Router route handlers (2-line stub re-export)
+export { GET, POST } from "./api/route";
+export {
+  GET as productItemGET,
+  PATCH as productItemPATCH,
+  DELETE as productItemDELETE,
+} from "./api/[id]/route";

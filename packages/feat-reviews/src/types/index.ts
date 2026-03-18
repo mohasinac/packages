@@ -39,10 +39,11 @@ export interface ReviewListResponse {
   items: Review[];
   total: number;
   page: number;
-  perPage: number;
+  pageSize: number;
   totalPages: number;
+  hasMore: boolean;
   averageRating?: number;
-  ratingBreakdown?: Record<number, number>;
+  ratingDistribution?: Record<number, number>;
 }
 
 export interface ReviewListParams {

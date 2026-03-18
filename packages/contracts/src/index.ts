@@ -11,6 +11,7 @@ export type {
   IWriteRepository,
   IRepository,
   IRealtimeRepository,
+  IDbProvider,
 } from "./repository.js";
 
 // Auth
@@ -95,3 +96,9 @@ export type {
 
 // Site config
 export type { SiteConfig, NavItem } from "./config.js";
+
+// Extensibility utilities
+export type {
+  WithTransformOpts,
+  GenericListResponse,
+} from "./extend.js";
