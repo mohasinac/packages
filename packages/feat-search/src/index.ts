@@ -1,4 +1,6 @@
 export * from "./types";
+export * from "./schemas";
+export * from "./columns";
 export * from "./hooks/useSearch";
 export * from "./components";
 export { SearchRepository } from "./repository/search.repository";

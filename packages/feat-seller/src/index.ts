@@ -2,6 +2,8 @@ export * from "./types";
 export * from "./hooks/useSellerStore";
 export * from "./hooks/useSellerPayouts";
 export * from "./components";
+export * from "./schemas";
+export * from "./columns";
 export {
   SellerRepository,
   PayoutsRepository,

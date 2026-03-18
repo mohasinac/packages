@@ -1,4 +1,5 @@
 import React from "react";
+import type { LayoutSlots } from "@mohasinac/contracts";
 import type { ProductItem } from "../types";
 
 // ─── ProductCard ──────────────────────────────────────────────────────────────
@@ -145,6 +146,20 @@ interface ProductGridProps<T extends ProductItem = ProductItem> {
   /** Rendered below the grid (e.g. pagination). */
   footerSlot?: React.ReactNode;
   className?: string;
+  /**
+   * Render-prop slot overrides from a `FeatureExtension`.
+   * When both `slots` and the explicit `renderCard`/`headerSlot` props are
+   * provided, the explicit props take precedence.
+   *
+   * @example
+   * <ProductGrid products={products} {...extension.slots} />
+   * // or
+   * <ProductGrid products={products} slots={extension.slots} />
+   */
+  slots?: LayoutSlots<T>;
+  total?: number;
+  currentPage?: number;
+  totalPages?: number;
 }
 
 export function ProductGrid<T extends ProductItem = ProductItem>({
@@ -158,14 +173,35 @@ export function ProductGrid<T extends ProductItem = ProductItem>({
   headerSlot,
   footerSlot,
   className = "",
+  slots,
+  total = 0,
+  currentPage = 1,
+  totalPages = 1,
 }: ProductGridProps<T>) {
   const isEmpty = products.length === 0;
 
+  // Slot resolution: explicit props win over `slots` object
+  const resolvedHeader =
+    headerSlot ??
+    (slots?.renderHeader
+      ? (slots.renderHeader({ total }) as React.ReactNode)
+      : null);
+  const resolvedFooter =
+    footerSlot ??
+    (slots?.renderFooter
+      ? (slots.renderFooter({ page: currentPage, totalPages }) as React.ReactNode)
+      : null);
+  const resolvedEmpty =
+    emptySlot ??
+    (slots?.renderEmptyState
+      ? (slots.renderEmptyState() as React.ReactNode)
+      : null);
+
   return (
     <div>
-      {headerSlot}
+      {resolvedHeader}
       {isEmpty ? (
-        emptySlot ?? (
+        resolvedEmpty ?? (
           <p className="py-12 text-center text-sm text-neutral-500">
             {emptyLabel}
           </p>
@@ -174,14 +210,20 @@ export function ProductGrid<T extends ProductItem = ProductItem>({
         <div
           className={`grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ${className}`}
         >
-          {products.map((p) => {
+          {products.map((p, i) => {
             const ctx: ProductCardContext<T> = {
               onClick: onProductClick,
               onWishlistToggle,
               isWishlisted: wishlistedIds?.has(p.id) ?? false,
             };
-            return renderCard ? (
-              <React.Fragment key={p.id}>{renderCard(p, ctx)}</React.Fragment>
+            // Explicit renderCard prop wins; fall back to slots.renderCard
+            const cardRenderer = renderCard ?? slots?.renderCard;
+            return cardRenderer ? (
+              <React.Fragment key={p.id}>
+                {cardRenderer === renderCard
+                  ? (renderCard as NonNullable<typeof renderCard>)(p, ctx)
+                  : (slots!.renderCard!(p, i) as React.ReactNode)}
+              </React.Fragment>
             ) : (
               <ProductCard<T>
                 key={p.id}
@@ -194,7 +236,7 @@ export function ProductGrid<T extends ProductItem = ProductItem>({
           })}
         </div>
       )}
-      {footerSlot}
+      {resolvedFooter}
     </div>
   );
 }

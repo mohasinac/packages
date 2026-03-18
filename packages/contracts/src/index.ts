@@ -101,4 +101,8 @@ export type { SiteConfig, NavItem } from "./config.js";
 export type {
   WithTransformOpts,
   GenericListResponse,
+  TableColumn,
+  ColumnExtensionOpts,
+  LayoutSlots,
+  FeatureExtension,
 } from "./extend.js";

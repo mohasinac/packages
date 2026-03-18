@@ -1,4 +1,6 @@
 export * from "./types";
+export * from "./schemas";
+export * from "./columns";
 export * from "./hooks/useAuctions";
 export * from "./components";
 export { AuctionsRepository } from "./repository/auctions.repository";

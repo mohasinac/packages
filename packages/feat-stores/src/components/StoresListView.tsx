@@ -1,4 +1,5 @@
 import React from "react";
+import type { LayoutSlots } from "@mohasinac/contracts";
 import type { StoreListItem } from "../types";
 
 interface StoreCardProps {
@@ -66,23 +67,35 @@ function StoreCard({ store, labels = {}, className = "" }: StoreCardProps) {
   );
 }
 
-interface StoresListViewProps {
-  stores: StoreListItem[];
+interface StoresListViewProps<T extends StoreListItem = StoreListItem> {
+  stores: T[];
   labels?: {
     products?: string;
     reviews?: string;
     sold?: string;
     empty?: string;
   };
+  total?: number;
+  currentPage?: number;
+  totalPages?: number;
   className?: string;
+  /** Render-prop slot overrides — pass via `FeatureExtension.slots`. */
+  slots?: LayoutSlots<T>;
 }
 
-export function StoresListView({
+export function StoresListView<T extends StoreListItem = StoreListItem>({
   stores,
   labels = {},
+  total = 0,
+  currentPage = 1,
+  totalPages = 1,
   className = "",
-}: StoresListViewProps) {
+  slots,
+}: StoresListViewProps<T>) {
   if (stores.length === 0) {
+    if (slots?.renderEmptyState) {
+      return <>{slots.renderEmptyState() as React.ReactNode}</>;
+    }
     return (
       <p className="text-center text-gray-500 py-12">
         {labels.empty ?? "No stores found."}
@@ -91,12 +104,26 @@ export function StoresListView({
   }
 
   return (
-    <div
-      className={`grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ${className}`}
-    >
-      {stores.map((store) => (
-        <StoreCard key={store.id} store={store} labels={labels} />
-      ))}
+    <div className="space-y-4">
+      {slots?.renderHeader
+        ? (slots.renderHeader({ total }) as React.ReactNode)
+        : null}
+      <div
+        className={`grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ${className}`}
+      >
+        {stores.map((store, i) =>
+          slots?.renderCard ? (
+            <React.Fragment key={store.id}>
+              {slots.renderCard(store, i) as React.ReactNode}
+            </React.Fragment>
+          ) : (
+            <StoreCard key={store.id} store={store as StoreListItem} labels={labels} />
+          ),
+        )}
+      </div>
+      {slots?.renderFooter
+        ? (slots.renderFooter({ page: currentPage, totalPages }) as React.ReactNode)
+        : null}
     </div>
   );
 }

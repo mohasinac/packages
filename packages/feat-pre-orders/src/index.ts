@@ -1,4 +1,6 @@
 export * from "./types";
+export * from "./schemas";
+export * from "./columns";
 export * from "./hooks/usePreOrders";
 export * from "./components";
 export { PreOrdersRepository } from "./repository/pre-orders.repository";

@@ -8,6 +8,58 @@ All 47 packages are versioned together.
 
 ---
 
+## [0.2.0] — 2026-03-18
+
+### Added — Feature extensibility layer (schemas, columns, layout slots)
+
+**`@mohasinac/contracts`**
+- `ColumnExtensionOpts<T>` — shared `{ overrides?, extras?, omit? }` descriptor for all column factories
+- `LayoutSlots<T>` — render-prop overrides: `renderCard`, `renderRow`, `renderEmptyState`, `renderHeader`, `renderFooter`
+- `FeatureExtension<TBase, TExtended>` — unified bundle of `schema + columns + slots + transform` for consumer-app customisation
+- `TableColumn<T>` — new `hidden?: boolean` field
+
+**New `schemas/` in every feat-* package** (Zod base objects, extensible via `.extend()`):
+- `feat-products` — `productItemSchema`, `productListParamsSchema`
+- `feat-blog` — `blogPostSchema`, `blogListParamsSchema`
+- `feat-events` — `eventItemSchema`, `saleConfigSchema`, `offerConfigSchema`, `pollConfigSchema`, `eventListParamsSchema`
+- `feat-stores` — `storeListItemSchema`, `storeListParamsSchema`
+- `feat-categories` — `categoryItemSchema`, `categoryMetricsSchema`, `categoryListParamsSchema`
+- `feat-orders` — `orderSchema`, `orderItemSchema`, `orderTimelineSchema`, `orderListParamsSchema`
+- `feat-reviews` — `reviewSchema`, `reviewListParamsSchema`
+- `feat-faq` — `faqSchema`, `faqListParamsSchema`
+- `feat-seller` — `sellerStoreSchema`, `payoutRecordSchema`, `sellerListParamsSchema`, `payoutListParamsSchema`
+- `feat-auctions` — `auctionItemSchema`, `bidRecordSchema`, `auctionListParamsSchema`
+- `feat-auth` — `loginSchema`, `registerSchema`, `forgotPasswordSchema`, `resetPasswordSchema`, `authUserSchema`
+- `feat-account` — `userProfileSchema`, `userAddressSchema`, `notificationPreferencesSchema`, `updateProfileSchema`
+- `feat-promotions` — `couponItemSchema`, `promotionsListParamsSchema`
+- `feat-wishlist` — `wishlistItemSchema`
+- `feat-loyalty` — `loyaltyBalanceSchema`, `coinHistoryEntrySchema`, `loyaltyConfigSchema`
+- `feat-before-after` — `beforeAfterItemSchema`
+- `feat-consultation` — `consultationBookingSchema`, `bookConsultationSchema`
+- `feat-collections` — `collectionItemSchema`, `collectionListItemSchema`
+- `feat-payments` — `paymentRecordSchema`, `paymentGatewayConfigSchema`
+- `feat-pre-orders` — `preOrderItemSchema`, `preOrderListParamsSchema`
+- `feat-preorders` — `preorderItemSchema`
+- `feat-search` — `searchProductItemSchema`, `searchQuerySchema`
+- `feat-corporate` — `corporateInquirySchema`, `submitCorporateInquirySchema`
+- `feat-cart` — `cartItemSchema`, `cartItemMetaSchema`, `cartSummarySchema`
+
+**New `columns/` in every feat-* package** (`buildXxxColumns<T>(opts?: ColumnExtensionOpts<T>)` factories):
+- All 24 feat-* packages above now export typed default column arrays and `buildXxxColumns<T>` factories
+- `feat-auctions` exports two independent pairs: auction columns + bid columns
+- `feat-seller` exports two independent pairs: seller columns + payout columns
+
+**List-view components updated with `LayoutSlots<T>`**:
+- `feat-products/ProductGrid` — generic `<T>`, `slots?: LayoutSlots<T>`, `total/currentPage/totalPages` props
+- `feat-blog/BlogListView` — generic `<T extends BlogPost>`, `slots?: LayoutSlots<T>`
+- `feat-events/EventsListView` — **new component**, generic `<T extends EventItem>`, `slots?: LayoutSlots<T>`
+- `feat-stores/StoresListView` — generic `<T extends StoreListItem>`, `slots?: LayoutSlots<T>`
+
+### Changed
+- All 24 feat-* packages with new schemas gained `"zod": ">=3.0.0"` peerDependency
+
+---
+
 ## [0.1.0] — 2026-03-15
 
 ### Added — Initial release (47 packages)

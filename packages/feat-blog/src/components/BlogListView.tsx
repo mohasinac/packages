@@ -1,4 +1,5 @@
 import React from "react";
+import type { LayoutSlots } from "@mohasinac/contracts";
 import type { BlogPost, BlogPostCategory } from "../types";
 
 interface BlogCardProps {
@@ -112,25 +113,30 @@ export function BlogCategoryTabs({
   );
 }
 
-interface BlogListViewProps {
-  posts: BlogPost[];
+interface BlogListViewProps<T extends BlogPost = BlogPost> {
+  posts: T[];
   isLoading?: boolean;
   totalPages?: number;
   currentPage?: number;
+  total?: number;
   onPageChange?: (page: number) => void;
-  onPostClick?: (post: BlogPost) => void;
+  onPostClick?: (post: T) => void;
   emptyLabel?: string;
+  /** Render-prop slot overrides — pass via `FeatureExtension.slots`. */
+  slots?: LayoutSlots<T>;
 }
 
-export function BlogListView({
+export function BlogListView<T extends BlogPost = BlogPost>({
   posts,
   isLoading,
   totalPages = 1,
   currentPage = 1,
+  total = 0,
   onPageChange,
   onPostClick,
   emptyLabel = "No posts found",
-}: BlogListViewProps) {
+  slots,
+}: BlogListViewProps<T>) {
   if (isLoading) {
     return (
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -152,6 +158,9 @@ export function BlogListView({
   }
 
   if (posts.length === 0) {
+    if (slots?.renderEmptyState) {
+      return <>{slots.renderEmptyState() as React.ReactNode}</>;
+    }
     return (
       <p className="py-12 text-center text-sm text-neutral-500">{emptyLabel}</p>
     );
@@ -159,12 +168,27 @@ export function BlogListView({
 
   return (
     <div className="space-y-8">
+      {slots?.renderHeader
+        ? (slots.renderHeader({ total }) as React.ReactNode)
+        : null}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
-          <BlogCard key={post.id} post={post} onClick={onPostClick} />
-        ))}
+        {posts.map((post, i) =>
+          slots?.renderCard ? (
+            <React.Fragment key={post.id}>
+              {slots.renderCard(post, i) as React.ReactNode}
+            </React.Fragment>
+          ) : (
+            <BlogCard
+              key={post.id}
+              post={post}
+              onClick={onPostClick as ((post: BlogPost) => void) | undefined}
+            />
+          ),
+        )}
       </div>
-      {totalPages > 1 && onPageChange && (
+      {slots?.renderFooter ? (
+        (slots.renderFooter({ page: currentPage, totalPages }) as React.ReactNode)
+      ) : totalPages > 1 && onPageChange ? (
         <div className="flex justify-center gap-2">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
             <button
@@ -176,7 +200,7 @@ export function BlogListView({
             </button>
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
