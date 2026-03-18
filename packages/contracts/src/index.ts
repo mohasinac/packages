@@ -106,3 +106,17 @@ export type {
   LayoutSlots,
   FeatureExtension,
 } from "./extend.js";
+
+// Table / Pagination / Sticky config
+export type {
+  PaginationConfig,
+  StickyConfig,
+  TableConfig,
+  TableViewMode,
+} from "./table.js";
+export {
+  DEFAULT_PAGINATION_CONFIG,
+  DEFAULT_STICKY_CONFIG,
+  DEFAULT_TABLE_CONFIG,
+  mergeTableConfig,
+} from "./table.js";

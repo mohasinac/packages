@@ -7,25 +7,31 @@ import { Pagination } from "./components/Pagination";
 import { Text } from "./components/Typography";
 import { GRID_MAP } from "./components/Layout";
 import type { GridCols } from "./components/Layout";
+import type { TableColumn, TableConfig, PaginationConfig } from "@mohasinac/contracts";
+import { mergeTableConfig, DEFAULT_PAGINATION_CONFIG } from "@mohasinac/contracts";
 
 /**
  * DataTable — generic sortable + paginated table promoted to @mohasinac/ui.
  *
- * No app-specific imports (no THEME_CONSTANTS, UI_LABELS, @/components, @/constants).
- * All theme values inlined. Labels available as props with sensible defaults.
- * S1-2: rounded-2xl container, pageSize prop (default 20).
+ * Accepts `tableConfig` and `paginationConfig` for composable configuration.
+ * Apps can spread-merge DEFAULT_TABLE_CONFIG / DEFAULT_PAGINATION_CONFIG and
+ * override only the values they need, then pass the result once.
+ *
+ * Individual flat props (pageSize, stickyHeader, striped, …) still work and
+ * take precedence over anything in tableConfig when explicitly provided.
  */
 
 type ViewMode = "table" | "grid" | "list";
 type SortDirection = "asc" | "desc" | null;
 
-export interface DataTableColumn<T> {
-  key: string;
-  header: string;
+/**
+ * Column descriptor for the DataTable component.
+ * Narrows `render` to return `ReactNode` (TableColumn uses `unknown` so
+ * contracts stays React-free). Fully compatible with `TableColumn<T>`.
+ */
+export type DataTableColumn<T> = Omit<TableColumn<T>, "render"> & {
   render?: (item: T) => ReactNode;
-  sortable?: boolean;
-  width?: string;
-}
+};
 
 export interface DataTableProps<T> {
   data: T[];
@@ -37,7 +43,18 @@ export interface DataTableProps<T> {
   actions?: (item: T) => ReactNode;
   /** When true, disables internal pagination — render your own externally. Default: false */
   externalPagination?: boolean;
-  /** Items per page. Default: 20 */
+  /**
+   * Composable table configuration.
+   * Deep-merged with DEFAULT_TABLE_CONFIG. Individual flat props (pageSize,
+   * stickyHeader, etc.) override this when explicitly provided.
+   */
+  tableConfig?: Partial<TableConfig>;
+  /**
+   * Composable pagination configuration.
+   * Merged with DEFAULT_PAGINATION_CONFIG. Individual flat props override this.
+   */
+  paginationConfig?: Partial<PaginationConfig>;
+  /** Items per page. Explicit value overrides tableConfig.pageSize. Default: 20 */
   pageSize?: number;
   // Mobile view
   mobileCardRender?: (item: T) => ReactNode;
@@ -45,7 +62,7 @@ export interface DataTableProps<T> {
   emptyState?: ReactNode;
   emptyIcon?: ReactNode;
   emptyTitle?: string;
-  // Table enhancements
+  // Table enhancements — explicit values override tableConfig values
   stickyHeader?: boolean;
   striped?: boolean;
   // View toggle
@@ -88,21 +105,35 @@ export function DataTable<T extends Record<string, any>>({
   emptyState,
   emptyIcon,
   emptyTitle,
-  stickyHeader = false,
-  striped = false,
+  tableConfig,
+  paginationConfig,
   externalPagination = false,
-  pageSize = 20,
-  showViewToggle = false,
+  // Explicit flat props — override tableConfig when provided
+  pageSize: pageSizeProp,
+  stickyHeader: stickyHeaderProp,
+  striped: stripedProp,
+  showViewToggle: showViewToggleProp,
   showTableView = true,
   viewMode: controlledViewMode,
-  defaultViewMode = "table",
+  defaultViewMode: defaultViewModeProp,
   onViewModeChange,
-  selectable = false,
+  selectable: selectableProp,
   selectedIds = [],
   onSelectionChange,
   gridCols = "cards",
   labels = {},
 }: DataTableProps<T>) {
+  // Merge tableConfig + paginationConfig with defaults; explicit flat props win
+  const resolvedTable = mergeTableConfig(tableConfig);
+  const resolvedPag = { ...DEFAULT_PAGINATION_CONFIG, ...tableConfig?.pagination, ...paginationConfig };
+
+  const pageSize = pageSizeProp ?? resolvedTable.pageSize;
+  const stickyHeader = stickyHeaderProp ?? resolvedTable.sticky.enabled;
+  const striped = stripedProp ?? resolvedTable.striped;
+  const showViewToggle = showViewToggleProp ?? resolvedTable.showViewToggle;
+  const selectable = selectableProp ?? resolvedTable.selectable;
+  const defaultViewMode: ViewMode = defaultViewModeProp ?? resolvedTable.defaultViewMode;
+
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -518,6 +549,10 @@ export function DataTable<T extends Record<string, any>>({
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
+            maxVisible={resolvedPag.maxVisible}
+            showFirstLast={resolvedPag.showFirstLast}
+            showPrevNext={resolvedPag.showPrevNext}
+            size={resolvedPag.size}
           />
         </div>
       )}

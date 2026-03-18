@@ -92,6 +92,8 @@ export interface TableColumn<T = Record<string, unknown>> {
   render?: (row: T) => unknown;
   /** Additional className for the `<th>` and `<td>` */
   className?: string;
+  /** CSS width / Tailwind width class applied to the column. */
+  width?: string;
   /** Hide this column from the rendered table (keeps it in the array for export) */
   hidden?: boolean;
 }

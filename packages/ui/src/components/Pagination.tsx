@@ -1,18 +1,25 @@
 "use client";
 
 import React from "react";
+import type { PaginationConfig } from "@mohasinac/contracts";
+import { DEFAULT_PAGINATION_CONFIG } from "@mohasinac/contracts";
 
 /**
  * Pagination — smart ellipsis pagination with prev/next chevrons.
  *
- * Extracted to @mohasinac/ui as a standalone, framework-agnostic component.
- * No app-specific dependencies (no THEME_CONSTANTS, UI_LABELS, or app imports).
+ * Accepts either individual props OR a `paginationConfig` object
+ * (merged with DEFAULT_PAGINATION_CONFIG). Individual props take precedence.
  */
 
 export interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  /**
+   * Composable pagination config. Merged with DEFAULT_PAGINATION_CONFIG.
+   * Individual flat props override this.
+   */
+  paginationConfig?: Partial<PaginationConfig>;
   /** Max visible page buttons before ellipsis kicks in. Default: 7 */
   maxVisible?: number;
   showFirstLast?: boolean;
@@ -63,13 +70,19 @@ export function Pagination({
   currentPage,
   totalPages,
   onPageChange,
-  maxVisible = 7,
-  showFirstLast = true,
-  showPrevNext = true,
+  paginationConfig,
+  maxVisible: maxVisibleProp,
+  showFirstLast: showFirstLastProp,
+  showPrevNext: showPrevNextProp,
   disabled = false,
-  size = "md",
+  size: sizeProp,
   className = "",
 }: PaginationProps) {
+  const resolved = { ...DEFAULT_PAGINATION_CONFIG, ...paginationConfig };
+  const maxVisible = maxVisibleProp ?? resolved.maxVisible;
+  const showFirstLast = showFirstLastProp ?? resolved.showFirstLast;
+  const showPrevNext = showPrevNextProp ?? resolved.showPrevNext;
+  const size = sizeProp ?? resolved.size;
   const handle = (page: number) => {
     if (disabled || page < 1 || page > totalPages || page === currentPage)
       return;

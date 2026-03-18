@@ -97,6 +97,20 @@ export { ImageLightbox } from "./components/ImageLightbox";
 export type { DataTableProps, DataTableColumn } from "./DataTable";
 export { DataTable } from "./DataTable";
 
+// ─── Table / Pagination / Sticky config (re-exported from @mohasinac/contracts) ──
+export type {
+  TableConfig,
+  TableViewMode,
+  PaginationConfig,
+  StickyConfig,
+} from "@mohasinac/contracts";
+export {
+  DEFAULT_TABLE_CONFIG,
+  DEFAULT_PAGINATION_CONFIG,
+  DEFAULT_STICKY_CONFIG,
+  mergeTableConfig,
+} from "@mohasinac/contracts";
+
 // ─── Layout Primitives ────────────────────────────────────────────────────────
 export type {
   GapKey,
