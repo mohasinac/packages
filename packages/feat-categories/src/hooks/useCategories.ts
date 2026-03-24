@@ -1,25 +1,25 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@mohasinac/http";
-import type { CategoryItem, CategoriesResponse } from "../types";
+import type { CategoryItem } from "../types";
 
 interface UseCategoriesListOptions {
-  initialData?: CategoriesResponse;
+  initialData?: CategoryItem[];
   enabled?: boolean;
 }
 
 export function useCategoriesList(opts?: UseCategoriesListOptions) {
-  const query = useQuery<CategoriesResponse>({
+  const query = useQuery<CategoryItem[]>({
     queryKey: ["categories"],
-    queryFn: () => apiClient.get<CategoriesResponse>("/api/categories"),
+    queryFn: () => apiClient.get<CategoryItem[]>("/api/categories"),
     initialData: opts?.initialData,
     enabled: opts?.enabled,
     staleTime: 5 * 60 * 1000, // 5 min — categories change infrequently
   });
 
   return {
-    categories: query.data?.items ?? [],
-    total: query.data?.total ?? 0,
+    categories: query.data ?? [],
+    total: query.data?.length ?? 0,
     isLoading: query.isLoading,
     error: query.error,
   };
