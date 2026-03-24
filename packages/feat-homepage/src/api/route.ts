@@ -25,7 +25,7 @@ export async function GET(): Promise<NextResponse> {
       );
     }
 
-    const repo = db.getRepository<HomepageSection>("homepage_sections");
+    const repo = db.getRepository<HomepageSection>("homepageSections");
     const result = await repo.findAll({
       filters: "isVisible==true",
       sort: "order",

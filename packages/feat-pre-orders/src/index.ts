@@ -5,3 +5,5 @@ export * from "./hooks/usePreOrders";
 export * from "./components";
 export { PreOrdersRepository } from "./repository/pre-orders.repository";
 export { manifest } from "../manifest";
+// Next.js App Router route handlers (2-line stub re-export)
+export { GET as preOrdersGET, POST as preOrdersPOST, GET, POST } from "./api/route";
