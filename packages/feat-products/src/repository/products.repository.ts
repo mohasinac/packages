@@ -59,6 +59,16 @@ export class ProductsRepository {
     return this.repo.findById(id);
   }
 
+  /**
+   * Find a product by its Firestore document ID or its URL slug.
+   * Tries ID lookup first (O(1)); falls back to a Sieve slug query.
+   */
+  async findByIdOrSlug(idOrSlug: string): Promise<ProductItem | null> {
+    const byId = await this.repo.findById(idOrSlug);
+    if (byId) return byId;
+    return this.findBySlug(idOrSlug);
+  }
+
   async create(data: Omit<ProductItem, "id">): Promise<ProductItem> {
     return this.repo.create(data);
   }

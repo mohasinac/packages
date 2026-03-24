@@ -24,6 +24,9 @@ export interface HomepageSection {
   id: string;
   type: HomepageSectionType;
   title?: string;
+  /** Primary enable/disable flag stored in Firestore as `enabled` */
+  enabled?: boolean;
+  /** Alias kept for older consumers */
   isVisible?: boolean;
   order?: number;
   content?: HomepageSectionContent;

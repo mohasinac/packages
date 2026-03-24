@@ -15,7 +15,7 @@ import { NextResponse } from "next/server";
 import { getProviders } from "@mohasinac/contracts";
 import type { ProductItem } from "../../types/index.js";
 
-type RouteContext = { params: Promise<{ id: string }> | { id: string } };
+type RouteContext = { params: Promise<{ id: string }> };
 
 function getRepo() {
   const { db } = getProviders();
@@ -30,10 +30,7 @@ export async function GET(
   context: RouteContext,
 ): Promise<NextResponse> {
   try {
-    const { id } =
-      context.params instanceof Promise
-        ? await context.params
-        : context.params;
+    const { id } = await context.params;
 
     const repo = getRepo();
     if (!repo) {
@@ -43,7 +40,16 @@ export async function GET(
       );
     }
 
-    const item = await repo.findById(id);
+    // Support both Firestore document ID and URL slug
+    let item = await repo.findById(id);
+    if (!item) {
+      // Slug fallback: search by slug==id, status==published
+      const slugResult = await repo.findAll({
+        filters: `slug==${id},status==published`,
+        perPage: 1,
+      });
+      item = slugResult.data[0] ?? null;
+    }
     if (!item) {
       return NextResponse.json(
         { success: false, error: "Product not found" },
@@ -51,6 +57,9 @@ export async function GET(
       );
     }
 
+    // Note: view-count tracking is intentionally omitted here.
+    // Consuming projects that need atomic increments should implement
+    // it in their own route or via a database trigger.
     return NextResponse.json({ success: true, data: item });
   } catch (error) {
     console.error("[feat-products] GET /api/products/[id] failed", error);
@@ -68,10 +77,7 @@ export async function PATCH(
   context: RouteContext,
 ): Promise<NextResponse> {
   try {
-    const { id } =
-      context.params instanceof Promise
-        ? await context.params
-        : context.params;
+    const { id } = await context.params;
     const data = (await request.json()) as Partial<ProductItem>;
 
     const repo = getRepo();
@@ -100,10 +106,7 @@ export async function DELETE(
   context: RouteContext,
 ): Promise<NextResponse> {
   try {
-    const { id } =
-      context.params instanceof Promise
-        ? await context.params
-        : context.params;
+    const { id } = await context.params;
 
     const repo = getRepo();
     if (!repo) {

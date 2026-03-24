@@ -14,9 +14,21 @@ import { getProviders } from "@mohasinac/contracts";
 import type { HomepageSection } from "../types/index.js";
 
 // ─── GET /api/homepage-sections ───────────────────────────────────────────────
+// Supported query params:
+//   type         — filter by section type (e.g. "hero", "featured_products")
+//   order / sort — Sieve sort field (default: "order" asc)
+//
+// Note: includeDisabled (admin-only) is not supported here — implement that
+// in consuming-project middleware or an overriding local route.
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(request: Request): Promise<NextResponse> {
   try {
+    const url = new URL(request.url);
+    const typeFilter = url.searchParams.get("type");
+
+    const filterParts = ["enabled==true"];
+    if (typeFilter) filterParts.push(`type==${typeFilter}`);
+
     const { db } = getProviders();
     if (!db) {
       return NextResponse.json(
@@ -27,15 +39,17 @@ export async function GET(): Promise<NextResponse> {
 
     const repo = db.getRepository<HomepageSection>("homepageSections");
     const result = await repo.findAll({
-      filters: "isVisible==true",
+      filters: filterParts.join(","),
       sort: "order",
       order: "asc",
       perPage: 50,
     });
 
+    // Return the sections array directly so apiClient.get() resolves to
+    // HomepageSection[] — same shape as the letitrip local route.
     return NextResponse.json({
       success: true,
-      data: { sections: result.data },
+      data: result.data,
     });
   } catch (error) {
     console.error("[feat-homepage] GET /api/homepage-sections failed", error);
