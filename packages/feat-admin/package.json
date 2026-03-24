@@ -31,7 +31,8 @@
     "@tanstack/react-query": ">=5.0.0"
   },
   "dependencies": {
-    "@mohasinac/contracts": "workspace:*"
+    "@mohasinac/contracts": "workspace:*",
+    "@mohasinac/next": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19.1.6",
