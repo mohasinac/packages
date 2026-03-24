@@ -32,6 +32,10 @@
     "@mohasinac/react": ">=0.1.0",
     "@mohasinac/ui": ">=0.1.0"
   },
+  "dependencies": {
+    "@mohasinac/contracts": "workspace:*",
+    "@mohasinac/next": "workspace:*"
+  },
   "devDependencies": {
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.6",

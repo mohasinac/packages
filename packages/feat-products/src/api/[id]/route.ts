@@ -5,14 +5,15 @@
  *
  * ```ts
  * // app/api/products/[id]/route.ts
- * export { GET, PATCH, DELETE } from "@mohasinac/feat-products/api-item";
+ * export { productItemGET as GET, productItemPATCH as PATCH, productItemDELETE as DELETE }
+ *   from "@mohasinac/feat-products";
  * ```
- *
- * Or re-export via the main package barrel with aliased names (see index.ts).
  */
 
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
+import { createRouteHandler } from "@mohasinac/next";
 import type { ProductItem } from "../../types/index.js";
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -22,6 +23,27 @@ function getRepo() {
   if (!db) return null;
   return db.getRepository<ProductItem>("products");
 }
+
+const productUpdateSchema = z
+  .object({
+    title: z.string().min(1).max(200).optional(),
+    description: z.string().max(10000).optional(),
+    price: z.number().positive().optional(),
+    originalPrice: z.number().positive().optional(),
+    currency: z.string().length(3).optional(),
+    category: z.string().optional(),
+    status: z
+      .enum(["draft", "published", "archived", "sold", "discontinued", "out_of_stock"])
+      .optional(),
+    mainImage: z.string().optional(),
+    images: z.array(z.any()).optional(),
+    tags: z.array(z.string()).optional(),
+    featured: z.boolean().optional(),
+    isPromoted: z.boolean().optional(),
+    isAuction: z.boolean().optional(),
+    isPreOrder: z.boolean().optional(),
+  })
+  .passthrough();
 
 // ─── GET /api/products/[id] ───────────────────────────────────────────────────
 
@@ -57,9 +79,6 @@ export async function GET(
       );
     }
 
-    // Note: view-count tracking is intentionally omitted here.
-    // Consuming projects that need atomic increments should implement
-    // it in their own route or via a database trigger.
     return NextResponse.json({ success: true, data: item });
   } catch (error) {
     console.error("[feat-products] GET /api/products/[id] failed", error);
@@ -71,15 +90,16 @@ export async function GET(
 }
 
 // ─── PATCH /api/products/[id] ─────────────────────────────────────────────────
+// Auth required; the caller must be the owner, a moderator, or an admin.
 
-export async function PATCH(
-  request: Request,
-  context: RouteContext,
-): Promise<NextResponse> {
-  try {
-    const { id } = await context.params;
-    const data = (await request.json()) as Partial<ProductItem>;
-
+export const PATCH = createRouteHandler<
+  z.infer<typeof productUpdateSchema>,
+  { id: string }
+>({
+  auth: true,
+  schema: productUpdateSchema,
+  handler: async ({ user, body, params }) => {
+    const { id } = params!;
     const repo = getRepo();
     if (!repo) {
       return NextResponse.json(
@@ -88,26 +108,40 @@ export async function PATCH(
       );
     }
 
-    const updated = await repo.update(id, data);
+    const product = await repo.findById(id);
+    if (!product) {
+      return NextResponse.json(
+        { success: false, error: "Product not found" },
+        { status: 404 },
+      );
+    }
+
+    const isOwner = (product as any).sellerId === user?.uid;
+    const isModerator = user?.role === "moderator";
+    const isAdmin = user?.role === "admin";
+
+    if (!isOwner && !isModerator && !isAdmin) {
+      return NextResponse.json(
+        { success: false, error: "Not authorized to update this product" },
+        { status: 403 },
+      );
+    }
+
+    const updated = await repo.update(id, {
+      ...(body as Partial<ProductItem>),
+      updatedAt: new Date().toISOString(),
+    });
     return NextResponse.json({ success: true, data: updated });
-  } catch (error) {
-    console.error("[feat-products] PATCH /api/products/[id] failed", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to update product" },
-      { status: 500 },
-    );
-  }
-}
+  },
+});
 
 // ─── DELETE /api/products/[id] ────────────────────────────────────────────────
+// Soft-delete (sets status to "discontinued"). Auth required.
 
-export async function DELETE(
-  _request: Request,
-  context: RouteContext,
-): Promise<NextResponse> {
-  try {
-    const { id } = await context.params;
-
+export const DELETE = createRouteHandler<never, { id: string }>({
+  auth: true,
+  handler: async ({ user, params }) => {
+    const { id } = params!;
     const repo = getRepo();
     if (!repo) {
       return NextResponse.json(
@@ -116,13 +150,32 @@ export async function DELETE(
       );
     }
 
-    await repo.delete(id);
+    const product = await repo.findById(id);
+    if (!product) {
+      return NextResponse.json(
+        { success: false, error: "Product not found" },
+        { status: 404 },
+      );
+    }
+
+    const isOwner = (product as any).sellerId === user?.uid;
+    const isModerator = user?.role === "moderator";
+    const isAdmin = user?.role === "admin";
+
+    if (!isOwner && !isModerator && !isAdmin) {
+      return NextResponse.json(
+        { success: false, error: "Not authorized to delete this product" },
+        { status: 403 },
+      );
+    }
+
+    await repo.update(id, {
+      status: "discontinued" as ProductItem["status"],
+      updatedAt: new Date().toISOString(),
+    });
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("[feat-products] DELETE /api/products/[id] failed", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to delete product" },
-      { status: 500 },
-    );
-  }
-}
+  },
+});
+
+export { GET as productItemGET, PATCH as productItemPATCH, DELETE as productItemDELETE };
+

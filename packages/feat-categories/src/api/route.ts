@@ -1,12 +1,10 @@
 /**
- * feat-categories — Next.js App Router API handler (GET /api/categories)
+ * feat-categories — Next.js App Router API handler (GET/POST /api/categories)
  *
- * Consuming projects can create a hybrid stub:
- *
+ * Pure stub:
  * ```ts
  * // app/api/categories/route.ts
- * export { GET } from "@mohasinac/feat-categories";
- * export const POST = createApiHandler<...>({ ... }); // keep local
+ * export { GET, POST } from "@mohasinac/feat-categories";
  * ```
  *
  * Response shape:
@@ -16,7 +14,9 @@
  */
 
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
+import { createRouteHandler } from "@mohasinac/next";
 import type { CategoryItem } from "../types/index.js";
 
 // ─── Tree node (CategoryItem extended with nested children) ───────────────────
@@ -188,3 +188,48 @@ export async function GET(request: Request): Promise<NextResponse> {
     );
   }
 }
+
+// ---------------------------------------------------------------------------
+// POST /api/categories — create a new category (admin only)
+// ---------------------------------------------------------------------------
+
+const categoryCreateSchema = z.object({
+  name: z.string().min(1).max(200),
+  slug: z.string().min(1).max(200),
+  type: z.string().optional(),
+  parentId: z.string().optional(),
+  parentIds: z.array(z.string()).optional(),
+  childrenIds: z.array(z.string()).optional(),
+  tier: z.number().int().min(0).optional(),
+  order: z.number().int().min(0).optional(),
+  description: z.string().optional(),
+  imageUrl: z.string().url().optional(),
+  isFeatured: z.boolean().optional(),
+  showOnHomepage: z.boolean().optional(),
+}).passthrough();
+
+export const POST = createRouteHandler({
+  auth: true,
+  roles: ["admin"],
+  schema: categoryCreateSchema,
+  handler: async ({ body }) => {
+    const { db } = getProviders();
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: "DB not configured" },
+        { status: 503 },
+      );
+    }
+
+    const repo = db.getRepository<CategoryItem>("categories");
+    const now = new Date().toISOString();
+
+    const created = await repo.create({
+      ...(body as object),
+      createdAt: now,
+      updatedAt: now,
+    } as unknown as CategoryItem);
+
+    return NextResponse.json({ success: true, data: created }, { status: 201 });
+  },
+});

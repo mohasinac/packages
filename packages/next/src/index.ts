@@ -13,3 +13,7 @@ export type {
   IApiErrorLogger,
   ApiErrorHandlerOptions,
 } from "./api/errorHandler";
+
+// Provider-aware route handler factory for feat-* packages
+export { createRouteHandler } from "./api/routeHandler";
+export type { RouteUser } from "./api/routeHandler";

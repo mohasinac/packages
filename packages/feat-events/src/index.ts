@@ -11,3 +11,4 @@ export {
 export { manifest } from "../manifest";
 // Next.js App Router route handlers
 export { GET as eventsGET, GET } from "./api/route";
+export { GET as eventIdGET } from "./api/[id]/route";

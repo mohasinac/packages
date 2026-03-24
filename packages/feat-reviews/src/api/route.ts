@@ -1,20 +1,24 @@
 /**
- * feat-reviews — Next.js App Router API handler (GET /api/reviews)
+ * feat-reviews — Next.js App Router API handler (GET/POST /api/reviews)
  *
- * 2-line stub:
+ * 2-line stub for GET:
  * ```ts
  * // app/api/reviews/route.ts
- * export { GET } from "@mohasinac/feat-reviews";
+ * export { GET, POST } from "@mohasinac/feat-reviews";
  * ```
  *
- * Query modes:
+ * Query modes for GET:
  *   ?featured=true         → returns flat Review[] (for testimonial sections)
  *   ?latest=true           → paginated approved reviews, no productId required
  *   ?productId=<id>        → paginated + aggregate stats (averageRating, ratingDistribution)
+ *
+ * POST creates a new review; requires authentication.
  */
 
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
+import { createRouteHandler } from "@mohasinac/next";
 import type { Review, ReviewListResponse } from "../types/index.js";
 
 function param(url: URL, key: string): string | null {
@@ -162,3 +166,49 @@ export async function GET(request: Request): Promise<NextResponse> {
     );
   }
 }
+
+// ---------------------------------------------------------------------------
+// POST /api/reviews — create a new review (authenticated)
+// ---------------------------------------------------------------------------
+
+const reviewCreateSchema = z.object({
+  productId: z.string().min(1),
+  rating: z.union([
+    z.literal(1),
+    z.literal(2),
+    z.literal(3),
+    z.literal(4),
+    z.literal(5),
+  ]),
+  title: z.string().min(1).max(100).optional(),
+  comment: z.string().min(1).max(2000).optional(),
+  images: z.array(z.string().url()).max(10).optional(),
+  video: z.string().url().optional(),
+}).passthrough();
+
+export const POST = createRouteHandler({
+  auth: true,
+  schema: reviewCreateSchema,
+  handler: async ({ user, body }) => {
+    const { db } = getProviders();
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: "DB not configured" },
+        { status: 503 },
+      );
+    }
+
+    const repo = db.getRepository<Review>("reviews");
+    const now = new Date().toISOString();
+
+    const created = await repo.create({
+      ...(body as object),
+      userId: user!.uid,
+      status: "pending",
+      createdAt: now,
+      updatedAt: now,
+    } as unknown as Review);
+
+    return NextResponse.json({ success: true, data: created }, { status: 201 });
+  },
+});

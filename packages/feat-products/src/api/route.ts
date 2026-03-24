@@ -14,8 +14,36 @@
  */
 
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
+import { createRouteHandler } from "@mohasinac/next";
 import type { ProductItem, ProductListResponse } from "../types/index.js";
+
+// ─── Mutation schemas ─────────────────────────────────────────────────────────
+// Minimal schemas for secured mutations — consumer apps can extend as needed.
+
+const productMutateSchema = z.object({
+  title: z.string().min(1).max(200).optional(),
+  description: z.string().max(10000).optional(),
+  price: z.number().positive().optional(),
+  originalPrice: z.number().positive().optional(),
+  currency: z.string().length(3).optional(),
+  category: z.string().optional(),
+  status: z
+    .enum(["draft", "published", "archived", "sold", "discontinued", "out_of_stock"])
+    .optional(),
+  mainImage: z.string().optional(),
+  images: z.array(z.any()).optional(),
+  tags: z.array(z.string()).optional(),
+  featured: z.boolean().optional(),
+  isPromoted: z.boolean().optional(),
+  isAuction: z.boolean().optional(),
+  isPreOrder: z.boolean().optional(),
+  sellerId: z.string().optional(),
+  sellerName: z.string().optional(),
+  sellerEmail: z.string().email().optional(),
+  slug: z.string().optional(),
+}).passthrough();
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -110,14 +138,13 @@ export async function GET(request: Request): Promise<NextResponse> {
 }
 
 // ─── POST /api/products ───────────────────────────────────────────────────────
+// Requires seller, moderator, or admin role.
 
-export async function POST(request: Request): Promise<NextResponse> {
-  try {
-    const data = (await request.json()) as Omit<
-      ProductItem,
-      "id" | "createdAt" | "updatedAt"
-    >;
-
+export const POST = createRouteHandler({
+  auth: true,
+  roles: ["seller", "moderator", "admin"],
+  schema: productMutateSchema,
+  handler: async ({ user, body }) => {
     const { db } = getProviders();
     if (!db) {
       return NextResponse.json(
@@ -125,16 +152,17 @@ export async function POST(request: Request): Promise<NextResponse> {
         { status: 503 },
       );
     }
-
     const repo = db.getRepository<ProductItem>("products");
-    const created = await repo.create(data);
-
+    const data: Partial<ProductItem> = {
+      ...(body as Partial<ProductItem>),
+      status: "draft",
+      sellerId: (body as any).sellerId ?? user?.uid,
+      sellerName: (body as any).sellerName ?? user?.displayName as string | undefined,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    const created = await repo.create(data as Omit<ProductItem, "id">);
     return NextResponse.json({ success: true, data: created }, { status: 201 });
-  } catch (error) {
-    console.error("[feat-products] POST /api/products failed", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to create product" },
-      { status: 500 },
-    );
-  }
-}
+  },
+});
+

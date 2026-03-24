@@ -1,21 +1,17 @@
 /**
- * feat-homepage — Next.js App Router API handlers (GET /api/homepage-sections)
+ * feat-homepage — Next.js App Router API handlers (GET/POST /api/homepage-sections)
  *
- * Consuming projects can create a hybrid stub:
- *
+ * Pure stub:
  * ```ts
  * // app/api/homepage-sections/route.ts
- * export { GET } from "@mohasinac/feat-homepage";
- * export const POST = createApiHandler<...>({ ... }); // keep local
+ * export { GET, POST } from "@mohasinac/feat-homepage";
  * ```
- *
- * Supports:
- *   - Public GET: returns enabled sections only
- *   - `?includeDisabled=true`: admin only, returns all sections (verified via session cookie)
  */
 
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
+import { createRouteHandler } from "@mohasinac/next";
 import type { HomepageSection } from "../types/index.js";
 
 /** Read `__session` cookie from request headers (HTTP cookie string). */
@@ -97,3 +93,58 @@ export async function GET(request: Request): Promise<NextResponse> {
     );
   }
 }
+
+// ---------------------------------------------------------------------------
+// POST /api/homepage-sections — create a new section (admin only)
+// ---------------------------------------------------------------------------
+
+const homepageSectionCreateSchema = z.object({
+  type: z.enum(["hero", "featured_categories", "featured_products", "banner",
+    "testimonials", "promotions", "blog_posts", "sellers", "custom"]),
+  title: z.string().optional(),
+  enabled: z.boolean().optional(),
+  order: z.number().int().min(0).optional(),
+  content: z.object({
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+    ctaLabel: z.string().optional(),
+    ctaUrl: z.string().optional(),
+    imageUrl: z.string().url().optional(),
+    videoUrl: z.string().url().optional(),
+    itemIds: z.array(z.string()).optional(),
+    html: z.string().optional(),
+  }).optional(),
+  mobile: z.object({}).passthrough().optional(),
+}).passthrough();
+
+export const POST = createRouteHandler({
+  auth: true,
+  roles: ["admin"],
+  schema: homepageSectionCreateSchema,
+  handler: async ({ body }) => {
+    const { db } = getProviders();
+    if (!db) {
+      return NextResponse.json(
+        { success: false, error: "DB not configured" },
+        { status: 503 },
+      );
+    }
+
+    const repo = db.getRepository<HomepageSection>("homepageSections");
+
+    // Auto-assign order: place at end of existing sections
+    const existing = await repo.findAll({ sort: "order", order: "desc", perPage: 1 });
+    const maxOrder = existing.data[0]?.order ?? -1;
+
+    const now = new Date().toISOString();
+    const created = await repo.create({
+      ...(body as object),
+      order: (body as { order?: number }).order ?? maxOrder + 1,
+      enabled: (body as { enabled?: boolean }).enabled ?? true,
+      createdAt: now,
+      updatedAt: now,
+    } as unknown as HomepageSection);
+
+    return NextResponse.json({ success: true, data: created }, { status: 201 });
+  },
+});

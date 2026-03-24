@@ -11,3 +11,6 @@ export {
   GET as storeSlugGET,
   GET as GET_STORE_SLUG,
 } from "./api/[storeSlug]/route";
+export { GET as storeProductsGET } from "./api/[storeSlug]/products/route";
+export { GET as storeAuctionsGET } from "./api/[storeSlug]/auctions/route";
+export { GET as storeReviewsGET } from "./api/[storeSlug]/reviews/route";

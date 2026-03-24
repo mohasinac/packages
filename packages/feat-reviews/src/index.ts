@@ -6,5 +6,5 @@ export * from "./columns";
 export { ReviewsRepository } from "./repository/reviews.repository";
 export { manifest } from "../manifest";
 // Next.js App Router route handlers
-export { GET as reviewsGET, GET } from "./api/route";
-export { GET as reviewItemGET } from "./api/[id]/route";
+export { GET as reviewsGET, GET, POST } from "./api/route";
+export { reviewItemGET, reviewItemPATCH, reviewItemDELETE } from "./api/[id]/route";

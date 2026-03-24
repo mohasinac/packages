@@ -28,6 +28,9 @@
     "react": ">=18",
     "zod": ">=3"
   },
+  "dependencies": {
+    "@mohasinac/contracts": "workspace:*"
+  },
   "devDependencies": {
     "tsup": "^8.5.0",
     "typescript": "^5.9.3",

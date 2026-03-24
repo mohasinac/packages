@@ -130,3 +130,54 @@ export interface BeforeAfterItem {
   caption: string;
   sortOrder: number;
 }
+
+// ─── Carousel Slide ───────────────────────────────────────────────────────────
+
+export interface CarouselSlideCard {
+  id: string;
+  gridRow: 1 | 2;
+  gridCol: 1 | 2 | 3;
+  background: {
+    type: "color" | "gradient" | "image" | "transparent";
+    value: string;
+  };
+  content?: { title?: string; subtitle?: string; description?: string };
+  buttons?: Array<{
+    id: string;
+    text: string;
+    link: string;
+    variant: "primary" | "secondary" | "outline";
+    openInNewTab: boolean;
+  }>;
+  isButtonOnly: boolean;
+  sizing?: {
+    widthPct?: 25 | 50 | 75 | 100;
+    heightPct?: 25 | 50 | 75 | 100;
+    padding?: "none" | "sm" | "md" | "lg";
+  };
+}
+
+export interface CarouselSlide {
+  id: string;
+  title: string;
+  order: number;
+  active: boolean;
+  media: { type: "image" | "video"; url: string; alt: string; thumbnail?: string };
+  link?: { url: string; openInNewTab: boolean };
+  mobileMedia?: { type: "image" | "video"; url: string; alt: string };
+  cards: CarouselSlideCard[];
+  overlay?: {
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    button?: {
+      id: string;
+      text: string;
+      link: string;
+      variant: "primary" | "secondary" | "outline";
+      openInNewTab: boolean;
+    };
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}

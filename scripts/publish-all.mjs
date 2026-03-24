@@ -48,15 +48,18 @@ for (const pkg of BUILD_ORDER) {
   const dir = join("packages", pkg);
   if (!existsSync(dir)) continue;
 
-  // Check if dist exists (must build first)
-  if (!existsSync(join(dir, "dist"))) {
+  // Read current version from package.json
+  const meta = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+
+  // Check if the package has been built: dist/ OR inline main entry (e.g. index.js)
+  const hasDist = existsSync(join(dir, "dist"));
+  const mainEntry = meta.main ? join(dir, meta.main.replace(/^\.\//, "")) : null;
+  const hasInlineMain = mainEntry && !meta.main.startsWith("./dist") && existsSync(mainEntry);
+  if (!hasDist && !hasInlineMain) {
     console.warn(`⚠  WARN  ${pkg}: dist/ not found — run build first`);
     fail.push(pkg);
     continue;
   }
-
-  // Read current version from package.json
-  const meta = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
   const { name, version } = meta;
 
   // Check if this version is already on the registry
