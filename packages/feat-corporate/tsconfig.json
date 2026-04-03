@@ -38,7 +38,9 @@
       "@mohasinac/feat-auth": ["../../packages/feat-auth/src"],
       "@mohasinac/feat-auth/*": ["../../packages/feat-auth/src/*"],
       "@mohasinac/feat-before-after": ["../../packages/feat-before-after/src"],
-      "@mohasinac/feat-before-after/*": ["../../packages/feat-before-after/src/*"],
+      "@mohasinac/feat-before-after/*": [
+        "../../packages/feat-before-after/src/*"
+      ],
       "@mohasinac/feat-blog": ["../../packages/feat-blog/src"],
       "@mohasinac/feat-blog/*": ["../../packages/feat-blog/src/*"],
       "@mohasinac/feat-cart": ["../../packages/feat-cart/src"],
@@ -47,10 +49,10 @@
       "@mohasinac/feat-categories/*": ["../../packages/feat-categories/src/*"],
       "@mohasinac/feat-checkout": ["../../packages/feat-checkout/src"],
       "@mohasinac/feat-checkout/*": ["../../packages/feat-checkout/src/*"],
-      "@mohasinac/feat-concern": ["../../packages/feat-concern/src"],
-      "@mohasinac/feat-concern/*": ["../../packages/feat-concern/src/*"],
       "@mohasinac/feat-consultation": ["../../packages/feat-consultation/src"],
-      "@mohasinac/feat-consultation/*": ["../../packages/feat-consultation/src/*"],
+      "@mohasinac/feat-consultation/*": [
+        "../../packages/feat-consultation/src/*"
+      ],
       "@mohasinac/feat-corporate": ["../../packages/feat-corporate/src"],
       "@mohasinac/feat-corporate/*": ["../../packages/feat-corporate/src/*"],
       "@mohasinac/feat-events": ["../../packages/feat-events/src"],
@@ -100,7 +102,9 @@
       "@mohasinac/seo": ["../../packages/seo/src"],
       "@mohasinac/seo/*": ["../../packages/seo/src/*"],
       "@mohasinac/storage-firebase": ["../../packages/storage-firebase/src"],
-      "@mohasinac/storage-firebase/*": ["../../packages/storage-firebase/src/*"],
+      "@mohasinac/storage-firebase/*": [
+        "../../packages/storage-firebase/src/*"
+      ],
       "@mohasinac/tokens": ["../../packages/tokens/src"],
       "@mohasinac/tokens/*": ["../../packages/tokens/src/*"],
       "@mohasinac/ui": ["../../packages/ui/src"],

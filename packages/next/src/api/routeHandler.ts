@@ -17,8 +17,13 @@
  */
 
 import { NextResponse } from "next/server";
-import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
+
+/** Minimal schema interface compatible with Zod v3 and v4. */
+interface ParseableSchema<TOutput> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  safeParse(data: unknown): { success: true; data: TOutput } | { success: false; error: any };
+}
 
 export interface RouteUser {
   uid: string;
@@ -39,14 +44,15 @@ interface RouteHandlerOptions<
    */
   roles?: string[];
   /** Zod schema to validate + parse the JSON request body. */
-  schema?: z.ZodSchema<TInput>;
+  schema?: ParseableSchema<TInput>;
   /** Route handler. `user` is present when `auth: true`. */
   handler: (ctx: {
     request: Request;
     user?: RouteUser;
     body?: TInput;
     params?: TParams;
-  }) => Promise<NextResponse>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }) => Promise<any>;
 }
 
 /** Read the `__session` HTTP-only cookie from request headers. */
@@ -135,7 +141,7 @@ export function createRouteHandler<
             {
               success: false,
               error: "Validation failed",
-              issues: result.error.issues,
+              issues: (result.error as any)?.issues ?? [],
             },
             { status: 400 },
           );

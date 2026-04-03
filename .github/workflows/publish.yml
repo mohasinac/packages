@@ -1,55 +1,234 @@
 name: Publish to npm
 
-# Trigger: push a semver tag, e.g.  git tag v0.2.0 && git push --tags
-# All 46 packages are published at the same version.
-# Packages already at that version are skipped automatically.
+# Trigger: push a semver tag  (e.g.  git tag v0.2.0 && git push --tags)
+#
+# Dependency-ordered strategy (derived from actual package.json deps):
+#
+#   Layer 1 — no @mohasinac/* dependencies (33 packages, all run in parallel)
+#     Primitives/tooling: contracts, core, errors, http, monitoring, react, seo,
+#       tokens, utils, validation, eslint-plugin-letitrip
+#     Zero-dep features:  feat-account, feat-auctions, feat-auth, feat-before-after,
+#       feat-blog, feat-cart, feat-checkout, feat-consultation, feat-corporate,
+#       feat-events, feat-faq, feat-filters, feat-forms, feat-layout, feat-media,
+#       feat-orders, feat-payments, feat-pre-orders, feat-promotions, feat-search,
+#       feat-stores, feat-wishlist
+#
+#   Layer 2 — depend only on Layer 1 (10 packages, all run in parallel)
+#     next, ui, db-firebase, email-resend, css-tailwind, css-vanilla, security,
+#     cli, create-app, feat-whatsapp-bot
+#
+#   Layer 3 — depend on something in Layer 2 (11 packages, all run in parallel)
+#     auth-firebase, storage-firebase (→ db-firebase)
+#     feat-admin, feat-categories, feat-homepage, feat-products, feat-reviews,
+#     feat-seller  (→ next)
+#     feat-collections, feat-loyalty, feat-preorders  (→ db-firebase)
+#
+#   release — GitHub Release (after all Layer 3 jobs succeed)
+#
+# Packages already at the pushed version on npm are skipped automatically.
+
 on:
   push:
     tags:
       - "v*.*.*"
 
-# Allow one publish run at a time
 concurrency:
   group: publish
   cancel-in-progress: false
 
 jobs:
-  publish:
-    name: Build & Publish all @mohasinac/* packages
+  # ─────────────────────────────────────────────────────────────────────────────
+  # BUILD — compile all packages once, upload dist/ as a shared artifact
+  # ─────────────────────────────────────────────────────────────────────────────
+  build:
+    name: "Build: all packages"
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write  # needed to create GitHub Releases
-      id-token: write  # needed for provenance attestation (optional but good practice)
-
     steps:
-      # ── 1. Checkout ──────────────────────────────────────────────────────
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # ── 2. Node with npm auth + cache ────────────────────────────────────
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          registry-url: "https://registry.npmjs.org"
           cache: "npm"
 
-      # ── 3. Install root devDeps (tsup, typescript, @types/*) ─────────────
       - name: Install root dependencies
         run: npm ci
 
-      # ── 4. Build all packages ─────────────────────────────────────────────
       - name: Build all packages
         run: node scripts/build-all.mjs
 
-      # ── 5. Publish — skip already-published versions ──────────────────────
-      - name: Publish all packages
-        run: node scripts/publish-all.mjs
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-dist
+          path: packages/*/dist
+          retention-days: 1
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LAYER 1 — no @mohasinac/* dependencies
+  #   Primitives/tooling + all zero-dep feat-* packages
+  # ─────────────────────────────────────────────────────────────────────────────
+  publish-layer1:
+    name: "Publish: ${{ matrix.package }}"
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          # primitives & tooling
+          - contracts
+          - core
+          - errors
+          - http
+          - monitoring
+          - react
+          - seo
+          - tokens
+          - utils
+          - validation
+          - eslint-plugin-letitrip
+          # features with no @mohasinac/* deps
+          - feat-account
+          - feat-auctions
+          - feat-auth
+          - feat-before-after
+          - feat-blog
+          - feat-cart
+          - feat-checkout
+          - feat-consultation
+          - feat-corporate
+          - feat-events
+          - feat-faq
+          - feat-filters
+          - feat-forms
+          - feat-layout
+          - feat-media
+          - feat-orders
+          - feat-payments
+          - feat-pre-orders
+          - feat-promotions
+          - feat-search
+          - feat-stores
+          - feat-wishlist
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - uses: actions/download-artifact@v4
+        with:
+          name: packages-dist
+          path: .
+      - name: "Publish @mohasinac/${{ matrix.package }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PACKAGE: ${{ matrix.package }}
+        run: node scripts/publish-all.mjs "--filter=$PACKAGE"
 
-      # ── 6. Create GitHub Release ──────────────────────────────────────────
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LAYER 2 — depend only on Layer 1 packages (contracts or errors)
+  #   next, ui, db-firebase, email-resend, css-tailwind, css-vanilla,
+  #   security, cli, create-app, feat-whatsapp-bot
+  # ─────────────────────────────────────────────────────────────────────────────
+  publish-layer2:
+    name: "Publish: ${{ matrix.package }}"
+    needs: [publish-layer1]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - next # → contracts
+          - ui # → contracts
+          - db-firebase # → contracts
+          - email-resend # → contracts
+          - css-tailwind # → contracts
+          - css-vanilla # → contracts
+          - security # → errors
+          - cli # → contracts
+          - create-app # → contracts
+          - feat-whatsapp-bot # → contracts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - uses: actions/download-artifact@v4
+        with:
+          name: packages-dist
+          path: .
+      - name: "Publish @mohasinac/${{ matrix.package }}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PACKAGE: ${{ matrix.package }}
+        run: node scripts/publish-all.mjs "--filter=$PACKAGE"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # LAYER 3 — depend on Layer 2 (db-firebase or next or react)
+  #   auth-firebase, storage-firebase (→ db-firebase)
+  #   feat-admin, feat-categories, feat-homepage, feat-products,
+  #   feat-reviews, feat-seller  (→ next)
+  #   feat-collections, feat-loyalty, feat-preorders  (→ db-firebase)
+  # ─────────────────────────────────────────────────────────────────────────────
+  publish-layer3:
+    name: "Publish: ${{ matrix.package }}"
+    needs: [publish-layer2]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - auth-firebase # → contracts, db-firebase
+          - storage-firebase # → contracts, db-firebase
+          - feat-admin # → contracts, next
+          - feat-categories # → contracts, next
+          - feat-collections # → contracts, db-firebase
+          - feat-homepage # → contracts, next, react
+          - feat-loyalty # → contracts, db-firebase
+          - feat-preorders # → contracts, db-firebase
+          - feat-products # → contracts, next
+          - feat-reviews # → contracts, next
+          - feat-seller # → contracts, next
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - uses: actions/download-artifact@v4
+        with:
+          name: packages-dist
+          path: .
+      - name: "Publish @mohasinac/${{ matrix.package }}"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PACKAGE: ${{ matrix.package }}
+        run: node scripts/publish-all.mjs "--filter=$PACKAGE"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # RELEASE — create GitHub Release after all packages are published
+  # ─────────────────────────────────────────────────────────────────────────────
+  release:
+    name: Create GitHub Release
+    needs: [publish-layer3]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
@@ -57,7 +236,7 @@ jobs:
           body: |
             ## @mohasinac/* ${{ github.ref_name }}
 
-            All 46 packages published to npm at version `${{ github.ref_name }}`.
+            All packages published to npm at version `${{ github.ref_name }}`.
 
             ```
             npm install @mohasinac/contracts@${{ github.ref_name }}

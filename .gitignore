@@ -24,6 +24,7 @@ Thumbs.db
 # npm
 npm-debug.log*
 .npm/
+.npmrc
 
 # pnpm
 .pnpm-store/

@@ -19,19 +19,61 @@ import { argv } from "process";
 
 const BUILD_ORDER = [
   "contracts",
-  "core", "tokens", "errors", "utils", "validation",
-  "http", "next", "react", "ui",
-  "monitoring", "seo", "security",
-  "css-tailwind", "css-vanilla",
-  "db-firebase", "auth-firebase", "email-resend", "storage-firebase",
-  "feat-layout", "feat-forms", "feat-filters", "feat-media",
-  "feat-search", "feat-categories", "feat-blog", "feat-reviews",
-  "feat-faq", "feat-auth", "feat-account", "feat-homepage",
-  "feat-products", "feat-wishlist", "feat-cart",
-  "feat-payments", "feat-checkout", "feat-orders",
-  "feat-admin", "feat-events", "feat-auctions", "feat-promotions",
-  "feat-seller", "feat-stores", "feat-pre-orders",
-  "cli", "eslint-plugin-letitrip", "create-app",
+  "core",
+  "tokens",
+  "errors",
+  "utils",
+  "validation",
+  "http",
+  "next",
+  "react",
+  "ui",
+  "monitoring",
+  "seo",
+  "security",
+  "css-tailwind",
+  "css-vanilla",
+  "db-firebase",
+  "auth-firebase",
+  "email-resend",
+  "storage-firebase",
+  "feat-layout",
+  "feat-forms",
+  "feat-filters",
+  "feat-media",
+  "feat-search",
+  "feat-categories",
+  "feat-blog",
+  "feat-reviews",
+  "feat-faq",
+  "feat-auth",
+  "feat-account",
+  "feat-homepage",
+  "feat-products",
+  "feat-wishlist",
+  "feat-cart",
+  "feat-payments",
+  "feat-checkout",
+  "feat-orders",
+  "feat-admin",
+  "feat-events",
+  "feat-auctions",
+  "feat-promotions",
+  "feat-seller",
+  "feat-stores",
+  "feat-pre-orders",
+  // Layer 5b — licorice-specific features
+  "feat-consultation",
+  "feat-corporate",
+  "feat-before-after",
+  // Layer 5c — hobson-specific features
+  "feat-loyalty",
+  "feat-collections",
+  "feat-preorders",
+  "feat-whatsapp-bot",
+  "cli",
+  "eslint-plugin-letitrip",
+  "create-app",
 ];
 
 const dryRun = argv.includes("--dry-run");
@@ -53,8 +95,11 @@ for (const pkg of BUILD_ORDER) {
 
   // Check if the package has been built: dist/ OR inline main entry (e.g. index.js)
   const hasDist = existsSync(join(dir, "dist"));
-  const mainEntry = meta.main ? join(dir, meta.main.replace(/^\.\//, "")) : null;
-  const hasInlineMain = mainEntry && !meta.main.startsWith("./dist") && existsSync(mainEntry);
+  const mainEntry = meta.main
+    ? join(dir, meta.main.replace(/^\.\//, ""))
+    : null;
+  const hasInlineMain =
+    mainEntry && !meta.main.startsWith("./dist") && existsSync(mainEntry);
   if (!hasDist && !hasInlineMain) {
     console.warn(`⚠  WARN  ${pkg}: dist/ not found — run build first`);
     fail.push(pkg);

@@ -62,7 +62,6 @@ const FEATURE_PACKAGE_MAP: Record<string, string> = {
   stores: "@mohasinac/feat-stores",
   "pre-orders": "@mohasinac/feat-pre-orders",
   consultation: "@mohasinac/feat-consultation",
-  concern: "@mohasinac/feat-concern",
   corporate: "@mohasinac/feat-corporate",
   "before-after": "@mohasinac/feat-before-after",
   loyalty: "@mohasinac/feat-loyalty",

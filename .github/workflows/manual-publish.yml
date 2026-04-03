@@ -1,7 +1,7 @@
 name: Manual Publish
 
 # Allows triggering a publish from the GitHub Actions UI without pushing a tag.
-# Useful for re-publishing a specific version after a failed run.
+# Useful for re-publishing a specific version or recovering from a failed run.
 on:
   workflow_dispatch:
     inputs:
@@ -16,40 +16,70 @@ on:
         default: false
 
 jobs:
-  publish:
-    name: Manual Publish (@mohasinac/*)
+  # ─────────────────────────────────────────────────────────────────────────────
+  # BUILD — compile packages (respecting --filter if provided), upload artifact
+  # ─────────────────────────────────────────────────────────────────────────────
+  build:
+    name: "Build: ${{ inputs.filter || 'all packages' }}"
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          registry-url: "https://registry.npmjs.org"
           cache: "npm"
 
       - name: Install root dependencies
         run: npm ci
 
       - name: Build packages
+        env:
+          INPUT_FILTER: ${{ inputs.filter }}
         run: |
-          if [ -n "${{ inputs.filter }}" ]; then
-            node scripts/build-all.mjs --filter=${{ inputs.filter }}
+          if [ -n "$INPUT_FILTER" ]; then
+            node scripts/build-all.mjs "--filter=$INPUT_FILTER"
           else
             node scripts/build-all.mjs
           fi
 
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-dist
+          path: packages/*/dist
+          retention-days: 1
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # PUBLISH — one job, optional dry-run and filter
+  # ─────────────────────────────────────────────────────────────────────────────
+  publish:
+    name: "Publish: ${{ inputs.filter || 'all packages' }}"
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: packages-dist
+          path: .
+
       - name: Publish packages
-        run: |
-          ARGS=""
-          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
-          if [ -n "${{ inputs.filter }}" ]; then ARGS="$ARGS --filter=${{ inputs.filter }}"; fi
-          node scripts/publish-all.mjs $ARGS
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          INPUT_FILTER: ${{ inputs.filter }}
+          INPUT_DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          ARGS=""
+          if [ "$INPUT_DRY_RUN" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          if [ -n "$INPUT_FILTER" ]; then ARGS="$ARGS --filter=$INPUT_FILTER"; fi
+          node scripts/publish-all.mjs $ARGS
