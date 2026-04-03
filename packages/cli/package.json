@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/cli",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "CLI and Next.js helpers for the @mohasinac/* pluggable feature library",
   "publishConfig": {
     "access": "public"
@@ -45,6 +45,6 @@
     "eslint": "^9.37.0"
   },
   "peerDependencies": {
-    "@mohasinac/contracts": "workspace:*"
+    "@mohasinac/contracts": "^1.0.0"
   }
 }

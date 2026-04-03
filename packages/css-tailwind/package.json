@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/css-tailwind",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Tailwind CSS adapter implementing IStyleAdapter from @mohasinac/contracts — twMerge + CSS var tokens",
   "publishConfig": {
     "access": "public"
@@ -32,6 +32,6 @@
     "eslint": "^9.37.0"
   },
   "peerDependencies": {
-    "@mohasinac/contracts": "workspace:*"
+    "@mohasinac/contracts": "^1.0.0"
   }
 }

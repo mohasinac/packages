@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/email-resend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "private": false,
   "publishConfig": {
@@ -26,7 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mohasinac/contracts": "workspace:*"
+    "@mohasinac/contracts": "^1.0.0"
   },
   "peerDependencies": {
     "resend": ">=3.0.0"

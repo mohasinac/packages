@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/eslint-plugin",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": false,
   "publishConfig": {
     "access": "public"

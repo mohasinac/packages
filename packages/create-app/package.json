@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/create-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Scaffold a new @mohasinac/* project interactively",
   "publishConfig": {
     "access": "public"
@@ -27,7 +27,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@mohasinac/contracts": "workspace:*"
+    "@mohasinac/contracts": "^1.0.0"
   },
   "devDependencies": {
     "tsup": "^8.0.0",

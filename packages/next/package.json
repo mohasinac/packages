@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/next",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "publishConfig": {
     "access": "public"
   },
@@ -29,7 +29,7 @@
     "zod": ">=3"
   },
   "dependencies": {
-    "@mohasinac/contracts": "workspace:*"
+    "@mohasinac/contracts": "^1.0.0"
   },
   "devDependencies": {
     "tsup": "^8.5.0",
