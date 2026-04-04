@@ -37,14 +37,22 @@ export interface ProviderRegistry {
   eventBus?: IEventBus;
 }
 
-let _registry: ProviderRegistry | null = null;
+// Store the registry on globalThis so it is shared across all module instances
+// (duplicate copies of this package in the same Node.js process — common in
+// monorepos with pnpm where nested dependencies resolve to separate bundles).
+const GLOBAL_KEY = "__mohasinac_provider_registry__";
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __mohasinac_provider_registry__: ProviderRegistry | null | undefined;
+}
 
 /**
  * Call once at app startup (e.g. in providers.config.ts).
  * Subsequent calls replace the registry — useful in tests.
  */
 export function registerProviders(registry: ProviderRegistry): void {
-  _registry = registry;
+  globalThis[GLOBAL_KEY] = registry;
 }
 
 /**
@@ -52,13 +60,14 @@ export function registerProviders(registry: ProviderRegistry): void {
  * Feature packages call this to resolve concrete implementations.
  */
 export function getProviders(): ProviderRegistry {
-  if (!_registry) {
+  const registry = globalThis[GLOBAL_KEY];
+  if (!registry) {
     throw new Error(
       "[contracts] Call registerProviders() before getProviders(). " +
         "Ensure providers.config.ts is imported at app startup.",
     );
   }
-  return _registry;
+  return registry;
 }
 
 /**
@@ -66,5 +75,5 @@ export function getProviders(): ProviderRegistry {
  * @internal
  */
 export function _resetProviders(): void {
-  _registry = null;
+  globalThis[GLOBAL_KEY] = null;
 }

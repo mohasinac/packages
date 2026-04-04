@@ -11,7 +11,11 @@
 
 import { NextResponse } from "next/server";
 import { getProviders } from "@mohasinac/contracts";
-import type { BlogPost, BlogListResponse, BlogListMeta } from "../types/index.js";
+import type {
+  BlogPost,
+  BlogListResponse,
+  BlogListMeta,
+} from "../types/index.js";
 
 function param(url: URL, key: string): string | null {
   return url.searchParams.get(key);
@@ -51,7 +55,7 @@ export async function GET(request: Request): Promise<NextResponse> {
       );
     }
 
-    const repo = db.getRepository<BlogPost>("blog_posts");
+    const repo = db.getRepository<BlogPost>("blogPosts");
     const result = await repo.findAll({ filters, sort, page, perPage });
 
     const meta: BlogListMeta = {

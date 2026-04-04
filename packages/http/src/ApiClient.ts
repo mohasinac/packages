@@ -78,9 +78,13 @@ export class ApiClient {
     return url.toString();
   }
 
-  private async getHeaders(customHeaders?: HeadersInit): Promise<HeadersInit> {
+  private async getHeaders(
+    method: string,
+    customHeaders?: HeadersInit,
+  ): Promise<HeadersInit> {
+    const hasBody = !["GET", "HEAD", "DELETE"].includes(method.toUpperCase());
     return {
-      "Content-Type": "application/json",
+      ...(hasBody ? { "Content-Type": "application/json" } : {}),
       ...customHeaders,
     };
   }
@@ -96,9 +100,10 @@ export class ApiClient {
       signal: externalSignal,
       ...fetchConfig
     } = config;
+    const method = (fetchConfig.method ?? "GET").toUpperCase();
 
     const url = this.buildURL(endpoint, params);
-    const headers = await this.getHeaders(customHeaders);
+    const headers = await this.getHeaders(method, customHeaders);
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -226,7 +231,7 @@ export class ApiClient {
     config?: RequestConfig,
   ): Promise<T> {
     const { headers, ...restConfig } = config ?? {};
-    const uploadHeaders = await this.getHeaders(headers);
+    const uploadHeaders = await this.getHeaders("POST", headers);
     // Remove Content-Type so browser can set it with multipart boundary
     delete (uploadHeaders as Record<string, string>)["Content-Type"];
     return this.request<T>(endpoint, {

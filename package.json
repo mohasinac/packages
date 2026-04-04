@@ -14,14 +14,18 @@
         "clean": "node -e \"const{readdirSync,rmSync,existsSync}=require('fs');readdirSync('packages').forEach(p=>{const d='packages/'+p+'/dist';if(existsSync(d))rmSync(d,{recursive:true});});console.log('Cleaned all dist/');\""
     },
     "devDependencies": {
-        "tsup": "^8.5.0",
-        "typescript": "^5.9.3",
+        "@algolia/abtesting": "^1.16.1",
+        "@algolia/client-abtesting": "^5.50.1",
+        "@algolia/client-search": "^5.50.1",
+        "@mohasinac/sievejs": "^1.0.0",
+        "@tanstack/react-query": "^5.0.0",
         "@types/node": "^22.0.0",
         "@types/react": "^19.1.6",
         "@types/react-dom": "^19.1.6",
-        "@tanstack/react-query": "^5.0.0",
-        "@upstash/redis": "^1.34.9",
         "@upstash/ratelimit": "^2.0.5",
-        "@mohasinac/sievejs": "^1.0.0"
+        "@upstash/redis": "^1.34.9",
+        "tsup": "^8.5.0",
+        "typescript": "^5.9.3",
+        "use-intl": "^4.9.0"
     }
 }

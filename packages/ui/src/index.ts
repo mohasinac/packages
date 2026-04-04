@@ -1,3 +1,5 @@
+"use client";
+
 // ─── Semantic HTML wrappers ───────────────────────────────────────────────────
 export type {
   SectionProps,
@@ -93,6 +95,37 @@ export type {
 } from "./components/ImageLightbox";
 export { ImageLightbox } from "./components/ImageLightbox";
 
+export type { TagInputProps } from "./components/TagInput";
+export { TagInput } from "./components/TagInput";
+
+export type { StepperNavProps, StepperNavStep } from "./components/StepperNav";
+export { StepperNav } from "./components/StepperNav";
+
+export type {
+  ViewMode,
+  ViewToggleProps,
+  ViewToggleLabels,
+} from "./components/ViewToggle";
+export { ViewToggle } from "./components/ViewToggle";
+
+export type { RatingDisplayProps } from "./components/RatingDisplay";
+export { RatingDisplay } from "./components/RatingDisplay";
+
+export type { PriceDisplayProps } from "./components/PriceDisplay";
+export { PriceDisplay } from "./components/PriceDisplay";
+
+export type { StatsGridProps, StatItem } from "./components/StatsGrid";
+export { StatsGrid } from "./components/StatsGrid";
+
+export type { SummaryCardProps, SummaryLine } from "./components/SummaryCard";
+export { SummaryCard } from "./components/SummaryCard";
+
+export type { CountdownDisplayProps } from "./components/CountdownDisplay";
+export { CountdownDisplay } from "./components/CountdownDisplay";
+
+export type { ItemRowProps } from "./components/ItemRow";
+export { ItemRow } from "./components/ItemRow";
+
 // ─── S1-2: DataTable ──────────────────────────────────────────────────────────
 export type { DataTableProps, DataTableColumn } from "./DataTable";
 export { DataTable } from "./DataTable";
@@ -122,3 +155,8 @@ export type {
   GridProps,
 } from "./components/Layout";
 export { Container, Stack, Row, Grid, GRID_MAP } from "./components/Layout";
+
+// ─── UI Helpers ───────────────────────────────────────────────────────────────
+export { easings } from "./animation.helper";
+export { hexToRgb, rgbToHex, getContrastColor } from "./color.helper";
+export { classNames, mergeTailwindClasses } from "./style.helper";

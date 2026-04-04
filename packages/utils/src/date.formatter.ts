@@ -211,3 +211,18 @@ export function currentYear(): string {
 export function nowISO(): string {
   return new Date(nowMs()).toISOString();
 }
+
+export function formatCustomDate(
+  date: Date | string,
+  format: "short" | "medium" | "long" | "full" = "medium",
+): string {
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  const formatOptions: Record<string, Intl.DateTimeFormatOptions> = {
+    short: { month: "numeric", day: "numeric", year: "2-digit" },
+    medium: { month: "short", day: "numeric", year: "numeric" },
+    long: { month: "long", day: "numeric", year: "numeric" },
+    full: { weekday: "long", month: "long", day: "numeric", year: "numeric" },
+  };
+  const options = formatOptions[format] || formatOptions.medium;
+  return dateObj.toLocaleDateString("en-US", options);
+}

@@ -38,6 +38,9 @@ const BUILD_ORDER = [
   "auth-firebase",
   "email-resend",
   "storage-firebase",
+  "payment-razorpay",
+  "shipping-shiprocket",
+  "search-algolia",
   // Layer 4 — shell packages
   "feat-layout",
   "feat-forms",

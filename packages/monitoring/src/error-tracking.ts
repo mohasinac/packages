@@ -48,14 +48,26 @@ export type ErrorTrackerFn = (
   context?: ErrorContext,
 ) => void;
 
-let _tracker: ErrorTrackerFn = (error, category, severity, context) => {
-  const msg = error instanceof Error ? error.message : error;
-  console.error(`[${severity.toUpperCase()}][${category}] ${msg}`, context);
-};
+const TRACKER_KEY = "__mohasinac_error_tracker__" as const;
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __mohasinac_error_tracker__: ErrorTrackerFn | undefined;
+}
+
+function getTracker(): ErrorTrackerFn {
+  return (
+    globalThis.__mohasinac_error_tracker__ ??
+    ((error, category, severity, context) => {
+      const msg = error instanceof Error ? error.message : error;
+      console.error(`[${severity.toUpperCase()}][${category}] ${msg}`, context);
+    })
+  );
+}
 
 /** Override the default console-based tracker with a custom implementation. */
 export function setErrorTracker(fn: ErrorTrackerFn): void {
-  _tracker = fn;
+  (globalThis as Record<string, unknown>)[TRACKER_KEY] = fn;
 }
 
 export function trackError(
@@ -64,7 +76,7 @@ export function trackError(
   severity: ErrorSeverity = ErrorSeverity.MEDIUM,
   context?: ErrorContext,
 ): void {
-  _tracker(error, category, severity, context);
+  getTracker()(error, category, severity, context);
 }
 
 export function trackApiError(

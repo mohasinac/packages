@@ -77,8 +77,18 @@ export class FirebaseRepository<
     let q: Query = this.getCollection();
 
     // ── Sort ──────────────────────────────────────────────────────────────────
+    // SieveQuery.sort supports a leading "-" prefix for descending order
+    // (e.g. "-createdAt" means ORDER BY createdAt DESC).
     if (query?.sort) {
-      q = q.orderBy(query.sort, query.order === "desc" ? "desc" : "asc");
+      const rawSort = query.sort;
+      const descPrefix = rawSort.startsWith("-");
+      const sortField = descPrefix ? rawSort.slice(1) : rawSort;
+      const sortDir = descPrefix
+        ? "desc"
+        : query.order === "desc"
+          ? "desc"
+          : "asc";
+      q = q.orderBy(sortField, sortDir);
     }
 
     // ── Basic Sieve filter parsing ────────────────────────────────────────────

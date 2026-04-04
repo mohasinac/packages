@@ -189,7 +189,10 @@ export function ProductGrid<T extends ProductItem = ProductItem>({
   const resolvedFooter =
     footerSlot ??
     (slots?.renderFooter
-      ? (slots.renderFooter({ page: currentPage, totalPages }) as React.ReactNode)
+      ? (slots.renderFooter({
+          page: currentPage,
+          totalPages,
+        }) as React.ReactNode)
       : null);
   const resolvedEmpty =
     emptySlot ??
@@ -201,14 +204,14 @@ export function ProductGrid<T extends ProductItem = ProductItem>({
     <div>
       {resolvedHeader}
       {isEmpty ? (
-        resolvedEmpty ?? (
+        (resolvedEmpty ?? (
           <p className="py-12 text-center text-sm text-neutral-500">
             {emptyLabel}
           </p>
-        )
+        ))
       ) : (
         <div
-          className={`grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ${className}`}
+          className={`grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 ${className}`}
         >
           {products.map((p, i) => {
             const ctx: ProductCardContext<T> = {

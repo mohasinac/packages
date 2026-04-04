@@ -51,6 +51,14 @@
       "@mohasinac/email-resend/*": ["./packages/email-resend/src/*"],
       "@mohasinac/storage-firebase": ["./packages/storage-firebase/src"],
       "@mohasinac/storage-firebase/*": ["./packages/storage-firebase/src/*"],
+      "@mohasinac/payment-razorpay": ["./packages/payment-razorpay/src"],
+      "@mohasinac/payment-razorpay/*": ["./packages/payment-razorpay/src/*"],
+      "@mohasinac/shipping-shiprocket": ["./packages/shipping-shiprocket/src"],
+      "@mohasinac/shipping-shiprocket/*": [
+        "./packages/shipping-shiprocket/src/*"
+      ],
+      "@mohasinac/search-algolia": ["./packages/search-algolia/src"],
+      "@mohasinac/search-algolia/*": ["./packages/search-algolia/src/*"],
       "@mohasinac/feat-layout": ["./packages/feat-layout/src"],
       "@mohasinac/feat-layout/*": ["./packages/feat-layout/src/*"],
       "@mohasinac/feat-forms": ["./packages/feat-forms/src"],

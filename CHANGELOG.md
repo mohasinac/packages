@@ -8,6 +8,34 @@ All 47 packages are versioned together.
 
 ---
 
+## [Unreleased] — 2026-04-04
+
+### Added
+
+- `@mohasinac/security`
+	- Added `redactPii` utility export (`src/pii-redact.ts`) for recursive PII-safe logging payload sanitization.
+
+- `@mohasinac/utils`
+	- Added `animation.helper` (`easings`).
+	- Added `color.helper` (`hexToRgb`, `rgbToHex`, `getContrastColor`).
+	- Added full `event-manager` utility surface:
+		- `GlobalEventManager`, `globalEventManager`
+		- `throttle`, `debounce`
+		- `addGlobalScrollHandler`, `addGlobalResizeHandler`, `addGlobalClickHandler`, `addGlobalKeyHandler`
+		- `removeGlobalHandler`, `isMobileDevice`, `hasTouchSupport`, `getViewportDimensions`, `isInViewport`, `smoothScrollTo`, `preventBodyScroll`
+
+- `@mohasinac/react`
+	- Added hooks `useBulkAction`, `usePendingFilters`, `usePendingTable`, `useUnsavedChanges`.
+	- Added associated exported types for bulk action and pending filter/table state.
+
+### Verification
+
+- `npm run build --workspace @mohasinac/utils` ✅
+- `npm run build --workspace @mohasinac/security` ✅
+- `npm run build --workspace @mohasinac/react` ✅
+
+---
+
 ## [0.2.0] — 2026-03-18
 
 ### Added — Feature extensibility layer (schemas, columns, layout slots)

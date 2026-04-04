@@ -109,7 +109,7 @@ export function StoresListView<T extends StoreListItem = StoreListItem>({
         ? (slots.renderHeader({ total }) as React.ReactNode)
         : null}
       <div
-        className={`grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 ${className}`}
+        className={`grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4 ${className}`}
       >
         {stores.map((store, i) =>
           slots?.renderCard ? (
@@ -117,12 +117,19 @@ export function StoresListView<T extends StoreListItem = StoreListItem>({
               {slots.renderCard(store, i) as React.ReactNode}
             </React.Fragment>
           ) : (
-            <StoreCard key={store.id} store={store as StoreListItem} labels={labels} />
+            <StoreCard
+              key={store.id}
+              store={store as StoreListItem}
+              labels={labels}
+            />
           ),
         )}
       </div>
       {slots?.renderFooter
-        ? (slots.renderFooter({ page: currentPage, totalPages }) as React.ReactNode)
+        ? (slots.renderFooter({
+            page: currentPage,
+            totalPages,
+          }) as React.ReactNode)
         : null}
     </div>
   );

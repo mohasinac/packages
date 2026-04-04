@@ -40,7 +40,7 @@ export function DashboardStatsGrid({
 }: DashboardStatsGridProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
@@ -56,7 +56,7 @@ export function DashboardStatsGrid({
 
   const cur = stats.currency ?? "";
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4">
       <StatCard
         label={labels.totalOrders ?? "Total Orders"}
         value={stats.totalOrders ?? 0}

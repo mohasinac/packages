@@ -25,7 +25,8 @@
   },
   "peerDependencies": {
     "react": ">=18",
-    "react-dom": ">=18"
+    "react-dom": ">=18",
+    "next": ">=14"
   },
   "devDependencies": {
     "tsup": "^8.5.0",

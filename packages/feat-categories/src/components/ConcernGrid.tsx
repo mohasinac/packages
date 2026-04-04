@@ -8,11 +8,17 @@ interface ConcernGridProps {
   className?: string;
 }
 
-export function ConcernGrid({ concerns, onSelect, className = "" }: ConcernGridProps) {
+export function ConcernGrid({
+  concerns,
+  onSelect,
+  className = "",
+}: ConcernGridProps) {
   if (concerns.length === 0) return null;
 
   return (
-    <div className={`grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 ${className}`}>
+    <div
+      className={`grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] gap-4 ${className}`}
+    >
       {concerns.map((concern) => (
         <ConcernCard key={concern.id} concern={concern} onClick={onSelect} />
       ))}

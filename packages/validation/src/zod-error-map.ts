@@ -83,11 +83,14 @@ export function zodErrorMap(
   };
 }
 
-let _applied = false;
+declare global {
+  // eslint-disable-next-line no-var
+  var __mohasinac_zod_applied__: boolean | undefined;
+}
 
 /** Apply the custom error map globally. Safe to call multiple times. */
 export function setupZodErrorMap(): void {
-  if (_applied) return;
+  if (globalThis.__mohasinac_zod_applied__) return;
   z.setErrorMap(zodErrorMap);
-  _applied = true;
+  globalThis.__mohasinac_zod_applied__ = true;
 }

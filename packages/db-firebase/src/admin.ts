@@ -19,23 +19,44 @@ import { getDatabase, type Database } from "firebase-admin/database";
 import * as path from "path";
 import * as fs from "fs";
 
-let _app: App | null = null;
-let _auth: Auth | null = null;
-let _db: Firestore | null = null;
-let _storage: Storage | null = null;
-let _rtdb: Database | null = null;
+// ─── Global singletons ────────────────────────────────────────────────────────
+// Stored on globalThis so all module instances (pnpm deduplication may create
+// multiple copies of this package in the same process) share one SDK instance.
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __mohasinac_firebase_admin_app__: App | null | undefined;
+  // eslint-disable-next-line no-var
+  var __mohasinac_firebase_admin_auth__: Auth | null | undefined;
+  // eslint-disable-next-line no-var
+  var __mohasinac_firebase_admin_db__: Firestore | null | undefined;
+  // eslint-disable-next-line no-var
+  var __mohasinac_firebase_admin_storage__: Storage | null | undefined;
+  // eslint-disable-next-line no-var
+  var __mohasinac_firebase_admin_rtdb__: Database | null | undefined;
+}
+
+function get<T>(key: keyof typeof globalThis): T | null {
+  return (globalThis[key] as T | null | undefined) ?? null;
+}
+function set<T>(key: keyof typeof globalThis, value: T): void {
+  (globalThis as Record<string, unknown>)[key] = value;
+}
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
 export function getAdminApp(): App {
-  if (_app) return _app;
+  const cached = get<App>("__mohasinac_firebase_admin_app__");
+  if (cached) return cached;
 
   if (getApps().length) {
-    _app = getApps()[0];
-    return _app;
+    const existing = getApps()[0];
+    set("__mohasinac_firebase_admin_app__", existing);
+    return existing;
   }
 
   const keyPath = path.join(process.cwd(), "firebase-admin-key.json");
+  let app: App;
 
   try {
     if (fs.existsSync(keyPath)) {
@@ -44,7 +65,7 @@ export function getAdminApp(): App {
         process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL ??
         `https://${sa.project_id}-default-rtdb.firebaseio.com`;
 
-      _app = initializeApp({ credential: cert(keyPath), databaseURL: dbUrl });
+      app = initializeApp({ credential: cert(keyPath), databaseURL: dbUrl });
     } else if (
       process.env.FIREBASE_ADMIN_PROJECT_ID &&
       process.env.FIREBASE_ADMIN_CLIENT_EMAIL &&
@@ -56,7 +77,7 @@ export function getAdminApp(): App {
         process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL ??
         `https://${projectId}-default-rtdb.firebaseio.com`;
 
-      _app = initializeApp({
+      app = initializeApp({
         credential: cert({
           projectId,
           clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
@@ -83,45 +104,62 @@ export function getAdminApp(): App {
     throw err;
   }
 
-  return _app;
+  set("__mohasinac_firebase_admin_app__", app);
+  return app;
 }
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 
 export function getAdminAuth(): Auth {
-  if (!_auth) _auth = getAuth(getAdminApp());
-  return _auth;
+  const cached = get<Auth>("__mohasinac_firebase_admin_auth__");
+  if (cached) return cached;
+  const auth = getAuth(getAdminApp());
+  set("__mohasinac_firebase_admin_auth__", auth);
+  return auth;
 }
 
 // ─── Firestore ────────────────────────────────────────────────────────────────
 
 export function getAdminDb(): Firestore {
-  if (!_db) {
-    _db = getFirestore(getAdminApp());
-    _db.settings({ ignoreUndefinedProperties: true });
+  const cached = get<Firestore>("__mohasinac_firebase_admin_db__");
+  if (cached) return cached;
+  const db = getFirestore(getAdminApp());
+  try {
+    // settings() can only be called once per Firestore instance — guard for
+    // HMR reloads and duplicate module instances.
+    db.settings({ ignoreUndefinedProperties: true });
+  } catch {
+    // Already configured — safe to ignore.
   }
-  return _db;
+  set("__mohasinac_firebase_admin_db__", db);
+  return db;
 }
 
 // ─── Cloud Storage ────────────────────────────────────────────────────────────
 
 export function getAdminStorage(): Storage {
-  if (!_storage) _storage = getFirebaseStorage(getAdminApp());
-  return _storage;
+  const cached = get<Storage>("__mohasinac_firebase_admin_storage__");
+  if (cached) return cached;
+  const storage = getFirebaseStorage(getAdminApp());
+  set("__mohasinac_firebase_admin_storage__", storage);
+  return storage;
 }
 
 // ─── Realtime DB ──────────────────────────────────────────────────────────────
 
 export function getAdminRealtimeDb(): Database {
-  if (!_rtdb) _rtdb = getDatabase(getAdminApp());
-  return _rtdb;
+  const cached = get<Database>("__mohasinac_firebase_admin_rtdb__");
+  if (cached) return cached;
+  const rtdb = getDatabase(getAdminApp());
+  set("__mohasinac_firebase_admin_rtdb__", rtdb);
+  return rtdb;
 }
 
 /** Reset all singletons — useful in tests. */
 export function _resetAdminSingletons(): void {
-  _app = null;
-  _auth = null;
-  _db = null;
-  _storage = null;
-  _rtdb = null;
+  set("__mohasinac_firebase_admin_app__", null);
+  set("__mohasinac_firebase_admin_auth__", null);
+  set("__mohasinac_firebase_admin_db__", null);
+  set("__mohasinac_firebase_admin_storage__", null);
+  set("__mohasinac_firebase_admin_rtdb__", null);
 }

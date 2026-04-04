@@ -38,7 +38,9 @@ export async function GET(
       );
     }
 
-    const blogRepo = new BlogRepository(db.getRepository<BlogPost>("blog_posts"));
+    const blogRepo = new BlogRepository(
+      db.getRepository<BlogPost>("blogPosts"),
+    );
 
     const post = await blogRepo.findBySlug(slug);
     if (!post) {
@@ -49,16 +51,12 @@ export async function GET(
     }
 
     // Increment view count fire-and-forget — must not block response
-    db.getRepository<BlogPost>("blog_posts")
+    db.getRepository<BlogPost>("blogPosts")
       .update(post.id, { views: (post.views ?? 0) + 1 } as Partial<BlogPost>)
       .catch(() => {});
 
     // Related posts: same category, latest 3, excluding current
-    const relatedResult = await blogRepo.findByCategory(
-      post.category,
-      1,
-      4,
-    );
+    const relatedResult = await blogRepo.findByCategory(post.category, 1, 4);
     const related = relatedResult.data
       .filter((p) => p.id !== post.id)
       .slice(0, 3);
