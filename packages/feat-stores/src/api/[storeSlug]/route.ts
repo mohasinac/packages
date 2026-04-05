@@ -12,7 +12,7 @@
  * apiClient.get<StoreDetail>('/api/stores/x') resolves correctly.
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 import type { StoreDetail } from "../../types/index.js";
 

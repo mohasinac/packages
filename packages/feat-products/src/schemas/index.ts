@@ -39,15 +39,38 @@ export const productItemSchema = z.object({
   originalPrice: z.number().optional(),
   currency: z.string().optional(),
   mainImage: z.string().optional(),
-  images: z.array(productImageSchema).optional(),
+  images: z.array(z.string()).optional(),
+  video: z
+    .object({ url: z.string(), thumbnailUrl: z.string().optional() })
+    .optional(),
+  featured: z.boolean().optional(),
+  isPromoted: z.boolean().optional(),
+  currentBid: z.number().optional(),
+  availableQuantity: z.number().optional(),
   category: z.string().optional(),
   categorySlug: z.string().optional(),
   sellerId: z.string().optional(),
   sellerName: z.string().optional(),
   sellerAvatar: z.string().optional(),
-  status: z.enum(["draft", "published", "archived", "sold"]),
+  status: z.enum([
+    "draft",
+    "published",
+    "archived",
+    "sold",
+    "out_of_stock",
+    "discontinued",
+  ]),
   condition: z
-    .enum(["new", "like_new", "good", "fair", "poor"])
+    .enum([
+      "new",
+      "like_new",
+      "good",
+      "fair",
+      "poor",
+      "used",
+      "refurbished",
+      "broken",
+    ])
     .optional(),
   listingType: z.enum(["fixed", "auction"]).optional(),
   isAuction: z.boolean().optional(),
@@ -62,15 +85,91 @@ export const productItemSchema = z.object({
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
   publishedAt: z.string().optional(),
+
+  // Detail fields
+  stockQuantity: z.number().optional(),
+  subcategory: z.string().optional(),
+  brand: z.string().optional(),
+  storeId: z.string().optional(),
+  sellerEmail: z.string().optional(),
+  specifications: z
+    .array(
+      z.object({
+        name: z.string(),
+        value: z.string(),
+        unit: z.string().optional(),
+      }),
+    )
+    .optional(),
+  features: z.array(z.string()).optional(),
+  shippingInfo: z.string().optional(),
+  returnPolicy: z.string().optional(),
+  ingredients: z.array(z.string()).optional(),
+  howToUse: z.array(z.string()).optional(),
+  allowOffers: z.boolean().optional(),
+  minOfferPercent: z.number().optional(),
+  bulkDiscounts: z
+    .array(z.object({ quantity: z.number(), discountPercent: z.number() }))
+    .optional(),
+
+  // Auction detail fields
+  startingBid: z.number().optional(),
+  bidCount: z.number().optional(),
+  auctionEndDate: z.union([z.string(), z.date()]).optional(),
+  reservePrice: z.number().optional(),
+  buyNowPrice: z.number().optional(),
+  minBidIncrement: z.number().optional(),
+  autoExtendable: z.boolean().optional(),
+  auctionExtensionMinutes: z.number().optional(),
+  auctionShippingPaidBy: z.enum(["seller", "winner"]).optional(),
+
+  // Pre-order detail fields
+  preOrderDeliveryDate: z.union([z.string(), z.date()]).optional(),
+  preOrderDepositPercent: z.number().optional(),
+  preOrderDepositAmount: z.number().optional(),
+  preOrderMaxQuantity: z.number().optional(),
+  preOrderCurrentCount: z.number().optional(),
+  preOrderProductionStatus: z
+    .enum(["upcoming", "in_production", "ready_to_ship"])
+    .optional(),
+  preOrderCancellable: z.boolean().optional(),
+
+  // Analytics
+  viewCount: z.number().optional(),
+  avgRating: z.number().optional(),
+
+  // Shipping
+  shippingPaidBy: z.enum(["seller", "buyer"]).optional(),
+  pickupAddressId: z.string().optional(),
+  insurance: z.boolean().optional(),
+  insuranceCost: z.number().optional(),
 });
 
 /** Base Zod schema for list-query parameters. */
 export const productListParamsSchema = z.object({
   q: z.string().optional(),
   category: z.string().optional(),
-  status: z.enum(["draft", "published", "archived", "sold"]).optional(),
+  status: z
+    .enum([
+      "draft",
+      "published",
+      "archived",
+      "sold",
+      "out_of_stock",
+      "discontinued",
+    ])
+    .optional(),
   condition: z
-    .enum(["new", "like_new", "good", "fair", "poor"])
+    .enum([
+      "new",
+      "like_new",
+      "good",
+      "fair",
+      "poor",
+      "used",
+      "refurbished",
+      "broken",
+    ])
     .optional(),
   minPrice: z.coerce.number().optional(),
   maxPrice: z.coerce.number().optional(),

@@ -9,7 +9,7 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 import type {
   BlogPost,

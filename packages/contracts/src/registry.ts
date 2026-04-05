@@ -8,72 +8,37 @@ import type { ICacheProvider, IQueueProvider, IEventBus } from "./infra.js";
 import type { IStyleAdapter } from "./style.js";
 import type { IDbProvider } from "./repository.js";
 
-// ─── Provider Registry ────────────────────────────────────────────────────────
-
-/**
- * The single DI container. Populated once at app startup via registerProviders().
- * Feature packages access concrete implementations via getProviders() — they
- * never import a concrete provider directly (Dependency Inversion Principle).
- */
 export interface ProviderRegistry {
   auth: IAuthProvider;
   session: ISessionProvider;
   email: IEmailProvider;
   storage: IStorageProvider;
   style: IStyleAdapter;
-  /** Optional — database provider; enables true 2-line API route stubs in feat-* packages */
   db?: IDbProvider;
-  /** Optional — only required for projects with payment flows */
   payment?: IPaymentProvider;
-  /** Optional — only required for projects with order shipping */
   shipping?: IShippingProvider;
-  /** Optional — only required for projects with full-text search */
   search?: ISearchProvider;
-  /** Optional — falls back to in-memory cache if not provided */
   cache?: ICacheProvider;
-  /** Optional — falls back to in-memory queue if not provided */
   queue?: IQueueProvider;
-  /** Optional — falls back to EventEmitter if not provided */
   eventBus?: IEventBus;
 }
 
-// Store the registry on globalThis so it is shared across all module instances
-// (duplicate copies of this package in the same Node.js process — common in
-// monorepos with pnpm where nested dependencies resolve to separate bundles).
-const GLOBAL_KEY = "__mohasinac_provider_registry__";
+let _registry: ProviderRegistry | null = null;
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __mohasinac_provider_registry__: ProviderRegistry | null | undefined;
-}
-
-/**
- * Call once at app startup (e.g. in providers.config.ts).
- * Subsequent calls replace the registry — useful in tests.
- */
 export function registerProviders(registry: ProviderRegistry): void {
-  globalThis[GLOBAL_KEY] = registry;
+  _registry = registry;
 }
 
-/**
- * Returns the registry. Throws if registerProviders() has not been called.
- * Feature packages call this to resolve concrete implementations.
- */
 export function getProviders(): ProviderRegistry {
-  const registry = globalThis[GLOBAL_KEY];
-  if (!registry) {
+  if (!_registry) {
     throw new Error(
       "[contracts] Call registerProviders() before getProviders(). " +
         "Ensure providers.config.ts is imported at app startup.",
     );
   }
-  return registry;
+  return _registry;
 }
 
-/**
- * Resets the registry — only for use in test environments.
- * @internal
- */
 export function _resetProviders(): void {
-  globalThis[GLOBAL_KEY] = null;
+  _registry = null;
 }

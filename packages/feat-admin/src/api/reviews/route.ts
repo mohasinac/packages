@@ -10,7 +10,7 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
 
@@ -40,7 +40,12 @@ export const GET = createRouteHandler({
       );
 
     const repo = db.getRepository<Record<string, unknown>>("reviews");
-    const result = await repo.findAll({ filters, sort, page, perPage: pageSize });
+    const result = await repo.findAll({
+      filters,
+      sort,
+      page,
+      perPage: pageSize,
+    });
     const totalPages = Math.max(1, Math.ceil(result.total / pageSize));
 
     return NextResponse.json({

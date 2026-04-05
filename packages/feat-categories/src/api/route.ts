@@ -13,7 +13,7 @@
  * - With `?slug=…` → data: CategoryItem (single)
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
@@ -31,9 +31,7 @@ function buildTreeFromFlat(
   const byId = new Map<string, CategoryItem>(items.map((i) => [i.id, i]));
 
   // Roots: tier === 0 or no parentIds
-  let roots = items.filter(
-    (i) => i.tier === 0 || !i.parentIds?.length,
-  );
+  let roots = items.filter((i) => i.tier === 0 || !i.parentIds?.length);
 
   if (rootId) {
     const root = byId.get(rootId);
@@ -49,9 +47,7 @@ function buildTreeFromFlat(
     return { ...item, children };
   }
 
-  return roots
-    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-    .map(nest);
+  return roots.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map(nest);
 }
 
 function param(url: URL, key: string): string | null {
@@ -141,9 +137,7 @@ export async function GET(request: Request): Promise<NextResponse> {
         order: "asc",
         perPage,
       });
-      const items = result.data.sort(
-        (a, b) => (a.order ?? 0) - (b.order ?? 0),
-      );
+      const items = result.data.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
       const res = NextResponse.json({ success: true, data: items });
       res.headers.set(
         "Cache-Control",
@@ -193,20 +187,22 @@ export async function GET(request: Request): Promise<NextResponse> {
 // POST /api/categories — create a new category (admin only)
 // ---------------------------------------------------------------------------
 
-const categoryCreateSchema = z.object({
-  name: z.string().min(1).max(200),
-  slug: z.string().min(1).max(200),
-  type: z.string().optional(),
-  parentId: z.string().optional(),
-  parentIds: z.array(z.string()).optional(),
-  childrenIds: z.array(z.string()).optional(),
-  tier: z.number().int().min(0).optional(),
-  order: z.number().int().min(0).optional(),
-  description: z.string().optional(),
-  imageUrl: z.string().url().optional(),
-  isFeatured: z.boolean().optional(),
-  showOnHomepage: z.boolean().optional(),
-}).passthrough();
+const categoryCreateSchema = z
+  .object({
+    name: z.string().min(1).max(200),
+    slug: z.string().min(1).max(200),
+    type: z.string().optional(),
+    parentId: z.string().optional(),
+    parentIds: z.array(z.string()).optional(),
+    childrenIds: z.array(z.string()).optional(),
+    tier: z.number().int().min(0).optional(),
+    order: z.number().int().min(0).optional(),
+    description: z.string().optional(),
+    imageUrl: z.string().url().optional(),
+    isFeatured: z.boolean().optional(),
+    showOnHomepage: z.boolean().optional(),
+  })
+  .passthrough();
 
 export const POST = createRouteHandler({
   auth: true,

@@ -7,7 +7,7 @@
  *   export { authMeGET as GET } from "@mohasinac/feat-auth";
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { createRouteHandler } from "@mohasinac/next";
 import { getProviders } from "@mohasinac/contracts";
 import type { AuthUser as ContractsAuthUser } from "@mohasinac/contracts";

@@ -1,7 +1,6 @@
 {
-  "name": "@mohasinac/feat-whatsapp-bot",
+  "name": "@mohasinac/instrumentation",
   "version": "1.0.0",
-  "private": false,
   "publishConfig": {
     "access": "public"
   },
@@ -20,19 +19,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --external @mohasinac/contracts",
-    "typecheck": "tsc --noEmit"
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
-    "next": ">=14.0.0"
-  },
-  "dependencies": {
-    "@mohasinac/contracts": "^0.1.0"
+    "next": ">=14"
   },
   "devDependencies": {
-    "tsup": "^8.5.1",
-    "typescript": "^5.4.5"
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "eslint": "^9.37.0"
   }
 }

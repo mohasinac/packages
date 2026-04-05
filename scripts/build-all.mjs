@@ -33,6 +33,7 @@ const BUILD_ORDER = [
   "security",
   "css-tailwind",
   "css-vanilla",
+  "instrumentation",
   // Layer 3 — infrastructure providers
   "db-firebase",
   "auth-firebase",

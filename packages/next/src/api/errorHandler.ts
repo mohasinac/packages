@@ -23,7 +23,7 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 
 /** Minimal logger interface — satisfied by Winston, Pino, or console. */
 export interface IApiErrorLogger {

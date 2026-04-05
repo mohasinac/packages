@@ -18,7 +18,7 @@
  * Collection: "coupons"
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 import type { CouponItem, PromotionsListResponse } from "../types/index.js";
 
@@ -72,7 +72,12 @@ export async function GET(request: Request): Promise<NextResponse> {
     }
 
     const repo = db.getRepository<CouponItem>("coupons");
-    const result = await repo.findAll({ filters, sort, page, perPage: pageSize });
+    const result = await repo.findAll({
+      filters,
+      sort,
+      page,
+      perPage: pageSize,
+    });
 
     const totalPages = Math.max(1, Math.ceil(result.total / pageSize));
     const body: PromotionsListResponse = {

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { AppError } from "./base-error";
 import { ERROR_CODES, ERROR_MESSAGES } from "./error-codes";
 

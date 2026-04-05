@@ -15,7 +15,7 @@
  * POST creates a new review; requires authentication.
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
@@ -171,20 +171,22 @@ export async function GET(request: Request): Promise<NextResponse> {
 // POST /api/reviews — create a new review (authenticated)
 // ---------------------------------------------------------------------------
 
-const reviewCreateSchema = z.object({
-  productId: z.string().min(1),
-  rating: z.union([
-    z.literal(1),
-    z.literal(2),
-    z.literal(3),
-    z.literal(4),
-    z.literal(5),
-  ]),
-  title: z.string().min(1).max(100).optional(),
-  comment: z.string().min(1).max(2000).optional(),
-  images: z.array(z.string().url()).max(10).optional(),
-  video: z.string().url().optional(),
-}).passthrough();
+const reviewCreateSchema = z
+  .object({
+    productId: z.string().min(1),
+    rating: z.union([
+      z.literal(1),
+      z.literal(2),
+      z.literal(3),
+      z.literal(4),
+      z.literal(5),
+    ]),
+    title: z.string().min(1).max(100).optional(),
+    comment: z.string().min(1).max(2000).optional(),
+    images: z.array(z.string().url()).max(10).optional(),
+    video: z.string().url().optional(),
+  })
+  .passthrough();
 
 export const POST = createRouteHandler({
   auth: true,

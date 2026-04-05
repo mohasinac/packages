@@ -9,7 +9,7 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
@@ -43,7 +43,10 @@ export async function GET(
 
     return NextResponse.json({ success: true, data: section });
   } catch (error) {
-    console.error("[feat-homepage] GET /api/homepage-sections/[id] failed", error);
+    console.error(
+      "[feat-homepage] GET /api/homepage-sections/[id] failed",
+      error,
+    );
     return NextResponse.json(
       { success: false, error: "Failed to fetch homepage section" },
       { status: 500 },
@@ -55,16 +58,29 @@ export { GET as homepageSectionItemGET };
 
 // ──── PATCH /api/homepage-sections/[id] ───────────────────────────────────
 
-const homepageSectionUpdateSchema = z.object({
-  type: z.enum(["hero", "featured_categories", "featured_products", "banner",
-    "testimonials", "promotions", "blog_posts", "sellers", "custom"]).optional(),
-  title: z.string().optional(),
-  enabled: z.boolean().optional(),
-  isVisible: z.boolean().optional(),
-  order: z.number().int().min(0).optional(),
-  content: z.object({}).passthrough().optional(),
-  mobile: z.object({}).passthrough().optional(),
-}).passthrough();
+const homepageSectionUpdateSchema = z
+  .object({
+    type: z
+      .enum([
+        "hero",
+        "featured_categories",
+        "featured_products",
+        "banner",
+        "testimonials",
+        "promotions",
+        "blog_posts",
+        "sellers",
+        "custom",
+      ])
+      .optional(),
+    title: z.string().optional(),
+    enabled: z.boolean().optional(),
+    isVisible: z.boolean().optional(),
+    order: z.number().int().min(0).optional(),
+    content: z.object({}).passthrough().optional(),
+    mobile: z.object({}).passthrough().optional(),
+  })
+  .passthrough();
 
 export const homepageSectionItemPATCH = createRouteHandler({
   auth: true,
@@ -76,11 +92,19 @@ export const homepageSectionItemPATCH = createRouteHandler({
     const id = segments[segments.length - 1];
 
     const { db } = getProviders();
-    if (!db) return NextResponse.json({ success: false, error: "DB not configured" }, { status: 503 });
+    if (!db)
+      return NextResponse.json(
+        { success: false, error: "DB not configured" },
+        { status: 503 },
+      );
 
     const repo = db.getRepository<HomepageSection>("homepageSections");
     const section = await repo.findById(id);
-    if (!section) return NextResponse.json({ success: false, error: "Section not found" }, { status: 404 });
+    if (!section)
+      return NextResponse.json(
+        { success: false, error: "Section not found" },
+        { status: 404 },
+      );
 
     const updated = await repo.update(id, {
       ...(body as object),
@@ -101,11 +125,19 @@ export const homepageSectionItemDELETE = createRouteHandler({
     const id = segments[segments.length - 1];
 
     const { db } = getProviders();
-    if (!db) return NextResponse.json({ success: false, error: "DB not configured" }, { status: 503 });
+    if (!db)
+      return NextResponse.json(
+        { success: false, error: "DB not configured" },
+        { status: 503 },
+      );
 
     const repo = db.getRepository<HomepageSection>("homepageSections");
     const section = await repo.findById(id);
-    if (!section) return NextResponse.json({ success: false, error: "Section not found" }, { status: 404 });
+    if (!section)
+      return NextResponse.json(
+        { success: false, error: "Section not found" },
+        { status: 404 },
+      );
 
     await repo.delete(id);
     return NextResponse.json({ success: true });

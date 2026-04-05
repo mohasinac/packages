@@ -8,7 +8,7 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
@@ -98,24 +98,37 @@ export async function GET(request: Request): Promise<NextResponse> {
 // POST /api/homepage-sections — create a new section (admin only)
 // ---------------------------------------------------------------------------
 
-const homepageSectionCreateSchema = z.object({
-  type: z.enum(["hero", "featured_categories", "featured_products", "banner",
-    "testimonials", "promotions", "blog_posts", "sellers", "custom"]),
-  title: z.string().optional(),
-  enabled: z.boolean().optional(),
-  order: z.number().int().min(0).optional(),
-  content: z.object({
+const homepageSectionCreateSchema = z
+  .object({
+    type: z.enum([
+      "hero",
+      "featured_categories",
+      "featured_products",
+      "banner",
+      "testimonials",
+      "promotions",
+      "blog_posts",
+      "sellers",
+      "custom",
+    ]),
     title: z.string().optional(),
-    subtitle: z.string().optional(),
-    ctaLabel: z.string().optional(),
-    ctaUrl: z.string().optional(),
-    imageUrl: z.string().url().optional(),
-    videoUrl: z.string().url().optional(),
-    itemIds: z.array(z.string()).optional(),
-    html: z.string().optional(),
-  }).optional(),
-  mobile: z.object({}).passthrough().optional(),
-}).passthrough();
+    enabled: z.boolean().optional(),
+    order: z.number().int().min(0).optional(),
+    content: z
+      .object({
+        title: z.string().optional(),
+        subtitle: z.string().optional(),
+        ctaLabel: z.string().optional(),
+        ctaUrl: z.string().optional(),
+        imageUrl: z.string().url().optional(),
+        videoUrl: z.string().url().optional(),
+        itemIds: z.array(z.string()).optional(),
+        html: z.string().optional(),
+      })
+      .optional(),
+    mobile: z.object({}).passthrough().optional(),
+  })
+  .passthrough();
 
 export const POST = createRouteHandler({
   auth: true,
@@ -133,7 +146,11 @@ export const POST = createRouteHandler({
     const repo = db.getRepository<HomepageSection>("homepageSections");
 
     // Auto-assign order: place at end of existing sections
-    const existing = await repo.findAll({ sort: "order", order: "desc", perPage: 1 });
+    const existing = await repo.findAll({
+      sort: "order",
+      order: "desc",
+      perPage: 1,
+    });
     const maxOrder = existing.data[0]?.order ?? -1;
 
     const now = new Date().toISOString();

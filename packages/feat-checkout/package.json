@@ -20,10 +20,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "build": "tsup src/index.ts --format esm,cjs --dts --external @mohasinac/contracts",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
+    "@mohasinac/contracts": "*",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
     "next": ">=14.0.0",

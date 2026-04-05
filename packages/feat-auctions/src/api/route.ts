@@ -11,7 +11,7 @@
  * Collection: "bids"
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 import type { BidRecord, BidListResponse } from "../types/index.js";
 
@@ -54,7 +54,12 @@ export async function GET(request: Request): Promise<NextResponse> {
     }
 
     const repo = db.getRepository<BidRecord>("bids");
-    const result = await repo.findAll({ filters, sort, page, perPage: pageSize });
+    const result = await repo.findAll({
+      filters,
+      sort,
+      page,
+      perPage: pageSize,
+    });
 
     const body: BidListResponse = {
       items: result.data,

@@ -9,7 +9,7 @@
  *   UPSTASH_REDIS_REST_TOKEN
  */
 
-import type { NextRequest } from "next/server";
+import type { NextRequest } from "next/server.js";
 
 export interface RateLimitConfig {
   /** Maximum requests allowed in the window */

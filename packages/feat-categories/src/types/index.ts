@@ -10,6 +10,7 @@ export interface CategorySeo {
 export interface CategoryDisplay {
   icon?: string;
   coverImage?: string;
+  color?: string;
   showInMenu?: boolean;
 }
 
@@ -17,6 +18,12 @@ export interface CategoryMetrics {
   productCount: number;
   totalItemCount: number;
   lastUpdated?: string;
+}
+
+export interface CategoryAncestor {
+  id: string;
+  name: string;
+  tier: number;
 }
 
 export interface CategoryItem {
@@ -38,6 +45,7 @@ export interface CategoryItem {
   /** @deprecated Use type === "brand" */ isBrand?: boolean;
   seo?: CategorySeo;
   display?: CategoryDisplay;
+  ancestors?: CategoryAncestor[];
   createdAt?: string;
   updatedAt?: string;
 }

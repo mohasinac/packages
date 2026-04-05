@@ -10,7 +10,7 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
@@ -33,7 +33,14 @@ const productUpdateSchema = z
     currency: z.string().length(3).optional(),
     category: z.string().optional(),
     status: z
-      .enum(["draft", "published", "archived", "sold", "discontinued", "out_of_stock"])
+      .enum([
+        "draft",
+        "published",
+        "archived",
+        "sold",
+        "discontinued",
+        "out_of_stock",
+      ])
       .optional(),
     mainImage: z.string().optional(),
     images: z.array(z.any()).optional(),
@@ -177,5 +184,8 @@ export const DELETE = createRouteHandler<never, { id: string }>({
   },
 });
 
-export { GET as productItemGET, PATCH as productItemPATCH, DELETE as productItemDELETE };
-
+export {
+  GET as productItemGET,
+  PATCH as productItemPATCH,
+  DELETE as productItemDELETE,
+};

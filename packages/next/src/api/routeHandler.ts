@@ -16,13 +16,15 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 
 /** Minimal schema interface compatible with Zod v3 and v4. */
 interface ParseableSchema<TOutput> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  safeParse(data: unknown): { success: true; data: TOutput } | { success: false; error: any };
+  safeParse(
+    data: unknown,
+  ): { success: true; data: TOutput } | { success: false; error: any };
 }
 
 export interface RouteUser {
@@ -51,7 +53,7 @@ interface RouteHandlerOptions<
     user?: RouteUser;
     body?: TInput;
     params?: TParams;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) => Promise<any>;
 }
 
@@ -165,10 +167,7 @@ export function createRouteHandler<
       const message =
         err instanceof Error ? err.message : "Internal server error";
       console.error(`[createRouteHandler] ${request.method} failed`, err);
-      return NextResponse.json(
-        { success: false, error: message },
-        { status },
-      );
+      return NextResponse.json({ success: false, error: message }, { status });
     }
   };
 }

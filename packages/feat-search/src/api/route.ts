@@ -19,7 +19,7 @@
  * Collection: "products"
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 import { SearchRepository } from "../repository/search.repository.js";
 import type { SearchProductItem } from "../types/index.js";

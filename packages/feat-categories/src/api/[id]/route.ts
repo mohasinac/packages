@@ -9,7 +9,7 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
@@ -55,21 +55,23 @@ export { GET as categoryItemGET };
 
 // ──── PATCH /api/categories/[id] ──────────────────────────────────────────────
 
-const categoryUpdateSchema = z.object({
-  name: z.string().min(1).max(200).optional(),
-  slug: z.string().min(1).max(200).optional(),
-  type: z.string().optional(),
-  parentId: z.string().optional(),
-  parentIds: z.array(z.string()).optional(),
-  childrenIds: z.array(z.string()).optional(),
-  tier: z.number().int().min(0).optional(),
-  order: z.number().int().min(0).optional(),
-  description: z.string().optional(),
-  imageUrl: z.string().url().optional(),
-  isFeatured: z.boolean().optional(),
-  showOnHomepage: z.boolean().optional(),
-  isActive: z.boolean().optional(),
-}).passthrough();
+const categoryUpdateSchema = z
+  .object({
+    name: z.string().min(1).max(200).optional(),
+    slug: z.string().min(1).max(200).optional(),
+    type: z.string().optional(),
+    parentId: z.string().optional(),
+    parentIds: z.array(z.string()).optional(),
+    childrenIds: z.array(z.string()).optional(),
+    tier: z.number().int().min(0).optional(),
+    order: z.number().int().min(0).optional(),
+    description: z.string().optional(),
+    imageUrl: z.string().url().optional(),
+    isFeatured: z.boolean().optional(),
+    showOnHomepage: z.boolean().optional(),
+    isActive: z.boolean().optional(),
+  })
+  .passthrough();
 
 export const categoryItemPATCH = createRouteHandler({
   auth: true,
@@ -81,11 +83,19 @@ export const categoryItemPATCH = createRouteHandler({
     const id = segments[segments.length - 1];
 
     const { db } = getProviders();
-    if (!db) return NextResponse.json({ success: false, error: "DB not configured" }, { status: 503 });
+    if (!db)
+      return NextResponse.json(
+        { success: false, error: "DB not configured" },
+        { status: 503 },
+      );
 
     const repo = db.getRepository<CategoryItem>("categories");
     const category = await repo.findById(id);
-    if (!category) return NextResponse.json({ success: false, error: "Category not found" }, { status: 404 });
+    if (!category)
+      return NextResponse.json(
+        { success: false, error: "Category not found" },
+        { status: 404 },
+      );
 
     const updated = await repo.update(id, {
       ...(body as object),
@@ -106,11 +116,19 @@ export const categoryItemDELETE = createRouteHandler({
     const id = segments[segments.length - 1];
 
     const { db } = getProviders();
-    if (!db) return NextResponse.json({ success: false, error: "DB not configured" }, { status: 503 });
+    if (!db)
+      return NextResponse.json(
+        { success: false, error: "DB not configured" },
+        { status: 503 },
+      );
 
     const repo = db.getRepository<CategoryItem>("categories");
     const category = await repo.findById(id);
-    if (!category) return NextResponse.json({ success: false, error: "Category not found" }, { status: 404 });
+    if (!category)
+      return NextResponse.json(
+        { success: false, error: "Category not found" },
+        { status: 404 },
+      );
 
     // Guard: refuse to delete if it has children
     if (category.childrenIds?.length) {

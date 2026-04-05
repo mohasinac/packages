@@ -4,7 +4,7 @@ export interface AuctionItem {
   id: string;
   title: string;
   description?: string;
-  slug: string;
+  slug?: string;
   mainImage?: string;
   images?: string[];
   currency: string;
@@ -20,6 +20,7 @@ export interface AuctionItem {
   storeSlug?: string;
   featured: boolean;
   isAuction: true;
+  video?: { url: string; thumbnailUrl?: string };
   createdAt: string;
   updatedAt: string;
 }

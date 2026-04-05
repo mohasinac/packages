@@ -14,7 +14,7 @@
  * Collections: "stores", "products", "reviews"
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 
 type RouteContext = { params: Promise<{ storeSlug: string }> };
@@ -85,7 +85,11 @@ export async function GET(
 
     // Compute aggregate metrics
     const ratingDistribution: Record<number, number> = {
-      1: 0, 2: 0, 3: 0, 4: 0, 5: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
     };
     let ratingSum = 0;
     let totalReviews = 0;
@@ -121,7 +125,10 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("[feat-stores] GET /api/stores/[storeSlug]/reviews failed", error);
+    console.error(
+      "[feat-stores] GET /api/stores/[storeSlug]/reviews failed",
+      error,
+    );
     return NextResponse.json(
       { success: false, error: "Failed to fetch store reviews" },
       { status: 500 },

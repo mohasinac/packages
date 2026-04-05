@@ -8,7 +8,7 @@
  * ```
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { z } from "zod";
 import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
@@ -67,7 +67,11 @@ export async function GET(request: Request): Promise<NextResponse> {
 
     let slides: CarouselSlide[];
     if (includeInactive) {
-      const result = await repo.findAll({ sort: "order", order: "asc", perPage: 100 });
+      const result = await repo.findAll({
+        sort: "order",
+        order: "asc",
+        perPage: 100,
+      });
       slides = result.data;
     } else {
       const result = await repo.findAll({
@@ -102,28 +106,34 @@ export { GET as carouselGET };
 // POST /api/carousel — create a new slide (admin only)
 // ---------------------------------------------------------------------------
 
-const carouselSlideCreateSchema = z.object({
-  title: z.string().min(1).max(200),
-  order: z.number().int().min(0).optional(),
-  active: z.boolean().optional(),
-  media: z.object({
-    type: z.enum(["image", "video"]),
-    url: z.string().url(),
-    alt: z.string(),
-    thumbnail: z.string().url().optional(),
-  }),
-  link: z.object({
-    url: z.string().url(),
-    openInNewTab: z.boolean(),
-  }).optional(),
-  mobileMedia: z.object({
-    type: z.enum(["image", "video"]),
-    url: z.string().url(),
-    alt: z.string(),
-  }).optional(),
-  cards: z.array(z.object({}).passthrough()).optional(),
-  overlay: z.object({}).passthrough().optional(),
-}).passthrough();
+const carouselSlideCreateSchema = z
+  .object({
+    title: z.string().min(1).max(200),
+    order: z.number().int().min(0).optional(),
+    active: z.boolean().optional(),
+    media: z.object({
+      type: z.enum(["image", "video"]),
+      url: z.string().url(),
+      alt: z.string(),
+      thumbnail: z.string().url().optional(),
+    }),
+    link: z
+      .object({
+        url: z.string().url(),
+        openInNewTab: z.boolean(),
+      })
+      .optional(),
+    mobileMedia: z
+      .object({
+        type: z.enum(["image", "video"]),
+        url: z.string().url(),
+        alt: z.string(),
+      })
+      .optional(),
+    cards: z.array(z.object({}).passthrough()).optional(),
+    overlay: z.object({}).passthrough().optional(),
+  })
+  .passthrough();
 
 export const carouselPOST = createRouteHandler({
   auth: true,
@@ -148,12 +158,19 @@ export const carouselPOST = createRouteHandler({
     const incoming = body as { active?: boolean };
     if (incoming.active !== false && active.data.length >= MAX_ACTIVE_SLIDES) {
       return NextResponse.json(
-        { success: false, error: `Maximum ${MAX_ACTIVE_SLIDES} active slides allowed` },
+        {
+          success: false,
+          error: `Maximum ${MAX_ACTIVE_SLIDES} active slides allowed`,
+        },
         { status: 409 },
       );
     }
 
-    const existing = await repo.findAll({ sort: "order", order: "desc", perPage: 1 });
+    const existing = await repo.findAll({
+      sort: "order",
+      order: "desc",
+      perPage: 1,
+    });
     const maxOrder = existing.data[0]?.order ?? -1;
 
     const now = new Date().toISOString();

@@ -89,3 +89,35 @@ export interface StoreListParams {
   sort?: string;
   filters?: string;
 }
+
+// ─── Store auctions response ──────────────────────────────────────────────────
+
+export interface StoreAuctionsResponse {
+  items: StoreAuctionItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasMore: boolean;
+}
+
+// ─── Store reviews ────────────────────────────────────────────────────────────
+
+export interface StoreReview {
+  id: string;
+  productId: string;
+  productTitle?: string;
+  productMainImage?: string | null;
+  userId: string;
+  userName?: string;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+}
+
+export interface StoreReviewsData {
+  reviews: StoreReview[];
+  averageRating: number;
+  totalReviews: number;
+  ratingDistribution: Record<number, number>;
+}

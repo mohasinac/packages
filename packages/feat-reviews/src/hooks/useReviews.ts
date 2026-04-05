@@ -41,9 +41,27 @@ export function useReviews(
     ratingDistribution: query.data?.ratingDistribution,
     isLoading: query.isLoading,
     error: query.error,
+    refetch: query.refetch,
   };
 }
 
-export function useProductReviews(productId: string, opts?: UseReviewsOptions) {
-  return useReviews({ productId, status: "approved" }, opts);
+interface UseProductReviewsOptions {
+  page?: number;
+  pageSize?: number;
+  enabled?: boolean;
+}
+
+export function useProductReviews(
+  productId: string,
+  opts?: UseProductReviewsOptions,
+) {
+  return useReviews(
+    {
+      productId,
+      status: "approved",
+      page: opts?.page,
+      perPage: opts?.pageSize,
+    },
+    { enabled: opts?.enabled },
+  );
 }

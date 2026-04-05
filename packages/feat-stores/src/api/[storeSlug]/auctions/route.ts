@@ -14,9 +14,12 @@
  * Collections: "stores", "products"
  */
 
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
-import type { StoreAuctionItem, StoreProductsResponse } from "../../../types/index.js";
+import type {
+  StoreAuctionItem,
+  StoreProductsResponse,
+} from "../../../types/index.js";
 
 type RouteContext = { params: Promise<{ storeSlug: string }> };
 
@@ -93,7 +96,10 @@ export async function GET(
 
     return NextResponse.json({ success: true, data: body });
   } catch (error) {
-    console.error("[feat-stores] GET /api/stores/[storeSlug]/auctions failed", error);
+    console.error(
+      "[feat-stores] GET /api/stores/[storeSlug]/auctions failed",
+      error,
+    );
     return NextResponse.json(
       { success: false, error: "Failed to fetch store auctions" },
       { status: 500 },

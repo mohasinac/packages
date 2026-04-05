@@ -25,6 +25,8 @@
       "@mohasinac/utils/*": ["./packages/utils/src/*"],
       "@mohasinac/validation": ["./packages/validation/src"],
       "@mohasinac/validation/*": ["./packages/validation/src/*"],
+      "@mohasinac/instrumentation": ["./packages/instrumentation/src"],
+      "@mohasinac/instrumentation/*": ["./packages/instrumentation/src/*"],
       "@mohasinac/http": ["./packages/http/src"],
       "@mohasinac/http/*": ["./packages/http/src/*"],
       "@mohasinac/next": ["./packages/next/src"],
