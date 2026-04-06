@@ -65,26 +65,53 @@ const CONTAINER_MAP = {
   "2xl": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
   /** `max-w-screen-2xl` — full-bleed wide content */
   full: "max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8",
-  /** `max-w-screen-2xl` — wide store/seller layouts (no lg:px-8) */
+  /** `max-w-screen-2xl` — wide store/seller layouts (compact px) */
   wide: "max-w-screen-2xl mx-auto px-4 sm:px-6",
+  /** `max-w-[1920px]` — ultra-wide / 4K displays */
+  ultra: "max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8",
 } as const;
 
 export type ContainerSize = keyof typeof CONTAINER_MAP;
+
+export type ContainerSizeValue = (typeof CONTAINER_MAP)[ContainerSize];
 
 /**
  * Responsive grid column presets.
  * Mirrors THEME_CONSTANTS.grid in the host app.
  */
 export const GRID_MAP = {
+  /** Single column */
   1: "grid grid-cols-1",
-  2: "grid grid-cols-1 sm:grid-cols-2",
-  3: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-3",
-  4: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4",
-  5: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
+  /** 1 → 2 */
+  2: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2",
+  /** 1 → 2 → 3 → 4 on widescreen */
+  3: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4",
+  /** 1 → 2 → 3 → 4 → 5 on widescreen */
+  4: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
+  /** 1 → 2 → 3 → 4 → 5 */
+  5: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5",
+  /** 2 → 3 → 4 → 5 → 6 */
   6: "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6",
-  /** Card grid — starts at 2 on mobile, max 5 on 2xl */
+  /**
+   * Generic card grid — 1 col on portrait mobile → 5 on ultrawide.
+   * Starts at 1 so product cards are readable even on 320 px handsets.
+   */
   cards:
-    "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5",
+    "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5",
+  /** Auto-fill product cards — min 200 px */
+  productCards: "grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6",
+  /** Auto-fill store cards — min 220 px */
+  storeCards: "grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-6",
+  /** Auto-fill category tiles — min 130 px */
+  categoryCards: "grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] gap-4",
+  /** Auto-fill coupon/promo cards — min 264 px */
+  couponCards: "grid grid-cols-[repeat(auto-fill,minmax(264px,1fr))] gap-6",
+  /** Auto-fill address / wide cards — min 300 px */
+  addressCards: "grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4",
+  /** Auto-fill KPI/stat tiles — min 180 px */
+  statTiles: "grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4",
+  /** Auto-fill account nav tiles — min 160 px */
+  navTiles: "grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4",
   /** Equal halves on md+ */
   halves: "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2",
   /** 2fr / 1fr split on md+ */
@@ -145,13 +172,14 @@ type JustifyContent = keyof typeof JUSTIFY_MAP;
 export interface ContainerProps extends React.HTMLAttributes<HTMLElement> {
   /**
    * Max-width breakpoint preset.
-   * - `sm`  → `max-w-3xl`  (blog / policy)
-   * - `md`  → `max-w-4xl`  (contact / about)
-   * - `lg`  → `max-w-5xl`  (checkout / help)
-   * - `xl`  → `max-w-6xl`  (product detail / cart)
-   * - `2xl` → `max-w-7xl`  (main content grids — **default**)
-   * - `full`→ `max-w-screen-2xl` (full-bleed)
-   * - `wide`→ `max-w-screen-2xl` (compact px, no lg step)
+   * - `sm`    → `max-w-3xl`       (blog / policy)
+   * - `md`    → `max-w-4xl`       (contact / about)
+   * - `lg`    → `max-w-5xl`       (checkout / help)
+   * - `xl`    → `max-w-6xl`       (product detail / cart)
+   * - `2xl`   → `max-w-7xl`       (main content grids — **default**)
+   * - `full`  → `max-w-screen-2xl` (full-bleed)
+   * - `wide`  → `max-w-screen-2xl` (compact px, no lg step)
+   * - `ultra` → `max-w-[1920px]`  (ultra-wide / 4K displays)
    */
   size?: ContainerSize;
   /** Render as a different element (e.g. `"main"`, `"section"`). Defaults to `"div"`. */

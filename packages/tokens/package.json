@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/tokens",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Design tokens for @mohasinac/* packages — CSS custom properties and TS constants",
   "publishConfig": {
     "access": "public"
