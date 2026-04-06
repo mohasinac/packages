@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/ui",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -29,7 +29,7 @@
     "tailwindcss": ">=3"
   },
   "dependencies": {
-    "@mohasinac/contracts": "^1.0.0",
+    "@mohasinac/contracts": "^1.1.0",
     "lucide-react": "^0.479.0",
     "tailwind-merge": "^3.3.0"
   },

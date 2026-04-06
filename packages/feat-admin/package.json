@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/feat-admin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -31,8 +31,8 @@
     "@tanstack/react-query": ">=5.0.0"
   },
   "dependencies": {
-    "@mohasinac/contracts": "^1.0.0",
-    "@mohasinac/next": "^1.0.0"
+    "@mohasinac/contracts": "^1.1.0",
+    "@mohasinac/next": "^1.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.6",

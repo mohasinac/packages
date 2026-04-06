@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/contracts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "All TypeScript interfaces and shared types for @mohasinac/* packages — no concrete code",
   "publishConfig": {
     "access": "public"

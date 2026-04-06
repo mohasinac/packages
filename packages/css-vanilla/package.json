@@ -1,6 +1,6 @@
 {
   "name": "@mohasinac/css-vanilla",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Plain CSS custom properties adapter implementing IStyleAdapter from @mohasinac/contracts",
   "publishConfig": {
     "access": "public"
@@ -29,6 +29,6 @@
     "eslint": "^9.37.0"
   },
   "peerDependencies": {
-    "@mohasinac/contracts": "^1.0.0"
+    "@mohasinac/contracts": "^1.1.0"
   }
 }

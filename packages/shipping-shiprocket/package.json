@@ -21,8 +21,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@mohasinac/contracts": "^1.0.0",
-    "@mohasinac/errors": "^1.0.0"
+    "@mohasinac/contracts": "^1.1.0",
+    "@mohasinac/errors": "^1.1.0"
   },
   "devDependencies": {
     "tsup": "^8.5.0",
