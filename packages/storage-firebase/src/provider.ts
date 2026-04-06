@@ -29,8 +29,8 @@ import { getAdminStorage } from "@mohasinac/db-firebase";
 
 function getBucket() {
   const bucketName =
-    process.env.FIREBASE_ADMIN_STORAGE_BUCKET ??
-    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+    process.env.FIREBASE_ADMIN_STORAGE_BUCKET?.trim() ??
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET?.trim();
   return bucketName
     ? getAdminStorage().bucket(bucketName)
     : getAdminStorage().bucket();

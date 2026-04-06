@@ -71,17 +71,17 @@ export function getAdminApp(): App {
       process.env.FIREBASE_ADMIN_CLIENT_EMAIL &&
       process.env.FIREBASE_ADMIN_PRIVATE_KEY
     ) {
-      const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID;
+      const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID.trim();
       const dbUrl =
-        process.env.FIREBASE_ADMIN_DATABASE_URL ??
-        process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL ??
+        process.env.FIREBASE_ADMIN_DATABASE_URL?.trim() ??
+        process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL?.trim() ??
         `https://${projectId}-default-rtdb.firebaseio.com`;
 
       app = initializeApp({
         credential: cert({
           projectId,
-          clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
-          privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY.replace(
+          clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL.trim(),
+          privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY.trim().replace(
             /\\n/g,
             "\n",
           ),

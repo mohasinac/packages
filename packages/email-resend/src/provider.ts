@@ -49,14 +49,15 @@ export function createResendProvider(
   options: ResendProviderOptions = {},
 ): IEmailProvider {
   const resolveKey = (): string =>
-    options.apiKey ?? process.env.RESEND_API_KEY ?? "";
+    options.apiKey ?? process.env.RESEND_API_KEY?.trim() ?? "";
 
   const resolveFrom = (): string => {
-    const name = options.fromName ?? process.env.EMAIL_FROM_NAME ?? "App";
+    const name =
+      options.fromName ?? process.env.EMAIL_FROM_NAME?.trim() ?? "App";
     const email =
       options.fromEmail ??
-      process.env.EMAIL_FROM ??
-      `noreply@${process.env.NEXT_PUBLIC_SITE_URL?.replace(/^https?:\/\//, "") ?? "example.com"}`;
+      process.env.EMAIL_FROM?.trim() ??
+      `noreply@${process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/^https?:\/\//, "") ?? "example.com"}`;
     return `${name} <${email}>`;
   };
 
