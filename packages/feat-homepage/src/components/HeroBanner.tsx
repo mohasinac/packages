@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button, Heading, Span } from "@mohasinac/ui";
 import type { Banner } from "../types";
 
 export interface HeroBannerProps {
@@ -92,11 +93,15 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
       {/* Content */}
       <div
         className="relative flex flex-col justify-end px-5 pb-16 sm:px-12 sm:pb-24 lg:px-20"
-        style={{ minHeight: "100svh", zIndex: 10, paddingTop: "var(--header-height, 4rem)" }}
+        style={{
+          minHeight: "100svh",
+          zIndex: 10,
+          paddingTop: "var(--header-height, 4rem)",
+        }}
       >
         {banner.subtitle && (
           <div className="mb-3">
-            <span
+            <Span
               className="inline-block px-3 py-1 text-xs font-black uppercase tracking-[0.18em]"
               style={{
                 background: "var(--color-red)",
@@ -106,11 +111,12 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
               }}
             >
               {banner.subtitle}
-            </span>
+            </Span>
           </div>
         )}
 
-        <h2
+        <Heading
+          level={2}
           className="mb-5 max-w-xl leading-none"
           style={{
             fontFamily: "var(--font-bangers, Bangers, cursive)",
@@ -121,7 +127,7 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
           }}
         >
           {banner.title}
-        </h2>
+        </Heading>
 
         {banner.ctaLabel && banner.ctaUrl && (
           <div className="flex flex-wrap items-center gap-4">
@@ -138,7 +144,12 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
               }}
             >
               {banner.ctaLabel}
-              <span aria-hidden="true" className="text-lg sm:text-xl leading-none">→</span>
+              <Span
+                aria-hidden="true"
+                className="text-lg sm:text-xl leading-none"
+              >
+                →
+              </Span>
             </Link>
           </div>
         )}
@@ -147,9 +158,11 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
       {/* Prev / Next arrows */}
       {banners.length > 1 && (
         <>
-          <button
+          <Button
             onClick={prev}
             aria-label="Previous slide"
+            variant="ghost"
+            size="sm"
             className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full transition-all hover:scale-105"
             style={{
               zIndex: 15,
@@ -161,13 +174,26 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
               backdropFilter: "blur(6px)",
             }}
           >
-            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+            <svg
+              className="h-4 w-4 sm:h-5 sm:w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={next}
             aria-label="Next slide"
+            variant="ghost"
+            size="sm"
             className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full transition-all hover:scale-105"
             style={{
               zIndex: 15,
@@ -179,10 +205,21 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
               backdropFilter: "blur(6px)",
             }}
           >
-            <svg className="h-4 w-4 sm:h-5 sm:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            <svg
+              className="h-4 w-4 sm:h-5 sm:w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2.5}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
-          </button>
+          </Button>
         </>
       )}
 
@@ -192,7 +229,7 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
           className="absolute bottom-8 right-6 sm:right-12 flex items-center gap-3"
           style={{ zIndex: 15 }}
         >
-          <span
+          <Span
             className="text-xs font-black tabular-nums"
             style={{
               color: "rgba(255,255,255,0.6)",
@@ -200,20 +237,26 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
               letterSpacing: "0.1em",
             }}
           >
-            {String(current + 1).padStart(2, "0")} / {String(banners.length).padStart(2, "0")}
-          </span>
+            {String(current + 1).padStart(2, "0")} /{" "}
+            {String(banners.length).padStart(2, "0")}
+          </Span>
           <div className="flex gap-1.5">
             {banners.map((_, i) => (
-              <button
+              <Button
                 key={i}
                 onClick={() => goTo(i)}
                 aria-label={`Go to slide ${i + 1}`}
+                variant="ghost"
+                size="sm"
                 className="transition-all"
                 style={{
                   height: 3,
                   width: i === current ? 28 : 10,
                   borderRadius: 2,
-                  background: i === current ? "var(--color-yellow)" : "rgba(255,255,255,0.35)",
+                  background:
+                    i === current
+                      ? "var(--color-yellow)"
+                      : "rgba(255,255,255,0.35)",
                 }}
               />
             ))}
@@ -230,7 +273,8 @@ export function HeroBanner({ banners, autoplayMs = 5000 }: HeroBannerProps) {
         <div
           className="h-8 w-px"
           style={{
-            background: "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.8))",
+            background:
+              "linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.8))",
           }}
         />
       </div>

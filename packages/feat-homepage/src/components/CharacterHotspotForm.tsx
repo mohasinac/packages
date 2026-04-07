@@ -2,6 +2,16 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import {
+  Button,
+  Heading,
+  Input,
+  Label,
+  Li,
+  Text,
+  Textarea,
+  Ul,
+} from "@mohasinac/ui";
 import type { CharacterHotspotConfig, HotspotPin } from "../types";
 
 type WizardStep = "image" | "place" | "details" | "review";
@@ -48,10 +58,14 @@ export function CharacterHotspotForm({
   onAfterSave,
 }: CharacterHotspotFormProps) {
   const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? "");
-  const [imageAlt, setImageAlt] = useState(initial?.imageAlt ?? "DC, Marvel and Anime characters");
+  const [imageAlt, setImageAlt] = useState(
+    initial?.imageAlt ?? "DC, Marvel and Anime characters",
+  );
   const [active, setActive] = useState(initial?.active ?? true);
   const [pins, setPins] = useState<HotspotPin[]>(initial?.pins ?? []);
-  const [step, setStep] = useState<WizardStep>(initial?.imageUrl ? "review" : "image");
+  const [step, setStep] = useState<WizardStep>(
+    initial?.imageUrl ? "review" : "image",
+  );
 
   const [draftPos, setDraftPos] = useState<DraftPosition | null>(null);
   const [draftName, setDraftName] = useState("");
@@ -88,9 +102,19 @@ export function CharacterHotspotForm({
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const xPct =
-      Math.round(Math.max(1, Math.min(99, ((e.clientX - rect.left) / rect.width) * 100)) * 10) / 10;
+      Math.round(
+        Math.max(
+          1,
+          Math.min(99, ((e.clientX - rect.left) / rect.width) * 100),
+        ) * 10,
+      ) / 10;
     const yPct =
-      Math.round(Math.max(1, Math.min(99, ((e.clientY - rect.top) / rect.height) * 100)) * 10) / 10;
+      Math.round(
+        Math.max(
+          1,
+          Math.min(99, ((e.clientY - rect.top) / rect.height) * 100),
+        ) * 10,
+      ) / 10;
     setDraftPos((prev) => ({ id: prev?.id ?? randomId(), xPct, yPct }));
   }
 
@@ -152,14 +176,14 @@ export function CharacterHotspotForm({
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       {error && (
-        <p className="rounded border border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-600">
+        <Text className="rounded border border-red-200 bg-red-50 px-4 py-2 text-sm font-bold text-red-600">
           {error}
-        </p>
+        </Text>
       )}
       {success && (
-        <p className="rounded border border-green-200 bg-green-50 px-4 py-2 text-sm font-bold text-green-700">
+        <Text className="rounded border border-green-200 bg-green-50 px-4 py-2 text-sm font-bold text-green-700">
           Saved to database successfully!
-        </p>
+        </Text>
       )}
 
       {/* Progress stepper */}
@@ -170,7 +194,12 @@ export function CharacterHotspotForm({
               {i > 0 && (
                 <div
                   className="h-0.5 flex-1"
-                  style={{ background: i <= stepIndex ? "var(--color-black)" : "var(--border-ink)" }}
+                  style={{
+                    background:
+                      i <= stepIndex
+                        ? "var(--color-black)"
+                        : "var(--border-ink)",
+                  }}
                 />
               )}
               <div
@@ -182,7 +211,10 @@ export function CharacterHotspotForm({
                       : i === stepIndex
                         ? "var(--color-yellow)"
                         : "var(--surface-elevated)",
-                  color: i < stepIndex ? "var(--color-yellow)" : "var(--color-black)",
+                  color:
+                    i < stepIndex
+                      ? "var(--color-yellow)"
+                      : "var(--color-black)",
                   border:
                     i <= stepIndex
                       ? "2px solid var(--color-black)"
@@ -194,11 +226,19 @@ export function CharacterHotspotForm({
               {i < STEPS.length - 1 && (
                 <div
                   className="h-0.5 flex-1"
-                  style={{ background: i < stepIndex ? "var(--color-black)" : "var(--border-ink)" }}
+                  style={{
+                    background:
+                      i < stepIndex
+                        ? "var(--color-black)"
+                        : "var(--border-ink)",
+                  }}
                 />
               )}
             </div>
-            <span className="mt-1 text-center text-[10px] font-medium" style={{ color: "var(--color-muted)" }}>
+            <span
+              className="mt-1 text-center text-[10px] font-medium"
+              style={{ color: "var(--color-muted)" }}
+            >
               {s.label}
             </span>
           </div>
@@ -209,82 +249,116 @@ export function CharacterHotspotForm({
       {step === "image" && (
         <div
           className="space-y-4 rounded-lg border-2 p-6"
-          style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)" }}
+          style={{
+            borderColor: "var(--border-ink)",
+            background: "var(--surface-elevated)",
+          }}
         >
-          <h2 className="text-lg font-bold">Upload Background Image</h2>
-          <p className="text-sm" style={{ color: "var(--color-muted)" }}>
-            Choose a wide panoramic image that shows all the characters. You will place pins on it in the next step.
-          </p>
+          <Heading level={2} className="text-lg font-bold">
+            Upload Background Image
+          </Heading>
+          <Text className="text-sm" style={{ color: "var(--color-muted)" }}>
+            Choose a wide panoramic image that shows all the characters. You
+            will place pins on it in the next step.
+          </Text>
 
-          <label
+          <Label
             className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-8 transition-colors hover:opacity-80"
             style={{ borderColor: "var(--border-ink)" }}
           >
             <span className="text-3xl">🖼</span>
-            <span className="font-medium">{uploading ? "Uploading…" : "Click to choose image"}</span>
+            <span className="font-medium">
+              {uploading ? "Uploading…" : "Click to choose image"}
+            </span>
             <span className="text-xs" style={{ color: "var(--color-muted)" }}>
               JPG, PNG, WebP — wide landscape images work best
             </span>
-            <input
+            <Input
               type="file"
               accept="image/*"
               className="hidden"
               onChange={handleImageUpload}
               disabled={uploading}
             />
-          </label>
+          </Label>
 
           {imageUrl && (
             <div className="space-y-1">
-              <div className="relative w-full overflow-hidden rounded-lg" style={{ paddingTop: "37.5%" }}>
-                <Image src={imageUrl} alt={imageAlt} fill className="object-cover" sizes="680px" />
+              <div
+                className="relative w-full overflow-hidden rounded-lg"
+                style={{ paddingTop: "37.5%" }}
+              >
+                <Image
+                  src={imageUrl}
+                  alt={imageAlt}
+                  fill
+                  className="object-cover"
+                  sizes="680px"
+                />
               </div>
-              <p className="text-xs font-medium text-green-700">✓ Image uploaded</p>
+              <Text className="text-xs font-medium text-green-700">
+                ✓ Image uploaded
+              </Text>
             </div>
           )}
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-bold">Image Alt Text</label>
-            <input
+            <Label className="text-sm font-bold">Image Alt Text</Label>
+            <Input
               type="text"
               value={imageAlt}
               onChange={(e) => setImageAlt(e.target.value)}
               placeholder="DC, Marvel and Anime characters"
               className="rounded border-2 px-3 py-2 text-sm outline-none"
-              style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)", color: "var(--color-black)" }}
+              style={{
+                borderColor: "var(--border-ink)",
+                background: "var(--surface-elevated)",
+                color: "var(--color-black)",
+              }}
             />
           </div>
 
-          <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium">
-            <input
+          <Label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium">
+            <Input
               type="checkbox"
               checked={active}
               onChange={(e) => setActive(e.target.checked)}
               className="h-4 w-4 rounded"
             />
             Active (show on homepage)
-          </label>
+          </Label>
 
-          <div className="flex items-center justify-end gap-3 border-t pt-4" style={{ borderColor: "var(--border-ink)" }}>
+          <div
+            className="flex items-center justify-end gap-3 border-t pt-4"
+            style={{ borderColor: "var(--border-ink)" }}
+          >
             {(initial?.pins?.length ?? 0) > 0 && (
-              <button
+              <Button
                 type="button"
                 onClick={() => setStep("review")}
+                variant="ghost"
                 className="px-4 py-2 text-sm font-medium rounded transition-opacity hover:opacity-70"
-                style={{ background: "transparent", color: "var(--color-black)" }}
+                style={{
+                  background: "transparent",
+                  color: "var(--color-black)",
+                }}
               >
                 Skip to Review
-              </button>
+              </Button>
             )}
-            <button
+            <Button
               type="button"
               onClick={() => setStep("place")}
               disabled={!imageUrl || uploading}
+              variant="primary"
               className="px-4 py-2 text-sm font-bold rounded transition-opacity disabled:opacity-50"
-              style={{ background: "var(--color-black)", color: "var(--color-yellow)" }}
+              style={{
+                background: "var(--color-black)",
+                color: "var(--color-yellow)",
+              }}
             >
               Next: Place Pins →
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -293,20 +367,36 @@ export function CharacterHotspotForm({
       {step === "place" && (
         <div
           className="space-y-4 rounded-lg border-2 p-6"
-          style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)" }}
+          style={{
+            borderColor: "var(--border-ink)",
+            background: "var(--surface-elevated)",
+          }}
         >
-          <h2 className="text-lg font-bold">Place a Pin</h2>
-          <p className="text-sm" style={{ color: "var(--color-muted)" }}>
-            <strong>Click anywhere on the image</strong> to drop a pin, or enter exact coordinates below.
-          </p>
+          <Heading level={2} className="text-lg font-bold">
+            Place a Pin
+          </Heading>
+          <Text className="text-sm" style={{ color: "var(--color-muted)" }}>
+            <strong>Click anywhere on the image</strong> to drop a pin, or enter
+            exact coordinates below.
+          </Text>
 
           <div
             ref={containerRef}
             className="relative w-full overflow-hidden rounded-lg"
-            style={{ paddingTop: "56.25%", cursor: "crosshair", background: "#111" }}
+            style={{
+              paddingTop: "56.25%",
+              cursor: "crosshair",
+              background: "#111",
+            }}
             onClick={handleImageClick}
           >
-            <Image src={imageUrl} alt={imageAlt} fill className="object-cover" sizes="(max-width: 680px) 100vw" />
+            <Image
+              src={imageUrl}
+              alt={imageAlt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 680px) 100vw"
+            />
 
             {pins.map((pin) => (
               <div
@@ -354,7 +444,11 @@ export function CharacterHotspotForm({
               >
                 <span
                   className="absolute animate-ping rounded-full"
-                  style={{ inset: -6, background: "rgba(255,228,0,0.4)", pointerEvents: "none" }}
+                  style={{
+                    inset: -6,
+                    background: "rgba(255,228,0,0.4)",
+                    pointerEvents: "none",
+                  }}
                 />
                 <div
                   className="relative flex items-center justify-center rounded-full font-bold"
@@ -372,7 +466,10 @@ export function CharacterHotspotForm({
                 </div>
                 <div
                   className="pointer-events-none absolute left-9 top-1/2 -translate-y-1/2 whitespace-nowrap rounded px-2 py-0.5 text-[10px] font-bold"
-                  style={{ background: "var(--color-black)", color: "var(--color-yellow)" }}
+                  style={{
+                    background: "var(--color-black)",
+                    color: "var(--color-yellow)",
+                  }}
                 >
                   NEW PIN
                 </div>
@@ -408,8 +505,8 @@ export function CharacterHotspotForm({
               ] as const
             ).map(({ label, field, value, onChange }) => (
               <div key={field} className="flex flex-col gap-1">
-                <label className="text-sm font-bold">{label}</label>
-                <input
+                <Label className="text-sm font-bold">{label}</Label>
+                <Input
                   type="number"
                   min={1}
                   max={99}
@@ -421,47 +518,65 @@ export function CharacterHotspotForm({
                     if (!isNaN(v)) onChange(v);
                   }}
                   className="rounded border-2 px-3 py-2 text-sm outline-none"
-                  style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)", color: "var(--color-black)" }}
+                  style={{
+                    borderColor: "var(--border-ink)",
+                    background: "var(--surface-elevated)",
+                    color: "var(--color-black)",
+                  }}
                 />
               </div>
             ))}
           </div>
 
           {pins.length > 0 && (
-            <p className="text-xs" style={{ color: "var(--color-muted)" }}>
-              {pins.length} pin{pins.length !== 1 ? "s" : ""} already placed on this image.
-            </p>
+            <Text className="text-xs" style={{ color: "var(--color-muted)" }}>
+              {pins.length} pin{pins.length !== 1 ? "s" : ""} already placed on
+              this image.
+            </Text>
           )}
 
-          <div className="flex items-center justify-between border-t pt-4" style={{ borderColor: "var(--border-ink)" }}>
-            <button
+          <div
+            className="flex items-center justify-between border-t pt-4"
+            style={{ borderColor: "var(--border-ink)" }}
+          >
+            <Button
               type="button"
               onClick={() => setStep("image")}
+              variant="ghost"
               className="px-4 py-2 text-sm font-medium rounded transition-opacity hover:opacity-70"
               style={{ background: "transparent", color: "var(--color-black)" }}
             >
               ← Back
-            </button>
+            </Button>
             <div className="flex items-center gap-3">
               {pins.length > 0 && (
-                <button
+                <Button
                   type="button"
                   onClick={() => setStep("review")}
+                  variant="outline"
                   className="px-4 py-2 text-sm font-bold rounded transition-opacity"
-                  style={{ background: "var(--surface-warm)", color: "var(--color-black)", border: "2px solid var(--border-ink)" }}
+                  style={{
+                    background: "var(--surface-warm)",
+                    color: "var(--color-black)",
+                    border: "2px solid var(--border-ink)",
+                  }}
                 >
                   Done Adding Pins
-                </button>
+                </Button>
               )}
-              <button
+              <Button
                 type="button"
                 onClick={() => setStep("details")}
                 disabled={!draftPos}
+                variant="primary"
                 className="px-4 py-2 text-sm font-bold rounded transition-opacity disabled:opacity-50"
-                style={{ background: "var(--color-black)", color: "var(--color-yellow)" }}
+                style={{
+                  background: "var(--color-black)",
+                  color: "var(--color-yellow)",
+                }}
               >
                 Continue: Add Details →
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -471,78 +586,123 @@ export function CharacterHotspotForm({
       {step === "details" && (
         <div
           className="space-y-4 rounded-lg border-2 p-6"
-          style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)" }}
+          style={{
+            borderColor: "var(--border-ink)",
+            background: "var(--surface-elevated)",
+          }}
         >
-          <h2 className="text-lg font-bold">Pin Details</h2>
-          <p className="text-sm" style={{ color: "var(--color-muted)" }}>
+          <Heading level={2} className="text-lg font-bold">
+            Pin Details
+          </Heading>
+          <Text className="text-sm" style={{ color: "var(--color-muted)" }}>
             Fill in the details for the pin at{" "}
             <strong>
               {draftPos?.xPct}%, {draftPos?.yPct}%
             </strong>
             .
-          </p>
+          </Text>
 
           <div className="grid grid-cols-2 gap-3">
             {(
               [
-                { label: "Name *", value: draftName, onChange: setDraftName, placeholder: "SPIDER-MAN" },
-                { label: "Universe / Category *", value: draftUniverse, onChange: setDraftUniverse, placeholder: "Marvel" },
+                {
+                  label: "Name *",
+                  value: draftName,
+                  onChange: setDraftName,
+                  placeholder: "SPIDER-MAN",
+                },
+                {
+                  label: "Universe / Category *",
+                  value: draftUniverse,
+                  onChange: setDraftUniverse,
+                  placeholder: "Marvel",
+                },
               ] as const
             ).map(({ label, value, onChange, placeholder }) => (
               <div key={label} className="flex flex-col gap-1">
-                <label className="text-sm font-bold">{label}</label>
-                <input
+                <Label className="text-sm font-bold">{label}</Label>
+                <Input
                   type="text"
                   value={value}
-                  onChange={(e) => (onChange as (v: string) => void)(e.target.value)}
+                  onChange={(e) =>
+                    (onChange as (v: string) => void)(e.target.value)
+                  }
                   placeholder={placeholder}
                   className="rounded border-2 px-3 py-2 text-sm outline-none"
-                  style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)", color: "var(--color-black)" }}
+                  style={{
+                    borderColor: "var(--border-ink)",
+                    background: "var(--surface-elevated)",
+                    color: "var(--color-black)",
+                  }}
                 />
               </div>
             ))}
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-bold">Description *</label>
-            <textarea
+            <Label className="text-sm font-bold">Description *</Label>
+            <Textarea
               rows={3}
               value={draftDescription}
               onChange={(e) => setDraftDescription(e.target.value)}
               className="resize-none rounded border-2 px-3 py-2 text-sm outline-none"
-              style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)", color: "var(--color-black)" }}
+              style={{
+                borderColor: "var(--border-ink)",
+                background: "var(--surface-elevated)",
+                color: "var(--color-black)",
+              }}
               placeholder="Short description shown in the popup…"
             />
           </div>
 
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-bold">Link (href) *</label>
-            <input
+            <Label className="text-sm font-bold">Link (href) *</Label>
+            <Input
               type="text"
               value={draftHref}
               onChange={(e) => setDraftHref(e.target.value)}
               placeholder="/franchise/marvel"
               className="rounded border-2 px-3 py-2 text-sm outline-none"
-              style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)", color: "var(--color-black)" }}
+              style={{
+                borderColor: "var(--border-ink)",
+                background: "var(--surface-elevated)",
+                color: "var(--color-black)",
+              }}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             {(
               [
-                { label: "Button Text *", value: draftBuyText, onChange: setDraftBuyText, placeholder: "Get Spider-Man Figures" },
-                { label: "Badge Label", value: draftBadge, onChange: setDraftBadge, placeholder: "MARVEL" },
+                {
+                  label: "Button Text *",
+                  value: draftBuyText,
+                  onChange: setDraftBuyText,
+                  placeholder: "Get Spider-Man Figures",
+                },
+                {
+                  label: "Badge Label",
+                  value: draftBadge,
+                  onChange: setDraftBadge,
+                  placeholder: "MARVEL",
+                },
               ] as const
             ).map(({ label, value, onChange, placeholder }) => (
               <div key={label} className="flex flex-col gap-1">
-                <label className="text-sm font-bold">{label}</label>
-                <input
+                <Label className="text-sm font-bold">{label}</Label>
+                <Input
                   type="text"
                   value={value}
-                  onChange={(e) => (onChange as (v: string) => void)(e.target.value)}
+                  onChange={(e) =>
+                    (onChange as (v: string) => void)(e.target.value)
+                  }
                   placeholder={placeholder}
                   className="rounded border-2 px-3 py-2 text-sm outline-none"
-                  style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)", color: "var(--color-black)" }}
+                  style={{
+                    borderColor: "var(--border-ink)",
+                    background: "var(--surface-elevated)",
+                    color: "var(--color-black)",
+                  }}
                 />
               </div>
             ))}
@@ -550,17 +710,21 @@ export function CharacterHotspotForm({
 
           <div className="flex items-end gap-3">
             <div className="flex-1 flex flex-col gap-1">
-              <label className="text-sm font-bold">Accent Colour (hex)</label>
-              <input
+              <Label className="text-sm font-bold">Accent Colour (hex)</Label>
+              <Input
                 type="text"
                 value={draftAccent}
                 onChange={(e) => setDraftAccent(e.target.value)}
                 placeholder="#E8001C"
                 className="rounded border-2 px-3 py-2 text-sm outline-none"
-                style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)", color: "var(--color-black)" }}
+                style={{
+                  borderColor: "var(--border-ink)",
+                  background: "var(--surface-elevated)",
+                  color: "var(--color-black)",
+                }}
               />
             </div>
-            <input
+            <Input
               type="color"
               value={draftAccent}
               onChange={(e) => setDraftAccent(e.target.value)}
@@ -570,34 +734,53 @@ export function CharacterHotspotForm({
             />
           </div>
 
-          <div className="flex items-center justify-between border-t pt-4" style={{ borderColor: "var(--border-ink)" }}>
-            <button
+          <div
+            className="flex items-center justify-between border-t pt-4"
+            style={{ borderColor: "var(--border-ink)" }}
+          >
+            <Button
               type="button"
               onClick={() => setStep("place")}
+              variant="ghost"
               className="px-4 py-2 text-sm font-medium rounded transition-opacity hover:opacity-70"
               style={{ background: "transparent", color: "var(--color-black)" }}
             >
               ← Back
-            </button>
+            </Button>
             <div className="flex items-center gap-3">
-              <button
+              <Button
                 type="button"
                 disabled={!draftName || !draftHref}
-                onClick={() => { commitDraftPin(); setStep("review"); }}
+                onClick={() => {
+                  commitDraftPin();
+                  setStep("review");
+                }}
+                variant="outline"
                 className="px-4 py-2 text-sm font-bold rounded transition-opacity disabled:opacity-50"
-                style={{ background: "var(--surface-warm)", color: "var(--color-black)", border: "2px solid var(--border-ink)" }}
+                style={{
+                  background: "var(--surface-warm)",
+                  color: "var(--color-black)",
+                  border: "2px solid var(--border-ink)",
+                }}
               >
                 Save Pin &amp; Finish
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 disabled={!draftName || !draftHref}
-                onClick={() => { commitDraftPin(); setStep("place"); }}
+                onClick={() => {
+                  commitDraftPin();
+                  setStep("place");
+                }}
+                variant="primary"
                 className="px-4 py-2 text-sm font-bold rounded transition-opacity disabled:opacity-50"
-                style={{ background: "var(--color-black)", color: "var(--color-yellow)" }}
+                style={{
+                  background: "var(--color-black)",
+                  color: "var(--color-yellow)",
+                }}
               >
                 Save Pin &amp; Add Another →
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -607,23 +790,45 @@ export function CharacterHotspotForm({
       {step === "review" && (
         <div
           className="space-y-4 rounded-lg border-2 p-6"
-          style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)" }}
+          style={{
+            borderColor: "var(--border-ink)",
+            background: "var(--surface-elevated)",
+          }}
         >
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold">Review &amp; Save</h2>
-            <span className="rounded-full px-3 py-1 text-sm font-bold" style={{ background: "var(--surface-warm)" }}>
+            <Heading level={2} className="text-lg font-bold">
+              Review &amp; Save
+            </Heading>
+            <span
+              className="rounded-full px-3 py-1 text-sm font-bold"
+              style={{ background: "var(--surface-warm)" }}
+            >
               {pins.length} pin{pins.length !== 1 ? "s" : ""}
             </span>
           </div>
 
           {/* Preview image */}
-          <div className="relative w-full overflow-hidden rounded-lg" style={{ paddingTop: "56.25%", background: "#111" }}>
-            <Image src={imageUrl} alt={imageAlt} fill className="object-cover" sizes="(max-width: 680px) 100vw" />
+          <div
+            className="relative w-full overflow-hidden rounded-lg"
+            style={{ paddingTop: "56.25%", background: "#111" }}
+          >
+            <Image
+              src={imageUrl}
+              alt={imageAlt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 680px) 100vw"
+            />
             {pins.map((pin) => (
               <div
                 key={pin.id}
                 className="pointer-events-none absolute"
-                style={{ left: `${pin.xPct}%`, top: `${pin.yPct}%`, transform: "translate(-50%, -50%)", zIndex: 10 }}
+                style={{
+                  left: `${pin.xPct}%`,
+                  top: `${pin.yPct}%`,
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 10,
+                }}
               >
                 <div
                   className="flex items-center justify-center rounded-full text-xs font-bold text-white"
@@ -651,9 +856,12 @@ export function CharacterHotspotForm({
 
           {/* Pin list */}
           {pins.length > 0 ? (
-            <ul className="divide-y rounded-lg border" style={{ borderColor: "var(--border-ink)" }}>
+            <Ul
+              className="divide-y rounded-lg border"
+              style={{ borderColor: "var(--border-ink)" }}
+            >
               {pins.map((pin, i) => (
-                <li key={pin.id} className="flex items-center gap-3 px-4 py-3">
+                <Li key={pin.id} className="flex items-center gap-3 px-4 py-3">
                   <span
                     className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
                     style={{ background: pin.accent || "#E8001C" }}
@@ -661,88 +869,129 @@ export function CharacterHotspotForm({
                     {i + 1}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-bold">
+                    <Text className="truncate text-sm font-bold">
                       {pin.name || (
-                        <span className="italic" style={{ color: "var(--color-muted)" }}>
+                        <span
+                          className="italic"
+                          style={{ color: "var(--color-muted)" }}
+                        >
                           Unnamed
                         </span>
                       )}
-                    </p>
-                    <p className="text-xs" style={{ color: "var(--color-muted)" }}>
-                      {pin.universe} · {pin.xPct.toFixed(0)}%, {pin.yPct.toFixed(0)}%
-                    </p>
+                    </Text>
+                    <Text
+                      className="text-xs"
+                      style={{ color: "var(--color-muted)" }}
+                    >
+                      {pin.universe} · {pin.xPct.toFixed(0)}%,{" "}
+                      {pin.yPct.toFixed(0)}%
+                    </Text>
                   </div>
-                  <button
+                  <Button
                     type="button"
                     onClick={() => deletePin(pin.id)}
+                    variant="ghost"
                     className="shrink-0 rounded p-1 text-xs text-red-500 hover:bg-red-50"
                     title="Remove pin"
                   >
                     ✕
-                  </button>
-                </li>
+                  </Button>
+                </Li>
               ))}
-            </ul>
+            </Ul>
           ) : (
             <div
               className="rounded-lg border-2 border-dashed p-8 text-center text-sm"
-              style={{ borderColor: "var(--border-ink)", color: "var(--color-muted)" }}
+              style={{
+                borderColor: "var(--border-ink)",
+                color: "var(--color-muted)",
+              }}
             >
               No pins yet — add some using the button below.
             </div>
           )}
 
           {/* Image settings */}
-          <details className="rounded-lg border p-3" style={{ borderColor: "var(--border-ink)" }}>
-            <summary className="cursor-pointer text-sm font-medium">Image Settings</summary>
+          <details
+            className="rounded-lg border p-3"
+            style={{ borderColor: "var(--border-ink)" }}
+          >
+            <summary className="cursor-pointer text-sm font-medium">
+              Image Settings
+            </summary>
             <div className="mt-3 space-y-3">
-              <label
+              <Label
                 className="inline-flex cursor-pointer items-center gap-2 rounded border-2 border-dashed px-3 py-1.5 text-sm font-medium transition-colors hover:opacity-80"
                 style={{ borderColor: "var(--border-ink)" }}
               >
                 {uploading ? "Uploading…" : "Replace Image"}
-                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
-              </label>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                  disabled={uploading}
+                />
+              </Label>
               <div className="flex flex-col gap-1">
-                <label className="text-sm font-bold">Image Alt Text</label>
-                <input
+                <Label className="text-sm font-bold">Image Alt Text</Label>
+                <Input
                   type="text"
                   value={imageAlt}
                   onChange={(e) => setImageAlt(e.target.value)}
                   className="rounded border-2 px-3 py-2 text-sm outline-none"
-                  style={{ borderColor: "var(--border-ink)", background: "var(--surface-elevated)", color: "var(--color-black)" }}
+                  style={{
+                    borderColor: "var(--border-ink)",
+                    background: "var(--surface-elevated)",
+                    color: "var(--color-black)",
+                  }}
                 />
               </div>
-              <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium">
-                <input
+              <Label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium">
+                <Input
                   type="checkbox"
                   checked={active}
                   onChange={(e) => setActive(e.target.checked)}
                   className="h-4 w-4 rounded"
                 />
                 Active (show on homepage)
-              </label>
+              </Label>
             </div>
           </details>
 
-          <div className="flex items-center justify-between border-t pt-4" style={{ borderColor: "var(--border-ink)" }}>
-            <button
+          <div
+            className="flex items-center justify-between border-t pt-4"
+            style={{ borderColor: "var(--border-ink)" }}
+          >
+            <Button
               type="button"
-              onClick={() => { setDraftPos(null); setStep("place"); }}
+              onClick={() => {
+                setDraftPos(null);
+                setStep("place");
+              }}
+              variant="outline"
               className="px-4 py-2 text-sm font-bold rounded transition-opacity"
-              style={{ background: "var(--surface-warm)", color: "var(--color-black)", border: "2px solid var(--border-ink)" }}
+              style={{
+                background: "var(--surface-warm)",
+                color: "var(--color-black)",
+                border: "2px solid var(--border-ink)",
+              }}
             >
               + Add Another Pin
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={handleSave}
               disabled={!imageUrl || saving || pins.length === 0}
+              variant="primary"
               className="px-4 py-2 text-sm font-bold rounded transition-opacity disabled:opacity-50"
-              style={{ background: "var(--color-black)", color: "var(--color-yellow)" }}
+              style={{
+                background: "var(--color-black)",
+                color: "var(--color-yellow)",
+              }}
             >
               {saving ? "Saving…" : "Save to Database"}
-            </button>
+            </Button>
           </div>
         </div>
       )}

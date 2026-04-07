@@ -1,4 +1,4 @@
-import { StarRating } from "@mohasinac/ui";
+import { Heading, Section, StarRating, Text } from "@mohasinac/ui";
 import type { Testimonial } from "../types";
 
 export interface TestimonialsCarouselProps {
@@ -17,7 +17,7 @@ export function TestimonialsCarousel({
   if (testimonials.length === 0) return null;
 
   return (
-    <section
+    <Section
       style={{
         background: "var(--section-bg)",
         borderTop: "var(--section-border)",
@@ -29,16 +29,20 @@ export function TestimonialsCarousel({
         paddingBlock: "clamp(3rem, 6vh, 5rem)",
       }}
     >
-      <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 flex flex-col" style={{ minHeight: 0 }}>
+      <div
+        className="mx-auto w-full max-w-7xl px-6 sm:px-8 flex flex-col"
+        style={{ minHeight: 0 }}
+      >
         {/* Heading */}
         <div className="mb-6 text-center" style={{ flexShrink: 0 }}>
-          <p
+          <Text
             className="mb-1 text-xs font-black uppercase tracking-widest"
             style={{ color: "var(--color-red)", letterSpacing: "0.18em" }}
           >
             {eyebrow}
-          </p>
-          <h2
+          </Text>
+          <Heading
+            level={2}
             style={{
               fontFamily: "var(--font-bangers, Bangers, cursive)",
               fontSize: "clamp(1.8rem, 4vw, 2.8rem)",
@@ -48,7 +52,7 @@ export function TestimonialsCarousel({
             }}
           >
             {heading}
-          </h2>
+          </Heading>
         </div>
 
         {/* 2-row masonry grid — wraps into 2 rows, scrolls horizontally on overflow */}
@@ -68,19 +72,25 @@ export function TestimonialsCarousel({
               }}
             >
               <StarRating value={t.rating} readOnly size="sm" />
-              <p className="flex-1 text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
+              <Text
+                className="flex-1 text-sm leading-relaxed"
+                style={{ color: "var(--text-secondary)" }}
+              >
                 &ldquo;{t.text}&rdquo;
-              </p>
-              <p
+              </Text>
+              <Text
                 className="text-xs font-black uppercase"
-                style={{ color: "var(--color-yellow)", letterSpacing: "0.06em" }}
+                style={{
+                  color: "var(--color-yellow)",
+                  letterSpacing: "0.06em",
+                }}
               >
                 — {t.name}
-              </p>
+              </Text>
             </div>
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

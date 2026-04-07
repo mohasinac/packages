@@ -13,6 +13,15 @@ import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 import type { StoreListItem, StoreListResponse } from "../types/index.js";
 
+type StoreListEntity = StoreListItem & {
+  stats?: {
+    totalProducts?: number;
+    itemsSold?: number;
+    totalReviews?: number;
+    averageRating?: number;
+  };
+};
+
 function param(url: URL, key: string): string | null {
   return url.searchParams.get(key);
 }
@@ -24,7 +33,10 @@ function numParam(url: URL, key: string, fallback: number): number {
 }
 
 const SAFE_STORE_FILTER_FIELDS = new Set([
-  "storeName", "storeCategory", "status", "isPublic",
+  "storeName",
+  "storeCategory",
+  "status",
+  "isPublic",
 ]);
 
 function validateSieveFilters(
@@ -69,7 +81,7 @@ export async function GET(request: Request): Promise<NextResponse> {
       );
     }
 
-    const repo = db.getRepository<StoreListItem>("stores");
+    const repo = db.getRepository<StoreListEntity>("stores");
     const result = await repo.findAll({
       filters,
       sort,
@@ -78,7 +90,7 @@ export async function GET(request: Request): Promise<NextResponse> {
     });
 
     // Map to public-safe shape (strip sensitive fields)
-    const items: StoreListItem[] = result.data.map((s: any) => ({
+    const items: StoreListItem[] = result.data.map((s) => ({
       id: s.id,
       storeSlug: s.storeSlug,
       ownerId: s.ownerId,

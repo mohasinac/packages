@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+import { Li, Nav, Span, Ul } from "@mohasinac/ui";
 
 export interface NavbarLayoutItem {
   href: string;
@@ -35,14 +37,14 @@ function DefaultNavItem({
       : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-slate-800 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors px-3";
 
   return (
-    <a
+    <Link
       href={item.href}
       aria-current={isActive ? "page" : undefined}
       className={`flex items-center gap-1.5 py-2 text-sm rounded-lg font-medium transition-colors duration-150 ${activeClasses}`}
     >
       {item.icon}
-      <span>{item.label}</span>
-    </a>
+      <Span>{item.label}</Span>
+    </Link>
   );
 }
 
@@ -62,33 +64,33 @@ export function NavbarLayout({
 }: NavbarLayoutProps) {
   if (inline) {
     return (
-      <ul
+      <Ul
         aria-label={ariaLabel}
         className="hidden md:flex items-center gap-0.5 lg:gap-1"
       >
         {items.map((item) => (
-          <li key={item.href}>
+          <Li key={item.href}>
             {renderItem ? (
               renderItem(item, activeHref === item.href)
             ) : (
               <DefaultNavItem item={item} isActive={activeHref === item.href} />
             )}
-          </li>
+          </Li>
         ))}
-      </ul>
+      </Ul>
     );
   }
 
   return (
-    <nav
+    <Nav
       id={id}
       aria-label={ariaLabel}
       className="hidden md:block bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-zinc-200/80 dark:border-slate-800/80"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1920px]">
-        <ul className="flex items-center gap-0.5 lg:gap-1 h-10 md:h-12">
+        <Ul className="flex items-center gap-0.5 lg:gap-1 h-10 md:h-12">
           {items.map((item) => (
-            <li key={item.href}>
+            <Li key={item.href}>
               {renderItem ? (
                 renderItem(item, activeHref === item.href)
               ) : (
@@ -97,10 +99,10 @@ export function NavbarLayout({
                   isActive={activeHref === item.href}
                 />
               )}
-            </li>
+            </Li>
           ))}
-        </ul>
+        </Ul>
       </div>
-    </nav>
+    </Nav>
   );
 }

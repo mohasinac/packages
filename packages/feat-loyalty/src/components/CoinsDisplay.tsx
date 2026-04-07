@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Text } from "@mohasinac/ui";
 
 interface CoinsBadgeProps {
   coins: number;
@@ -26,8 +27,10 @@ interface CoinsDisplayProps {
 export function CoinsDisplay({ coins, label = "HC Coins" }: CoinsDisplayProps) {
   return (
     <div className="flex flex-col items-center gap-1">
-      <p className="text-3xl font-bold text-amber-600">{coins.toLocaleString()}</p>
-      <p className="text-sm text-gray-500">{label}</p>
+      <Text className="text-3xl font-bold text-amber-600">
+        {coins.toLocaleString()}
+      </Text>
+      <Text className="text-sm text-gray-500">{label}</Text>
     </div>
   );
 }

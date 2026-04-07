@@ -147,7 +147,6 @@ export function ImageCropModal({
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}
             alt={t("cropPreviewAlt")}

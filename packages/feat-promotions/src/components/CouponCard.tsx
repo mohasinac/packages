@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, Text } from "@mohasinac/ui";
 import type { CouponItem, CouponType } from "../types";
 
 const TYPE_COLORS: Record<CouponType, string> = {
@@ -44,20 +45,22 @@ export function CouponCard({
     <div className={`rounded-xl border-2 p-4 ${colorClass} ${className}`}>
       <div className="flex items-start justify-between gap-2 mb-2">
         <div>
-          <p className="text-xl font-bold tracking-wide">{discountLabel}</p>
-          <p className="text-sm mt-0.5">{coupon.name}</p>
+          <Text className="text-xl font-bold tracking-wide">
+            {discountLabel}
+          </Text>
+          <Text className="text-sm mt-0.5">{coupon.name}</Text>
         </div>
-        <button
+        <Button
           type="button"
           onClick={() => onCopy?.(coupon.code)}
           className="shrink-0 rounded-lg border border-current px-3 py-1.5 text-xs font-semibold hover:opacity-80 transition-opacity"
         >
           {coupon.code} — {labels.copy ?? "Copy"}
-        </button>
+        </Button>
       </div>
 
       {coupon.description && (
-        <p className="text-xs opacity-70 mb-2">{coupon.description}</p>
+        <Text className="text-xs opacity-70 mb-2">{coupon.description}</Text>
       )}
 
       <div className="flex flex-wrap gap-2 text-xs opacity-70">

@@ -21,9 +21,11 @@ import type {
   StoreProductsResponse,
 } from "../../../types/index.js";
 
-const SAFE_STORE_AUCTION_FILTER_FIELDS = new Set([
-  "price", "category",
-]);
+interface StoreEntity {
+  ownerId: string;
+}
+
+const SAFE_STORE_AUCTION_FILTER_FIELDS = new Set(["price", "category"]);
 
 function validateSieveFilters(
   raw: string,
@@ -69,7 +71,7 @@ export async function GET(
     }
 
     // Resolve store by slug
-    const storesRepo = db.getRepository<any>("stores");
+    const storesRepo = db.getRepository<StoreEntity>("stores");
     const storeResult = await storesRepo.findAll({
       filters: `storeSlug==${storeSlug},status==active,isPublic==true`,
       perPage: 1,
@@ -93,7 +95,10 @@ export async function GET(
     ];
     const extra = param(url, "filters");
     if (extra) {
-      const safe = validateSieveFilters(extra, SAFE_STORE_AUCTION_FILTER_FIELDS);
+      const safe = validateSieveFilters(
+        extra,
+        SAFE_STORE_AUCTION_FILTER_FIELDS,
+      );
       if (safe) filterParts.push(safe);
     }
 

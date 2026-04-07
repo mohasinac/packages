@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Aside, Button, Nav } from "@mohasinac/ui";
 
 export interface ListingLayoutLabels {
   filtersTitle?: string;
@@ -139,11 +140,13 @@ export function ListingLayout({
       >
         <div className="hidden md:flex items-center gap-2 min-w-0">
           {hasFilter && (
-            <button
+            <Button
               type="button"
               onClick={() => setSidebarOpen((prev) => !prev)}
               aria-label={sidebarOpen ? l.hideFilters : l.showFilters}
               aria-expanded={sidebarOpen}
+              variant="ghost"
+              size="sm"
               className={[
                 "hidden lg:flex flex-shrink-0 items-center gap-1.5",
                 "rounded-full h-8 px-3 text-sm font-medium",
@@ -159,7 +162,7 @@ export function ListingLayout({
                   {filterActiveCount}
                 </span>
               )}
-            </button>
+            </Button>
           )}
 
           {searchSlot && <div className="flex-1 min-w-0">{searchSlot}</div>}
@@ -184,10 +187,12 @@ export function ListingLayout({
         <div className="flex flex-col gap-2 md:hidden">
           <div className="flex items-center gap-2">
             {hasFilter && (
-              <button
+              <Button
                 type="button"
                 onClick={() => setMobileFilterOpen(true)}
                 aria-label={l.filtersTitle}
+                variant="ghost"
+                size="sm"
                 className={[
                   "flex-shrink-0 flex items-center gap-1.5",
                   "rounded-full h-9 px-3 text-sm font-medium",
@@ -205,7 +210,7 @@ export function ListingLayout({
                     {filterActiveCount}
                   </span>
                 )}
-              </button>
+              </Button>
             )}
             {searchSlot && <div className="flex-1 min-w-0">{searchSlot}</div>}
           </div>
@@ -230,7 +235,7 @@ export function ListingLayout({
 
       <div className="flex gap-4 lg:gap-6 items-start">
         {hasFilter && (
-          <aside
+          <Aside
             aria-label={panelTitle}
             className={[
               "hidden lg:block flex-shrink-0 self-start",
@@ -245,13 +250,15 @@ export function ListingLayout({
               <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-100 dark:border-slate-800">
                 <div className="font-semibold text-sm">{panelTitle}</div>
                 {filterActiveCount > 0 && (
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={onFilterClear}
                     className="text-xs text-primary hover:text-primary/80 hover:underline p-0 h-auto leading-none font-medium"
                   >
                     {l.clearAll}
-                  </button>
+                  </Button>
                 )}
               </div>
 
@@ -260,16 +267,17 @@ export function ListingLayout({
               </div>
 
               <div className="px-3 pb-3 pt-2 border-t border-zinc-100 dark:border-slate-800">
-                <button
+                <Button
                   type="button"
+                  variant="primary"
                   className="w-full rounded-xl bg-primary text-white py-2 px-3"
                   onClick={onFilterApply}
                 >
                   {l.applyFilters}
-                </button>
+                </Button>
               </div>
             </div>
-          </aside>
+          </Aside>
         )}
 
         <div className="flex-1 min-w-0 space-y-3">
@@ -287,7 +295,7 @@ export function ListingLayout({
       </div>
 
       {toolbarPaginationSlot && (
-        <nav
+        <Nav
           aria-label="Pagination"
           className={[
             "fixed left-0 right-0 md:hidden",
@@ -304,7 +312,7 @@ export function ListingLayout({
           ].join(" ")}
         >
           {toolbarPaginationSlot}
-        </nav>
+        </Nav>
       )}
 
       {hasFilter && mobileFilterOpen && (
@@ -331,14 +339,16 @@ export function ListingLayout({
                   </span>
                 )}
               </div>
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => setMobileFilterOpen(false)}
                 aria-label={l.close}
                 className="rounded-full w-8 h-8 p-0 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-slate-800"
               >
                 x
-              </button>
+              </Button>
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 pt-6 pb-4 space-y-4">
@@ -346,22 +356,24 @@ export function ListingLayout({
             </div>
 
             <div className="flex-shrink-0 flex gap-3 px-4 py-4 border-t border-zinc-100 dark:border-slate-800 bg-white dark:bg-slate-950">
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 className="flex-1 rounded-xl bg-zinc-200 dark:bg-slate-700 py-2 px-3"
                 onClick={() => {
                   onFilterClear?.();
                 }}
               >
                 {l.clearAll}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="primary"
                 className="flex-1 rounded-xl bg-primary text-white py-2 px-3"
                 onClick={handleMobileApply}
               >
                 {l.applyFilters}
-              </button>
+              </Button>
             </div>
           </div>
         </>

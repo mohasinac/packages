@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
+import { Text } from "@mohasinac/ui";
 import type { BeforeAfterItem } from "../types";
 
 export interface BeforeAfterCardProps {
@@ -35,7 +36,10 @@ export function BeforeAfterCard({
 
     const onMove = (e: MouseEvent | TouchEvent) => {
       e.preventDefault();
-      const clientX = "touches" in e ? (e as TouchEvent).touches[0]!.clientX : (e as MouseEvent).clientX;
+      const clientX =
+        "touches" in e
+          ? (e as TouchEvent).touches[0]!.clientX
+          : (e as MouseEvent).clientX;
       updatePosition(clientX);
     };
     const onUp = () => setDragging(false);
@@ -57,8 +61,14 @@ export function BeforeAfterCard({
       <div
         ref={containerRef}
         className="relative aspect-[4/3] cursor-col-resize overflow-hidden select-none"
-        onMouseDown={(e) => { setDragging(true); updatePosition(e.clientX); }}
-        onTouchStart={(e) => { setDragging(true); updatePosition(e.touches[0]!.clientX); }}
+        onMouseDown={(e) => {
+          setDragging(true);
+          updatePosition(e.clientX);
+        }}
+        onTouchStart={(e) => {
+          setDragging(true);
+          updatePosition(e.touches[0]!.clientX);
+        }}
         role="slider"
         aria-label={`Before and after comparison: ${item.caption}`}
         aria-valuemin={0}
@@ -80,7 +90,10 @@ export function BeforeAfterCard({
         />
 
         {/* Before image — clipped to left of divider */}
-        <div className="absolute inset-0 overflow-hidden" style={{ width: `${position}%` }}>
+        <div
+          className="absolute inset-0 overflow-hidden"
+          style={{ width: `${position}%` }}
+        >
           <Image
             src={item.beforeImage}
             alt={beforeLabel}
@@ -96,7 +109,13 @@ export function BeforeAfterCard({
           style={{ left: `${position}%` }}
         >
           <div className="absolute top-1/2 left-1/2 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-card shadow-lg">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M4 8L1 5M4 8L1 11M4 8H12M12 8L15 5M12 8L15 11"
                 stroke="currentColor"
@@ -119,7 +138,9 @@ export function BeforeAfterCard({
 
       {/* Caption */}
       <div className="p-4">
-        <p className="text-foreground text-sm font-medium">{item.caption}</p>
+        <Text className="text-foreground text-sm font-medium">
+          {item.caption}
+        </Text>
       </div>
     </div>
   );

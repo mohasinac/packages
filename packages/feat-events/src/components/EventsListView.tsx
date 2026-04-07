@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, Text } from "@mohasinac/ui";
 import type { LayoutSlots } from "@mohasinac/contracts";
 import type { EventItem } from "../types";
 import { EventCard } from "./EventCard";
@@ -52,7 +53,9 @@ export function EventsListView<T extends EventItem = EventItem>({
       return <>{slots.renderEmptyState() as React.ReactNode}</>;
     }
     return (
-      <p className="py-12 text-center text-sm text-neutral-500">{emptyLabel}</p>
+      <Text className="py-12 text-center text-sm text-neutral-500">
+        {emptyLabel}
+      </Text>
     );
   }
 
@@ -72,26 +75,27 @@ export function EventsListView<T extends EventItem = EventItem>({
               key={event.id}
               event={event as EventItem}
               onParticipate={
-                onParticipate
-                  ? (e) => onParticipate(e as T)
-                  : undefined
+                onParticipate ? (e) => onParticipate(e as T) : undefined
               }
             />
           ),
         )}
       </div>
       {slots?.renderFooter ? (
-        (slots.renderFooter({ page: currentPage, totalPages }) as React.ReactNode)
+        (slots.renderFooter({
+          page: currentPage,
+          totalPages,
+        }) as React.ReactNode)
       ) : totalPages > 1 && onPageChange ? (
         <div className="flex justify-center gap-2">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button
+            <Button
               key={p}
               onClick={() => onPageChange(p)}
               className={`h-9 w-9 rounded-lg text-sm font-medium transition ${p === currentPage ? "bg-neutral-900 text-white" : "border border-neutral-200 text-neutral-600 hover:bg-neutral-100"}`}
             >
               {p}
-            </button>
+            </Button>
           ))}
         </div>
       ) : null}

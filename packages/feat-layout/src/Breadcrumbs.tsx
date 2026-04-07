@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+import { Li, Nav, Ol } from "@mohasinac/ui";
 
 export interface BreadcrumbsProps {
   children: React.ReactNode;
@@ -33,10 +35,10 @@ export function Breadcrumbs({
   const items = React.Children.toArray(children);
 
   return (
-    <nav aria-label="Breadcrumb" className={className}>
-      <ol className="flex items-center gap-2 text-sm flex-wrap">
+    <Nav aria-label="Breadcrumb" className={className}>
+      <Ol className="flex items-center gap-2 text-sm flex-wrap">
         {items.map((item, index) => (
-          <li key={index} className="flex items-center gap-2">
+          <Li key={index} className="flex items-center gap-2">
             {item}
             {index < items.length - 1 && (
               <span
@@ -46,10 +48,10 @@ export function Breadcrumbs({
                 {separator}
               </span>
             )}
-          </li>
+          </Li>
         ))}
-      </ol>
-    </nav>
+      </Ol>
+    </Nav>
   );
 }
 
@@ -71,11 +73,11 @@ export function BreadcrumbItem({
   }
 
   return (
-    <a
+    <Link
       href={href}
       className={`text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors ${className}`}
     >
       {children}
-    </a>
+    </Link>
   );
 }

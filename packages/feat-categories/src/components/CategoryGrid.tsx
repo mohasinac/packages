@@ -1,4 +1,5 @@
 import React from "react";
+import { Text } from "@mohasinac/ui";
 import type { CategoryItem } from "../types";
 
 interface CategoryCardProps {
@@ -26,26 +27,27 @@ export function CategoryCard({
     >
       {category.display?.coverImage ? (
         <div className="aspect-video w-full overflow-hidden bg-neutral-100">
-          <img
-            src={category.display.coverImage}
-            alt={category.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          <div
+            role="img"
+            aria-label={category.name}
+            className="h-full w-full bg-center bg-cover transition-transform duration-300 group-hover:scale-105"
+            style={{ backgroundImage: `url(${category.display.coverImage})` }}
           />
         </div>
       ) : (
         <div className="aspect-video w-full bg-gradient-to-br from-neutral-100 to-neutral-200" />
       )}
       <div className="p-4">
-        <p className="font-semibold text-neutral-900">{category.name}</p>
+        <Text className="font-semibold text-neutral-900">{category.name}</Text>
         {category.description && (
-          <p className="mt-1 text-sm text-neutral-500 line-clamp-2">
+          <Text className="mt-1 text-sm text-neutral-500 line-clamp-2">
             {category.description}
-          </p>
+          </Text>
         )}
         {category.metrics && (
-          <p className="mt-2 text-xs text-neutral-400">
+          <Text className="mt-2 text-xs text-neutral-400">
             {category.metrics.productCount} items
-          </p>
+          </Text>
         )}
       </div>
     </div>
@@ -67,7 +69,9 @@ export function CategoryGrid({
 }: CategoryGridProps) {
   if (categories.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-neutral-500">{emptyLabel}</p>
+      <Text className="py-12 text-center text-sm text-neutral-500">
+        {emptyLabel}
+      </Text>
     );
   }
 

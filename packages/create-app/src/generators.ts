@@ -27,7 +27,7 @@ module.exports = withFeatures(features)({
 // ─── i18n/request.ts ──────────────────────────────────────────────────────────
 
 export function generateI18nRequest(locales: string[]): string {
-  const defaultLocale = locales[0] ?? "en";
+  void locales;
   return `import { getRequestConfig } from "next-intl/server";
 import { mergeFeatureMessages } from "@mohasinac/cli/i18n";
 import features from "../../features.config";
@@ -177,7 +177,7 @@ export function generateRootLayout(
   projectName: string,
   locales: string[],
 ): string {
-  const defaultLocale = locales[0] ?? "en";
+  void locales;
   return `import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";

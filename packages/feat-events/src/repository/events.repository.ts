@@ -1,10 +1,9 @@
 import type {
   IRepository,
-  IReadRepository,
   PagedResult,
   SieveQuery,
 } from "@mohasinac/contracts";
-import type { EventItem, EventEntryItem, EventListResponse } from "../types";
+import type { EventItem, EventEntryItem } from "../types";
 
 export class EventsRepository {
   constructor(private readonly repo: IRepository<EventItem>) {}

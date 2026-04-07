@@ -1,4 +1,5 @@
 import React from "react";
+import { Article, Button, Heading, Span, Text } from "@mohasinac/ui";
 import type { EventItem, EventType } from "../types";
 import { EventStatusBadge } from "./EventStatusBadge";
 
@@ -33,51 +34,55 @@ export function EventCard({
   const daysLeft = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
 
   return (
-    <article
+    <Article
       className={`rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}
     >
       {event.coverImageUrl && (
         <div className="aspect-video overflow-hidden">
-          <img
-            src={event.coverImageUrl}
-            alt={event.title}
-            className="h-full w-full object-cover"
+          <div
+            role="img"
+            aria-label={event.title}
+            className="h-full w-full bg-cover bg-center"
+            style={{ backgroundImage: `url(${event.coverImageUrl})` }}
           />
         </div>
       )}
       <div className="p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <span className="text-lg" aria-hidden="true">
+          <Span className="text-lg" aria-hidden="true">
             {TYPE_ICONS[event.type]}
-          </span>
+          </Span>
           <EventStatusBadge status={event.status} />
         </div>
-        <h3 className="font-semibold text-gray-900 text-base leading-snug mb-1">
+        <Heading
+          level={3}
+          className="font-semibold text-gray-900 text-base leading-snug mb-1"
+        >
           {event.title}
-        </h3>
-        <p className="text-sm text-gray-500 line-clamp-2 mb-3">
+        </Heading>
+        <Text className="text-sm text-gray-500 line-clamp-2 mb-3">
           {event.description}
-        </p>
+        </Text>
 
         <div className="flex items-center justify-between text-xs text-gray-400 mb-3">
           {event.status === "active" && daysLeft > 0 && (
-            <span>{daysLeft}d remaining</span>
+            <Span>{daysLeft}d remaining</Span>
           )}
-          <span>
+          <Span>
             {event.stats.totalEntries} {labels.entries ?? "entries"}
-          </span>
+          </Span>
         </div>
 
         {event.status === "active" && onParticipate && (
-          <button
+          <Button
             type="button"
             onClick={() => onParticipate(event)}
             className="w-full rounded-lg bg-orange-500 py-2 text-sm font-medium text-white hover:bg-orange-600 transition-colors"
           >
             {labels.participate ?? "Participate"}
-          </button>
+          </Button>
         )}
       </div>
-    </article>
+    </Article>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button, Input, Span, Text } from "@mohasinac/ui";
 import { cn } from "./filterUtils";
 import type { FilterOption } from "./filterUtils";
 
@@ -78,69 +79,72 @@ export function FilterFacetSection({
       )}
     >
       {/* Header */}
-      <button
-        type="button"
-        onClick={handleToggle}
-        className="flex w-full items-center justify-between text-sm font-semibold text-zinc-900 dark:text-zinc-50 py-1 hover:opacity-80 transition-opacity"
-        aria-expanded={!isCollapsed}
-      >
-        <span className="flex items-center gap-2">
-          {title}
-          {hasValue && (
-            <span className="inline-flex items-center justify-center w-5 h-5 text-xs rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-600/20 dark:ring-emerald-400/20">
-              {selected.length}
-            </span>
-          )}
-          {onClear && hasValue && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onClear();
-              }}
-              className="inline-flex items-center justify-center w-5 h-5 p-0 text-zinc-500 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-zinc-100 dark:hover:bg-slate-700 transition-colors rounded-full"
-              aria-label="Clear filter"
-            >
-              <svg
-                className="w-3 h-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          )}
-        </span>
-        <svg
-          className={cn(
-            "w-4 h-4 text-zinc-500 dark:text-zinc-400 transition-transform duration-200",
-            isCollapsed ? "" : "rotate-180",
-          )}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-          aria-hidden="true"
+      <div className="flex items-center gap-2">
+        <Button
+          type="button"
+          onClick={handleToggle}
+          variant="ghost"
+          size="sm"
+          className="flex flex-1 items-center justify-between text-sm font-semibold text-zinc-900 dark:text-zinc-50 py-1 hover:opacity-80 transition-opacity"
+          aria-expanded={!isCollapsed}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
+          <span className="flex items-center gap-2">
+            {title}
+            {hasValue && (
+              <Span className="inline-flex items-center justify-center w-5 h-5 text-xs rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-600/20 dark:ring-emerald-400/20">
+                {selected.length}
+              </Span>
+            )}
+          </span>
+          <svg
+            className={cn(
+              "w-4 h-4 text-zinc-500 dark:text-zinc-400 transition-transform duration-200",
+              isCollapsed ? "" : "rotate-180",
+            )}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </Button>
+        {onClear && hasValue && (
+          <Button
+            type="button"
+            onClick={onClear}
+            variant="ghost"
+            size="sm"
+            className="inline-flex items-center justify-center w-5 h-5 p-0 text-zinc-500 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-zinc-100 dark:hover:bg-slate-700 transition-colors rounded-full"
+            aria-label="Clear filter"
+          >
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </Button>
+        )}
+      </div>
 
       {!isCollapsed && (
         <div className="mt-3 space-y-1">
           {searchable && options.length > 8 && (
-            <input
+            <Input
               type="search"
               placeholder="Search…"
               value={search}
@@ -151,37 +155,48 @@ export function FilterFacetSection({
           {filtered.map((option) => {
             const isSelected = selected.includes(option.value);
             return (
-              <label
+              <div
                 key={option.value}
                 className="flex items-center gap-2.5 py-1 cursor-pointer group"
               >
-                <input
-                  type={selectionMode === "single" ? "radio" : "checkbox"}
-                  checked={isSelected}
-                  onChange={() => toggle(option.value)}
-                  className={cn(
-                    "flex-shrink-0 border-zinc-300 dark:border-slate-600 cursor-pointer",
-                    selectionMode === "single"
-                      ? "w-4 h-4 rounded-full text-primary-600 dark:text-secondary-500"
-                      : "w-4 h-4 rounded text-primary-600 dark:text-secondary-500 checked:bg-primary-600 dark:checked:bg-secondary-500",
-                    "focus:ring-primary-500/30 dark:focus:ring-secondary-400/30",
-                  )}
-                />
-                <span className="flex-1 text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors truncate">
-                  {option.label}
-                </span>
-                {option.count !== undefined && (
-                  <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums flex-shrink-0">
-                    {option.count}
-                  </span>
+                {selectionMode === "single" ? (
+                  <input
+                    type="radio"
+                    checked={isSelected}
+                    onChange={() => toggle(option.value)}
+                    className={cn(
+                      "flex-shrink-0 border-zinc-300 dark:border-slate-600 cursor-pointer",
+                      "w-4 h-4 rounded-full text-primary-600 dark:text-secondary-500",
+                      "focus:ring-primary-500/30 dark:focus:ring-secondary-400/30",
+                    )}
+                  />
+                ) : (
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => toggle(option.value)}
+                    className={cn(
+                      "flex-shrink-0 border-zinc-300 dark:border-slate-600 cursor-pointer",
+                      "w-4 h-4 rounded text-primary-600 dark:text-secondary-500 checked:bg-primary-600 dark:checked:bg-secondary-500",
+                      "focus:ring-primary-500/30 dark:focus:ring-secondary-400/30",
+                    )}
+                  />
                 )}
-              </label>
+                <Span className="flex-1 text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors truncate">
+                  {option.label}
+                </Span>
+                {option.count !== undefined && (
+                  <Span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums flex-shrink-0">
+                    {option.count}
+                  </Span>
+                )}
+              </div>
             );
           })}
           {filtered.length === 0 && (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500 py-1">
+            <Text className="text-xs text-zinc-400 dark:text-zinc-500 py-1">
               No results
-            </p>
+            </Text>
           )}
         </div>
       )}

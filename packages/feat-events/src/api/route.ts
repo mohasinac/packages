@@ -24,7 +24,12 @@ function numParam(url: URL, key: string, fallback: number): number {
 }
 
 const SAFE_EVENT_FILTER_FIELDS = new Set([
-  "status", "title", "type", "startsAt", "endsAt", "createdAt",
+  "status",
+  "title",
+  "type",
+  "startsAt",
+  "endsAt",
+  "createdAt",
 ]);
 
 function validateSieveFilters(
@@ -78,7 +83,12 @@ export async function GET(request: Request): Promise<NextResponse> {
     const totalPages = Math.max(1, Math.ceil(result.total / pageSize));
 
     // Strip internal fields (createdBy) before returning
-    const items = result.data.map(({ createdBy: _cb, ...evt }) => evt);
+    const items = result.data.map((event) => {
+      const { createdBy: _createdBy, ...publicEvent } = event as EventItem & {
+        createdBy?: string;
+      };
+      return publicEvent as EventItem;
+    });
 
     const body: EventListResponse = {
       items: items as EventItem[],

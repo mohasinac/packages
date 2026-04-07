@@ -1,5 +1,7 @@
 import React from "react";
+import Link from "next/link";
 import type { LayoutSlots } from "@mohasinac/contracts";
+import { Heading, Span, Text } from "@mohasinac/ui";
 import type { StoreListItem } from "../types";
 
 interface StoreCardProps {
@@ -10,16 +12,17 @@ interface StoreCardProps {
 
 function StoreCard({ store, labels = {}, className = "" }: StoreCardProps) {
   return (
-    <a
+    <Link
       href={`/stores/${store.storeSlug}`}
       className={`block rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}
     >
       {store.storeBannerURL ? (
         <div className="h-24 overflow-hidden bg-gray-100">
-          <img
-            src={store.storeBannerURL}
-            alt={`${store.storeName} banner`}
-            className="h-full w-full object-cover"
+          <div
+            role="img"
+            aria-label={`${store.storeName} banner`}
+            className="h-full w-full bg-center bg-cover"
+            style={{ backgroundImage: `url(${store.storeBannerURL})` }}
           />
         </div>
       ) : (
@@ -28,10 +31,11 @@ function StoreCard({ store, labels = {}, className = "" }: StoreCardProps) {
       <div className="px-4 pb-4">
         <div className="-mt-6 mb-3">
           {store.storeLogoURL ? (
-            <img
-              src={store.storeLogoURL}
-              alt={store.storeName}
-              className="h-12 w-12 rounded-lg border-2 border-white object-cover shadow-sm"
+            <div
+              role="img"
+              aria-label={store.storeName}
+              className="h-12 w-12 rounded-lg border-2 border-white bg-center bg-cover shadow-sm"
+              style={{ backgroundImage: `url(${store.storeLogoURL})` }}
             />
           ) : (
             <div className="h-12 w-12 rounded-lg border-2 border-white bg-orange-100 flex items-center justify-center text-orange-600 font-bold shadow-sm">
@@ -39,31 +43,34 @@ function StoreCard({ store, labels = {}, className = "" }: StoreCardProps) {
             </div>
           )}
         </div>
-        <h3 className="font-semibold text-gray-900 text-sm truncate">
+        <Heading
+          level={3}
+          className="font-semibold text-gray-900 text-sm truncate"
+        >
           {store.storeName}
-        </h3>
+        </Heading>
         {store.storeDescription && (
-          <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">
+          <Text className="text-xs text-gray-500 mt-0.5 line-clamp-2">
             {store.storeDescription}
-          </p>
+          </Text>
         )}
         <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
           {store.totalProducts != null && (
-            <span>
+            <Span>
               {store.totalProducts} {labels.products ?? "products"}
-            </span>
+            </Span>
           )}
           {store.itemsSold != null && (
-            <span>
+            <Span>
               {store.itemsSold} {labels.sold ?? "sold"}
-            </span>
+            </Span>
           )}
           {store.averageRating != null && (
-            <span>★ {store.averageRating.toFixed(1)}</span>
+            <Span>★ {store.averageRating.toFixed(1)}</Span>
           )}
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -97,9 +104,9 @@ export function StoresListView<T extends StoreListItem = StoreListItem>({
       return <>{slots.renderEmptyState() as React.ReactNode}</>;
     }
     return (
-      <p className="text-center text-gray-500 py-12">
+      <Text className="text-center text-gray-500 py-12">
         {labels.empty ?? "No stores found."}
-      </p>
+      </Text>
     );
   }
 

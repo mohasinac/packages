@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@mohasinac/http";
-import type { BlogPost, BlogListResponse, BlogListParams } from "../types";
+import type { BlogListResponse, BlogListParams } from "../types";
 import type { BlogPostDetailResponse } from "../api/[slug]/route.js";
 
 export type { BlogListResponse };
@@ -53,8 +53,7 @@ interface UseBlogPostOptions {
 export function useBlogPost(slug: string, opts?: UseBlogPostOptions) {
   const query = useQuery<BlogPostDetailResponse>({
     queryKey: ["blog", "post", slug],
-    queryFn: () =>
-      apiClient.get<BlogPostDetailResponse>(`/api/blog/${slug}`),
+    queryFn: () => apiClient.get<BlogPostDetailResponse>(`/api/blog/${slug}`),
     initialData: opts?.initialData,
     enabled: opts?.enabled !== false && !!slug,
   });

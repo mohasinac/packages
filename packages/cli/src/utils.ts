@@ -3,7 +3,7 @@
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import { dirname, join, resolve } from "path";
+import { dirname, join } from "path";
 import type {
   FeatureManifest,
   RouteStub,
@@ -113,13 +113,6 @@ export async function loadManifest(
 }
 
 // ─── Stub generation ───────────────────────────────────────────────────────
-
-function routeExportsLine(stub: RouteStub): string {
-  const { default: def, generateMetadata: gm } = stub.exports;
-  const parts = [`${def} as default`];
-  if (gm) parts.push(gm);
-  return `export { ${parts.join(", ")} } from "@mohasinac/feat-${stub.segment.split("/")[1] ?? "unknown"}";`;
-}
 
 /**
  * Generates a 2-line route stub for a page.

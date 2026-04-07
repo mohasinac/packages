@@ -83,6 +83,15 @@ export { Drawer } from "./components/Drawer";
 export type { SelectProps, SelectOption } from "./components/Select";
 export { Select } from "./components/Select";
 
+export type { InputProps } from "./components/Input";
+export { Input } from "./components/Input";
+
+export type { TextareaProps } from "./components/Textarea";
+export { Textarea } from "./components/Textarea";
+
+export type { SliderProps } from "./components/Slider";
+export { Slider } from "./components/Slider";
+
 export type { StarRatingProps } from "./components/StarRating";
 export { StarRating } from "./components/StarRating";
 

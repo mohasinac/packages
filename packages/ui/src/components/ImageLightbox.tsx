@@ -144,7 +144,6 @@ export function ImageLightbox({
 
       {/* Image */}
       <div className="flex-1 flex items-center justify-center p-16 w-full h-full relative">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={image.src}
           alt={image.alt ?? ""}

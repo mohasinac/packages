@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { Button, Input, Text, Textarea } from "@mohasinac/ui";
 import type { SubmitCorporateInquiryInput } from "../types";
 
 interface CorporateInquiryFormProps {
@@ -7,7 +8,10 @@ interface CorporateInquiryFormProps {
   isPending?: boolean;
 }
 
-export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFormProps) {
+export function CorporateInquiryForm({
+  onSubmit,
+  isPending,
+}: CorporateInquiryFormProps) {
   const [form, setForm] = React.useState<SubmitCorporateInquiryInput>({
     companyName: "",
     contactPerson: "",
@@ -21,7 +25,9 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
     message: "",
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
     const { name, value, type } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -29,7 +35,9 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
         type === "checkbox"
           ? (e.target as HTMLInputElement).checked
           : type === "number"
-            ? value === "" ? undefined : Number(value)
+            ? value === ""
+              ? undefined
+              : Number(value)
             : value,
     }));
   }
@@ -42,7 +50,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <input
+        <Input
           name="companyName"
           type="text"
           placeholder="Company name"
@@ -51,7 +59,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           required
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
-        <input
+        <Input
           name="contactPerson"
           type="text"
           placeholder="Contact person"
@@ -60,7 +68,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           required
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
-        <input
+        <Input
           name="designation"
           type="text"
           placeholder="Designation (optional)"
@@ -68,7 +76,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           onChange={handleChange}
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
-        <input
+        <Input
           name="email"
           type="email"
           placeholder="Business email"
@@ -77,7 +85,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           required
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
-        <input
+        <Input
           name="phone"
           type="tel"
           placeholder="Phone number"
@@ -86,7 +94,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           required
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
-        <input
+        <Input
           name="units"
           type="number"
           placeholder="Number of units"
@@ -96,7 +104,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           required
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
-        <input
+        <Input
           name="budgetPerUnit"
           type="number"
           placeholder="Budget per unit (optional)"
@@ -105,7 +113,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           min={0}
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
-        <input
+        <Input
           name="deliveryDateRequired"
           type="date"
           placeholder="Required by (optional)"
@@ -114,7 +122,7 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
       </div>
-      <label className="flex items-center gap-2 text-sm text-neutral-700">
+      <div className="flex items-center gap-2 text-sm text-neutral-700">
         <input
           name="customBranding"
           type="checkbox"
@@ -122,9 +130,11 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
           onChange={handleChange}
           className="h-4 w-4 rounded border-neutral-300"
         />
-        Custom branding required
-      </label>
-      <textarea
+        <Text className="text-sm text-neutral-700">
+          Custom branding required
+        </Text>
+      </div>
+      <Textarea
         name="message"
         placeholder="Additional requirements (optional)"
         value={form.message ?? ""}
@@ -132,13 +142,14 @@ export function CorporateInquiryForm({ onSubmit, isPending }: CorporateInquiryFo
         rows={4}
         className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
       />
-      <button
+      <Button
         type="submit"
         disabled={isPending}
+        variant="primary"
         className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary/90 disabled:opacity-60"
       >
         {isPending ? "Submitting..." : "Submit Inquiry"}
-      </button>
+      </Button>
     </form>
   );
 }

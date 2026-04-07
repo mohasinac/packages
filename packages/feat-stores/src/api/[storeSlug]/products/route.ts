@@ -21,6 +21,10 @@ import type {
   StoreProductsResponse,
 } from "../../../types/index.js";
 
+interface StoreEntity {
+  ownerId: string;
+}
+
 type RouteContext = { params: Promise<{ storeSlug: string }> };
 
 function param(url: URL, key: string): string | null {
@@ -34,7 +38,10 @@ function numParam(url: URL, key: string, fallback: number): number {
 }
 
 const SAFE_STORE_PRODUCT_FILTER_FIELDS = new Set([
-  "category", "price", "brand", "condition",
+  "category",
+  "price",
+  "brand",
+  "condition",
 ]);
 
 function validateSieveFilters(
@@ -69,7 +76,7 @@ export async function GET(
     }
 
     // Resolve store by slug
-    const storesRepo = db.getRepository<any>("stores");
+    const storesRepo = db.getRepository<StoreEntity>("stores");
     const storeResult = await storesRepo.findAll({
       filters: `storeSlug==${storeSlug},status==active,isPublic==true`,
       perPage: 1,
@@ -93,7 +100,10 @@ export async function GET(
     ];
     const extra = param(url, "filters");
     if (extra) {
-      const safe = validateSieveFilters(extra, SAFE_STORE_PRODUCT_FILTER_FIELDS);
+      const safe = validateSieveFilters(
+        extra,
+        SAFE_STORE_PRODUCT_FILTER_FIELDS,
+      );
       if (safe) filterParts.push(safe);
     }
 

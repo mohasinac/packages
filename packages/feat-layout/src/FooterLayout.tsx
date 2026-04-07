@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { Button, Heading, Li, Span, Text, Ul } from "@mohasinac/ui";
 
 export interface FooterLinkGroup {
   heading: string;
@@ -69,9 +71,9 @@ export function FooterLayout({
       {showTrustBar && visibleTrustItems.length > 0 && (
         <div className="border-b border-zinc-200 dark:border-slate-800 py-6">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1920px]">
-            <ul className="flex flex-wrap items-center justify-center gap-6 lg:gap-10">
+            <Ul className="flex flex-wrap items-center justify-center gap-6 lg:gap-10">
               {visibleTrustItems.map((item) => (
-                <li
+                <Li
                   key={item.id}
                   className="flex items-center gap-3 text-sm min-w-[160px]"
                 >
@@ -79,16 +81,16 @@ export function FooterLayout({
                     {item.icon}
                   </span>
                   <span>
-                    <p className="font-semibold text-zinc-900 dark:text-zinc-100">
+                    <Span className="font-semibold text-zinc-900 dark:text-zinc-100">
                       {item.title}
-                    </p>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+                    </Span>
+                    <Span className="text-zinc-500 dark:text-zinc-400 text-xs">
                       {item.subtitle}
-                    </p>
+                    </Span>
                   </span>
-                </li>
+                </Li>
               ))}
-            </ul>
+            </Ul>
           </div>
         </div>
       )}
@@ -97,19 +99,19 @@ export function FooterLayout({
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-16">
           {/* Brand column */}
           <div className="lg:col-span-2 space-y-4">
-            <p className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+            <Heading level={5} className="text-zinc-900 dark:text-zinc-100">
               {brandName}
-            </p>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-sm">
+            </Heading>
+            <Text className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-sm">
               {brandDescription}
-            </p>
+            </Text>
 
             {/* Social links */}
             {socialLinks.length > 0 && (
-              <ul className="flex items-center gap-3">
+              <Ul className="flex items-center gap-3">
                 {socialLinks.map((link) => (
-                  <li key={link.platform}>
-                    <a
+                  <Li key={link.platform}>
+                    <Link
                       href={link.href}
                       aria-label={link.ariaLabel}
                       target="_blank"
@@ -117,10 +119,10 @@ export function FooterLayout({
                       className="flex items-center justify-center w-9 h-9 rounded-full border border-zinc-200 dark:border-slate-700 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:border-zinc-300 dark:hover:border-slate-600 transition-colors"
                     >
                       {link.icon}
-                    </a>
-                  </li>
+                    </Link>
+                  </Li>
                 ))}
-              </ul>
+              </Ul>
             )}
 
             {/* Newsletter slot */}
@@ -134,8 +136,10 @@ export function FooterLayout({
             {linkGroups.map((group, idx) => (
               <div key={idx}>
                 {/* Mobile accordion header */}
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => toggleGroup(idx)}
                   className="sm:hidden flex items-center justify-between w-full py-3 border-b border-zinc-200 dark:border-slate-800 text-sm font-semibold text-zinc-900 dark:text-zinc-100"
                 >
@@ -143,41 +147,41 @@ export function FooterLayout({
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${openGroups[idx] ? "rotate-180" : ""}`}
                   />
-                </button>
+                </Button>
 
                 {/* Mobile content */}
-                <ul
+                <Ul
                   className={`sm:hidden overflow-hidden transition-all duration-200 ${openGroups[idx] ? "max-h-96 py-3" : "max-h-0"} space-y-2.5`}
                 >
                   {group.links.map((link) => (
-                    <li key={link.href}>
-                      <a
+                    <Li key={link.href}>
+                      <Link
                         href={link.href}
                         className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
                       >
                         {link.label}
-                      </a>
-                    </li>
+                      </Link>
+                    </Li>
                   ))}
-                </ul>
+                </Ul>
 
                 {/* Desktop column */}
                 <div className="hidden sm:block">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3">
+                  <Text className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3">
                     {group.heading}
-                  </p>
-                  <ul className="space-y-2.5">
+                  </Text>
+                  <Ul className="space-y-2.5">
                     {group.links.map((link) => (
-                      <li key={link.href}>
-                        <a
+                      <Li key={link.href}>
+                        <Link
                           href={link.href}
                           className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
                         >
                           {link.label}
-                        </a>
-                      </li>
+                        </Link>
+                      </Li>
                     ))}
-                  </ul>
+                  </Ul>
                 </div>
               </div>
             ))}
@@ -186,8 +190,14 @@ export function FooterLayout({
 
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-zinc-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-600 dark:text-zinc-400">
-          <p>{copyrightText}</p>
-          {madeInText && <p>{madeInText}</p>}
+          <Text className="text-xs text-zinc-600 dark:text-zinc-400">
+            {copyrightText}
+          </Text>
+          {madeInText && (
+            <Text className="text-xs text-zinc-600 dark:text-zinc-400">
+              {madeInText}
+            </Text>
+          )}
         </div>
       </div>
     </footer>

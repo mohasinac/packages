@@ -1,7 +1,31 @@
-import type { PaymentGateway, PaymentStatus } from "@mohasinac/feat-payments";
-import type { UserAddress } from "@mohasinac/feat-account";
+export type PaymentGateway =
+  | "razorpay"
+  | "stripe"
+  | "paypal"
+  | "cod"
+  | "upi"
+  | "whatsapp";
 
-export { PaymentGateway, PaymentStatus, UserAddress };
+export type PaymentStatus =
+  | "pending"
+  | "processing"
+  | "paid"
+  | "failed"
+  | "refunded"
+  | "partial_refund";
+
+export interface UserAddress {
+  id: string;
+  label?: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  isDefault?: boolean;
+  phone?: string;
+}
 
 export type OrderStatus =
   | "pending"

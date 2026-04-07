@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button, Heading, Input, Section, Text } from "@mohasinac/ui";
 
 export interface NewsletterBannerProps {
   /**
@@ -56,7 +57,13 @@ export function NewsletterBanner({
   }
 
   return (
-    <section className="relative overflow-hidden py-24" style={{ background: "var(--newsletter-bg, linear-gradient(135deg, var(--color-primary, #1e40af) 0%, var(--color-secondary, #7c3aed) 100%))" }}>
+    <Section
+      className="relative overflow-hidden py-24"
+      style={{
+        background:
+          "var(--newsletter-bg, linear-gradient(135deg, var(--color-primary, #1e40af) 0%, var(--color-secondary, #7c3aed) 100%))",
+      }}
+    >
       {/* Decorative rings */}
       <div className="pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full border border-white/[0.06]" />
       <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full border border-dashed border-white/[0.08]" />
@@ -65,16 +72,21 @@ export function NewsletterBanner({
         <span className="mb-4 inline-flex rounded-full border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white/70">
           {eyebrow}
         </span>
-        <h2 className="text-3xl font-bold text-white sm:text-4xl">{heading}</h2>
-        <p className="mt-4 text-white/60">{subheading}</p>
+        <Heading
+          level={2}
+          className="text-3xl font-bold text-white sm:text-4xl"
+        >
+          {heading}
+        </Heading>
+        <Text className="mt-4 text-white/60">{subheading}</Text>
 
         {success ? (
-          <p className="mt-8 rounded-xl border border-white/20 bg-white/10 px-6 py-4 text-sm font-semibold text-white">
+          <Text className="mt-8 rounded-xl border border-white/20 bg-white/10 px-6 py-4 text-sm font-semibold text-white">
             {successMessage}
-          </p>
+          </Text>
         ) : (
           <form onSubmit={handleSubmit} className="mt-8 flex gap-3">
-            <input
+            <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -82,23 +94,29 @@ export function NewsletterBanner({
               required
               className="flex-1 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-white/40"
             />
-            <button
+            <Button
               type="submit"
               disabled={loading}
+              variant="primary"
               className="shrink-0 rounded-xl px-5 py-3 text-sm font-bold transition-opacity disabled:opacity-60"
-              style={{ background: "var(--color-yellow, #FFE500)", color: "#0D0D0D" }}
+              style={{
+                background: "var(--color-yellow, #FFE500)",
+                color: "#0D0D0D",
+              }}
             >
               {loading ? "…" : ctaLabel}
-            </button>
+            </Button>
           </form>
         )}
 
         {error && (
-          <p className="mt-3 text-sm text-red-300">{errorMessage}</p>
+          <Text className="mt-3 text-sm text-red-300">{errorMessage}</Text>
         )}
 
-        <p className="mt-4 text-xs text-white/40">No spam, ever. Unsubscribe anytime.</p>
+        <Text className="mt-4 text-xs text-white/40">
+          No spam, ever. Unsubscribe anytime.
+        </Text>
       </div>
-    </section>
+    </Section>
   );
 }

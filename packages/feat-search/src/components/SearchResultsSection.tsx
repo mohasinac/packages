@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, Select, Span, Text } from "@mohasinac/ui";
 import type { SearchProductItem } from "../types";
 
 export interface SearchResultsSectionProps {
@@ -68,16 +69,16 @@ export function SearchResultsSection({
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
-        <span className="text-5xl" aria-hidden="true">
+        <Span className="text-5xl" aria-hidden="true">
           🔍
-        </span>
-        <p className="text-lg font-semibold text-zinc-800 dark:text-zinc-100">
+        </Span>
+        <Text className="text-lg font-semibold text-zinc-800 dark:text-zinc-100">
           {L.noResultsTitle}
-        </p>
+        </Text>
         {urlQ && L.noResultsSubtitle && (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <Text className="text-sm text-zinc-500 dark:text-zinc-400">
             {L.noResultsSubtitle}
-          </p>
+          </Text>
         )}
       </div>
     );
@@ -87,21 +88,16 @@ export function SearchResultsSection({
     <div className="space-y-5">
       {/* Sort + count bar */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+        <Text className="text-sm text-zinc-500 dark:text-zinc-400">
           {L.showing(products.length, total)}
-        </p>
+        </Text>
         {sortOptions.length > 0 && (
-          <select
+          <Select
             value={urlSort}
-            onChange={(e) => onSortChange(e.target.value)}
+            onChange={onSortChange}
+            options={sortOptions}
             className="rounded-lg border border-zinc-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-3 py-1.5 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none"
-          >
-            {sortOptions.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+          />
         )}
       </div>
 
@@ -115,25 +111,29 @@ export function SearchResultsSection({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 pt-4">
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="sm"
             onClick={() => onPageChange(urlPage - 1)}
             disabled={urlPage <= 1}
             className="px-4 py-2 rounded-lg border border-zinc-200 dark:border-slate-700 text-sm text-zinc-700 dark:text-zinc-300 disabled:opacity-40 hover:bg-zinc-100 dark:hover:bg-slate-800 transition-colors"
           >
             {L.prevPage}
-          </button>
-          <span className="text-sm text-zinc-600 dark:text-zinc-400 tabular-nums">
+          </Button>
+          <Span className="text-sm text-zinc-600 dark:text-zinc-400 tabular-nums">
             {urlPage} / {totalPages}
-          </span>
-          <button
+          </Span>
+          <Button
             type="button"
+            variant="outline"
+            size="sm"
             onClick={() => onPageChange(urlPage + 1)}
             disabled={urlPage >= totalPages}
             className="px-4 py-2 rounded-lg border border-zinc-200 dark:border-slate-700 text-sm text-zinc-700 dark:text-zinc-300 disabled:opacity-40 hover:bg-zinc-100 dark:hover:bg-slate-800 transition-colors"
           >
             {L.nextPage}
-          </button>
+          </Button>
         </div>
       )}
     </div>

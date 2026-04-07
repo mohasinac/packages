@@ -1,5 +1,5 @@
 import type { IRepository, PagedResult } from "@mohasinac/contracts";
-import type { UserProfile, UserAddress } from "../types";
+import type { UserProfile } from "../types";
 
 export class AccountRepository {
   constructor(private readonly repo: IRepository<UserProfile>) {}

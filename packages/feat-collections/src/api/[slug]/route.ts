@@ -12,6 +12,10 @@
 import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 
+interface CollectionEntity extends Record<string, unknown> {
+  id: string;
+}
+
 export async function GET(
   request: Request,
   { params }: { params: { slug: string } },
@@ -32,7 +36,7 @@ export async function GET(
         { status: 503 },
       );
 
-    const repo = db.getRepository<Record<string, unknown>>("collections");
+    const repo = db.getRepository<CollectionEntity>("collections");
     const result = await repo.findAll({
       filters: `slug==${slug}`,
       perPage: 1,
@@ -82,7 +86,7 @@ export async function PATCH(
         { status: 503 },
       );
 
-    const repo = db.getRepository<Record<string, unknown>>("collections");
+    const repo = db.getRepository<CollectionEntity>("collections");
     const result = await repo.findAll({
       filters: `slug==${slug}`,
       perPage: 1,
@@ -95,7 +99,7 @@ export async function PATCH(
       );
     }
 
-    const updated = await repo.update((result.data[0] as any).id, body);
+    const updated = await repo.update(result.data[0].id, body);
 
     return NextResponse.json({
       success: true,
@@ -132,7 +136,7 @@ export async function DELETE(
         { status: 503 },
       );
 
-    const repo = db.getRepository<Record<string, unknown>>("collections");
+    const repo = db.getRepository<CollectionEntity>("collections");
     const result = await repo.findAll({
       filters: `slug==${slug}`,
       perPage: 1,
@@ -145,7 +149,7 @@ export async function DELETE(
       );
     }
 
-    await repo.delete((result.data[0] as any).id);
+    await repo.delete(result.data[0].id);
 
     return NextResponse.json({
       success: true,

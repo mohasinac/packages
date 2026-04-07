@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, Span, Text } from "@mohasinac/ui";
 import type { Order, OrderStatus } from "../types";
 
 const STATUS_COLORS: Record<OrderStatus, string> = {
@@ -44,47 +45,50 @@ export function OrderCard({ order, onClick, labels = {} }: OrderCardProps) {
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs text-neutral-500">
+          <Text className="text-xs text-neutral-500">
             Order #{order.id.slice(-8).toUpperCase()}
-          </p>
-          {date && <p className="mt-0.5 text-xs text-neutral-400">{date}</p>}
+          </Text>
+          {date && (
+            <Text className="mt-0.5 text-xs text-neutral-400">{date}</Text>
+          )}
         </div>
-        <span
+        <Span
           className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${statusColor}`}
         >
           {labels[order.orderStatus] ?? order.orderStatus.replace(/_/g, " ")}
-        </span>
+        </Span>
       </div>
       <div className="mt-4 flex flex-wrap gap-3">
         {order.items.slice(0, 3).map((item, i) => (
           <div key={i} className="flex items-center gap-2">
             {item.image && (
-              <img
-                src={item.image}
-                alt={item.title}
-                className="h-10 w-10 rounded-lg object-cover"
+              <div
+                role="img"
+                aria-label={item.title}
+                className="h-10 w-10 rounded-lg bg-center bg-cover"
+                style={{ backgroundImage: `url(${item.image})` }}
               />
             )}
             <div>
-              <p className="text-sm font-medium text-neutral-900 line-clamp-1">
+              <Text className="text-sm font-medium text-neutral-900 line-clamp-1">
                 {item.title}
-              </p>
-              <p className="text-xs text-neutral-400">×{item.quantity}</p>
+              </Text>
+              <Text className="text-xs text-neutral-400">×{item.quantity}</Text>
             </div>
           </div>
         ))}
         {order.items.length > 3 && (
-          <span className="self-center text-xs text-neutral-400">
+          <Span className="self-center text-xs text-neutral-400">
             +{order.items.length - 3} more
-          </span>
+          </Span>
         )}
       </div>
       <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3">
-        <span className="text-sm text-neutral-500">{order.currency} Total</span>
-        <span className="font-semibold text-neutral-900">
+        <Span className="text-sm text-neutral-500">{order.currency} Total</Span>
+        <Span className="font-semibold text-neutral-900">
           {order.currency}
           {order.total.toLocaleString()}
-        </span>
+        </Span>
       </div>
     </div>
   );
@@ -136,7 +140,9 @@ export function OrdersList({
 
   if (orders.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-neutral-500">{emptyLabel}</p>
+      <Text className="py-12 text-center text-sm text-neutral-500">
+        {emptyLabel}
+      </Text>
     );
   }
 
@@ -150,13 +156,16 @@ export function OrdersList({
       {totalPages > 1 && onPageChange && (
         <div className="flex justify-center gap-2">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button
+            <Button
               key={p}
+              type="button"
+              variant={p === currentPage ? "primary" : "outline"}
+              size="sm"
               onClick={() => onPageChange(p)}
               className={`h-9 w-9 rounded-lg text-sm font-medium transition ${p === currentPage ? "bg-neutral-900 text-white" : "border border-neutral-200 text-neutral-600 hover:bg-neutral-100"}`}
             >
               {p}
-            </button>
+            </Button>
           ))}
         </div>
       )}

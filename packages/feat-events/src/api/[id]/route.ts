@@ -48,7 +48,9 @@ export async function GET(
     }
 
     // Strip internal field
-    const { createdBy: _cb, ...publicEvent } = event;
+    const { createdBy: _createdBy, ...publicEvent } = event as EventItem & {
+      createdBy?: string;
+    };
 
     const entriesRepo = db.getRepository<EventEntryItem>("eventEntries");
 
@@ -95,7 +97,14 @@ export async function GET(
       });
 
       leaderboard = leaderboardResult.data.map((entry) => {
-        const { userId: _uid, userEmail: _em, ...rest } = entry;
+        const {
+          userId: _userId,
+          userEmail: _userEmail,
+          ...rest
+        } = entry as EventEntryItem & {
+          userId?: string;
+          userEmail?: string;
+        };
         return rest;
       });
     }

@@ -55,13 +55,16 @@ export function HorizontalScroller<T = unknown>({
   items,
   renderItem,
   keyExtractor,
-  perView: _perView,
-  rows: _rows = 1,
+  perView,
+  rows = 1,
   autoScroll,
   autoScrollInterval = 3500,
   minItemWidth,
   itemClassName = "",
 }: HorizontalScrollerProps<T>) {
+  void perView;
+  void rows;
+
   const internalRef = useRef<HTMLDivElement>(null);
   const containerRef = (externalRef ??
     internalRef) as RefObject<HTMLDivElement>;

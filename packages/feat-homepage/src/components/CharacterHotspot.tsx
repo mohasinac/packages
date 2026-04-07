@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useMediaQuery } from "@mohasinac/react";
+import { Button, Heading, Section, Text } from "@mohasinac/ui";
 import type { CharacterHotspotConfig, HotspotPin } from "../types";
 
 /* ── Fallback when no Firestore config is saved yet ──────────────────────────
@@ -166,7 +167,12 @@ export interface CharacterHotspotProps {
    */
   defaultHotspots?: HotspotPin[];
   /** Universe quick-browse links shown below the panorama. */
-  universeLinks?: { label: string; href: string; color: string; icon: string }[];
+  universeLinks?: {
+    label: string;
+    href: string;
+    color: string;
+    icon: string;
+  }[];
   /** "Shop all" button href */
   shopAllHref?: string;
   /** Section heading */
@@ -214,12 +220,27 @@ interface InnerProps {
 }
 
 const DEFAULT_UNIVERSE_LINKS: InnerProps["universeLinks"] = [
-  { label: "MARVEL",      href: "/franchise/marvel",      color: "#E8001C", icon: "⚡" },
-  { label: "DC COMICS",   href: "/franchise/dc-comics",   color: "#4A90D9", icon: "🦇" },
-  { label: "DRAGON BALL", href: "/franchise/dragon-ball", color: "#FFE500", icon: "✦" },
-  { label: "NARUTO",      href: "/franchise/naruto",      color: "#FF6B00", icon: "🍃" },
-  { label: "ONE PIECE",   href: "/franchise/one-piece",   color: "#FFE500", icon: "⚓" },
-  { label: "BLEACH",      href: "/franchise/bleach",      color: "#4A90D9", icon: "⚔" },
+  { label: "MARVEL", href: "/franchise/marvel", color: "#E8001C", icon: "⚡" },
+  {
+    label: "DC COMICS",
+    href: "/franchise/dc-comics",
+    color: "#4A90D9",
+    icon: "🦇",
+  },
+  {
+    label: "DRAGON BALL",
+    href: "/franchise/dragon-ball",
+    color: "#FFE500",
+    icon: "✦",
+  },
+  { label: "NARUTO", href: "/franchise/naruto", color: "#FF6B00", icon: "🍃" },
+  {
+    label: "ONE PIECE",
+    href: "/franchise/one-piece",
+    color: "#FFE500",
+    icon: "⚓",
+  },
+  { label: "BLEACH", href: "/franchise/bleach", color: "#4A90D9", icon: "⚔" },
 ];
 
 function CharacterHotspotInner({
@@ -241,7 +262,10 @@ function CharacterHotspotInner({
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setActiveId(null);
       }
     }
@@ -260,7 +284,7 @@ function CharacterHotspotInner({
   const active = hotspots.find((h) => h.id === activeId) ?? null;
 
   return (
-    <section
+    <Section
       style={{
         background: "var(--dark-section-deep)",
         borderTop: "3px solid var(--dark-section-bg)",
@@ -277,17 +301,21 @@ function CharacterHotspotInner({
         {/* Header overlay */}
         <div
           className="absolute top-0 left-0 right-0 z-10 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, rgba(10,10,18,0.88) 0%, rgba(10,10,18,0.40) 50%, transparent 100%)" }}
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(10,10,18,0.88) 0%, rgba(10,10,18,0.40) 50%, transparent 100%)",
+          }}
         >
           <div className="pointer-events-auto mx-auto max-w-7xl px-4 pt-4 pb-6 flex flex-wrap items-start justify-between gap-y-3">
             <div>
-              <p
+              <Text
                 className="mb-1 text-xs font-black uppercase tracking-[0.2em]"
                 style={{ color: "var(--color-red)" }}
               >
                 Explore the Universe
-              </p>
-              <h2
+              </Text>
+              <Heading
+                level={2}
                 style={{
                   fontFamily: "var(--font-bangers, Bangers, cursive)",
                   fontSize: "clamp(1.8rem, 4.5vw, 3rem)",
@@ -297,17 +325,17 @@ function CharacterHotspotInner({
                 }}
               >
                 {heading}
-              </h2>
+              </Heading>
               {subheading && (
-                <p
+                <Text
                   className="mt-2 text-sm font-medium max-w-md"
                   style={{ color: "var(--dark-section-muted)" }}
                 >
                   {subheading}
-                </p>
+                </Text>
               )}
               {!subheading && (
-                <p
+                <Text
                   className="mt-2 text-sm font-medium max-w-md"
                   style={{ color: "var(--dark-section-muted)" }}
                 >
@@ -329,7 +357,7 @@ function CharacterHotspotInner({
                     +
                   </span>{" "}
                   pins to get &amp; buy each character.
-                </p>
+                </Text>
               )}
             </div>
             <Link
@@ -375,7 +403,9 @@ function CharacterHotspotInner({
           />
           <div
             className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
-            style={{ background: "linear-gradient(to bottom, transparent, #0A0A12)" }}
+            style={{
+              background: "linear-gradient(to bottom, transparent, #0A0A12)",
+            }}
           />
         </div>
 
@@ -404,7 +434,10 @@ function CharacterHotspotInner({
               >
                 {label}
               </span>
-              <div className="mt-1 h-5 sm:h-8 w-px" style={{ background: color, opacity: 0.5 }} />
+              <div
+                className="mt-1 h-5 sm:h-8 w-px"
+                style={{ background: color, opacity: 0.5 }}
+              />
             </div>
           ))}
         </div>
@@ -429,11 +462,18 @@ function CharacterHotspotInner({
               {!isActive && (
                 <span
                   className="absolute rounded-full animate-ping"
-                  style={{ inset: -6, background: "rgba(255,255,255,0.2)", pointerEvents: "none" }}
+                  style={{
+                    inset: -6,
+                    background: "rgba(255,255,255,0.2)",
+                    pointerEvents: "none",
+                  }}
                 />
               )}
 
-              <button
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => toggle(hotspot.id)}
                 aria-label={`Info about ${hotspot.name}`}
                 aria-expanded={isActive}
@@ -441,14 +481,26 @@ function CharacterHotspotInner({
                 style={{
                   width: isMobile ? 18 : 38,
                   height: isMobile ? 18 : 38,
-                  background: isMobile ? "none" : (isActive ? "rgba(30,30,30,0.92)" : "rgba(255,255,255,0.95)"),
-                  border: isMobile ? "none" : (isActive ? "2px solid rgba(255,255,255,0.25)" : "2px solid rgba(0,0,0,0.18)"),
+                  background: isMobile
+                    ? "none"
+                    : isActive
+                      ? "rgba(30,30,30,0.92)"
+                      : "rgba(255,255,255,0.95)",
+                  border: isMobile
+                    ? "none"
+                    : isActive
+                      ? "2px solid rgba(255,255,255,0.25)"
+                      : "2px solid rgba(0,0,0,0.18)",
                   boxShadow: isMobile ? "none" : "0 2px 12px rgba(0,0,0,0.55)",
                   backdropFilter: isMobile ? "none" : "blur(4px)",
                   padding: 0,
                   transition: "transform 0.2s ease, opacity 0.2s ease",
                   transform: isActive ? "scale(1.2) rotate(45deg)" : "scale(1)",
-                  color: isMobile ? "#FFFFFF" : (isActive ? "#FFFFFF" : "#111111"),
+                  color: isMobile
+                    ? "#FFFFFF"
+                    : isActive
+                      ? "#FFFFFF"
+                      : "#111111",
                   fontSize: isMobile ? 18 : 22,
                   fontWeight: 200,
                   lineHeight: 1,
@@ -458,7 +510,7 @@ function CharacterHotspotInner({
                 }}
               >
                 +
-              </button>
+              </Button>
 
               {/* Desktop side popup */}
               {isActive && !isMobile && (
@@ -466,14 +518,19 @@ function CharacterHotspotInner({
                   className="absolute"
                   style={{
                     ...(popupAbove
-                      ? { bottom: "calc(100% + 12px)", top: "auto", transform: "none" }
+                      ? {
+                          bottom: "calc(100% + 12px)",
+                          top: "auto",
+                          transform: "none",
+                        }
                       : { top: "50%", transform: "translateY(-50%)" }),
                     ...(popupLeft
                       ? { left: "calc(100% + 14px)" }
                       : { right: "calc(100% + 14px)" }),
                     width: 300,
                     background: "rgba(255,255,255,0.97)",
-                    boxShadow: "0 12px 48px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.3)",
+                    boxShadow:
+                      "0 12px 48px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.3)",
                     borderRadius: 4,
                     overflow: "hidden",
                     zIndex: 40,
@@ -482,13 +539,19 @@ function CharacterHotspotInner({
                 >
                   <div style={{ height: 4, background: hotspot.accent }} />
                   <div className="px-5 py-4">
-                    <p
+                    <Text
                       className="text-[10px] font-bold uppercase tracking-[0.18em] mb-1"
-                      style={{ color: hotspot.accent === "#FFE500" ? "#b08800" : hotspot.accent }}
+                      style={{
+                        color:
+                          hotspot.accent === "#FFE500"
+                            ? "#b08800"
+                            : hotspot.accent,
+                      }}
                     >
                       {hotspot.universe}
-                    </p>
-                    <h3
+                    </Text>
+                    <Heading
+                      level={3}
                       className="font-black leading-tight mb-3"
                       style={{
                         fontFamily: "var(--font-bangers, Bangers, cursive)",
@@ -498,10 +561,13 @@ function CharacterHotspotInner({
                       }}
                     >
                       {hotspot.name}
-                    </h3>
-                    <p className="text-xs leading-relaxed mb-4" style={{ color: "#374151" }}>
+                    </Heading>
+                    <Text
+                      className="text-xs leading-relaxed mb-4"
+                      style={{ color: "#374151" }}
+                    >
                       {hotspot.description}
-                    </p>
+                    </Text>
                     <Link
                       href={hotspot.href}
                       onClick={() => setActiveId(null)}
@@ -510,7 +576,8 @@ function CharacterHotspotInner({
                         fontFamily: "var(--font-bangers, Bangers, cursive)",
                         letterSpacing: "0.1em",
                         background: hotspot.accent,
-                        color: hotspot.accent === "#FFE500" ? "#0D0D0D" : "#FFFFFF",
+                        color:
+                          hotspot.accent === "#FFE500" ? "#0D0D0D" : "#FFFFFF",
                         borderRadius: 2,
                       }}
                     >
@@ -530,7 +597,9 @@ function CharacterHotspotInner({
         <div
           className="fixed inset-0 z-50 flex items-end"
           style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(3px)" }}
-          onClick={(e) => { if (e.target === e.currentTarget) setActiveId(null); }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setActiveId(null);
+          }}
         >
           <div
             className="w-full"
@@ -543,17 +612,28 @@ function CharacterHotspotInner({
             }}
           >
             <div className="flex justify-center pt-3 pb-1">
-              <div style={{ width: 40, height: 4, borderRadius: 2, background: "#D1D5DB" }} />
+              <div
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  background: "#D1D5DB",
+                }}
+              />
             </div>
             <div style={{ height: 4, background: active.accent }} />
             <div className="px-5 pt-4 pb-10">
-              <p
+              <Text
                 className="text-[10px] font-bold uppercase tracking-[0.18em] mb-1"
-                style={{ color: active.accent === "#FFE500" ? "#b08800" : active.accent }}
+                style={{
+                  color:
+                    active.accent === "#FFE500" ? "#b08800" : active.accent,
+                }}
               >
                 {active.universe}
-              </p>
-              <h3
+              </Text>
+              <Heading
+                level={3}
                 className="font-black leading-tight mb-2"
                 style={{
                   fontFamily: "var(--font-bangers, Bangers, cursive)",
@@ -563,10 +643,13 @@ function CharacterHotspotInner({
                 }}
               >
                 {active.name}
-              </h3>
-              <p className="text-sm leading-relaxed mb-5" style={{ color: "#374151" }}>
+              </Heading>
+              <Text
+                className="text-sm leading-relaxed mb-5"
+                style={{ color: "#374151" }}
+              >
                 {active.description}
-              </p>
+              </Text>
               <div className="flex gap-3">
                 <Link
                   href={active.href}
@@ -584,13 +667,15 @@ function CharacterHotspotInner({
                   {active.buyText}
                   <span aria-hidden="true">→</span>
                 </Link>
-                <button
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => setActiveId(null)}
                   className="px-5 py-3 text-sm font-bold rounded"
                   style={{ background: "#F1F5F9", color: "#475569" }}
                 >
                   Close
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -614,14 +699,19 @@ function CharacterHotspotInner({
             }}
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLAnchorElement).style.borderColor = color;
-              (e.currentTarget as HTMLAnchorElement).style.background = `${color}18`;
+              (e.currentTarget as HTMLAnchorElement).style.background =
+                `${color}18`;
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.08)";
-              (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.04)";
+              (e.currentTarget as HTMLAnchorElement).style.borderColor =
+                "rgba(255,255,255,0.08)";
+              (e.currentTarget as HTMLAnchorElement).style.background =
+                "rgba(255,255,255,0.04)";
             }}
           >
-            <span className="text-base select-none" aria-hidden="true">{icon}</span>
+            <span className="text-base select-none" aria-hidden="true">
+              {icon}
+            </span>
             <span
               className="text-xs font-black uppercase tracking-wide"
               style={{
@@ -632,12 +722,15 @@ function CharacterHotspotInner({
             >
               {label}
             </span>
-            <span className="ml-auto text-xs" style={{ color: "#475569", transition: "color 0.15s" }}>
+            <span
+              className="ml-auto text-xs"
+              style={{ color: "#475569", transition: "color 0.15s" }}
+            >
               →
             </span>
           </Link>
         ))}
       </div>
-    </section>
+    </Section>
   );
 }

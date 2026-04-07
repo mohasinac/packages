@@ -19,6 +19,11 @@ import { getProviders } from "@mohasinac/contracts";
 import { createRouteHandler } from "@mohasinac/next";
 import type { ProductItem, ProductListResponse } from "../types/index.js";
 
+type ProductRecord = ProductItem & {
+  sellerId?: string;
+  sellerName?: string;
+};
+
 // ─── Mutation schemas ─────────────────────────────────────────────────────────
 // Minimal schemas for secured mutations — consumer apps can extend as needed.
 
@@ -68,9 +73,20 @@ function numParam(url: URL, key: string, fallback: number): number {
 
 /** Public fields callers may filter on via the ?filters= param. */
 const SAFE_PRODUCT_FILTER_FIELDS = new Set([
-  "status", "category", "brand", "condition", "sellerId",
-  "title", "price", "isAuction", "isPreOrder", "featured",
-  "isPromoted", "stockQuantity", "availableQuantity", "tags",
+  "status",
+  "category",
+  "brand",
+  "condition",
+  "sellerId",
+  "title",
+  "price",
+  "isAuction",
+  "isPreOrder",
+  "featured",
+  "isPromoted",
+  "stockQuantity",
+  "availableQuantity",
+  "tags",
 ]);
 
 /**
@@ -146,7 +162,7 @@ export async function GET(request: Request): Promise<NextResponse> {
       );
     }
 
-    const repo = db.getRepository<ProductItem>("products");
+    const repo = db.getRepository<ProductRecord>("products");
     const result = await repo.findAll({
       filters,
       sort,
@@ -187,6 +203,8 @@ export const POST = createRouteHandler({
   roles: ["seller", "moderator", "admin"],
   schema: productMutateSchema,
   handler: async ({ user, body }) => {
+    const payload = body as Record<string, unknown>;
+    const userRecord = (user ?? {}) as Record<string, unknown>;
     const { db } = getProviders();
     if (!db) {
       return NextResponse.json(
@@ -196,11 +214,20 @@ export const POST = createRouteHandler({
     }
     const repo = db.getRepository<ProductItem>("products");
     const data: Partial<ProductItem> = {
-      ...(body as Partial<ProductItem>),
+      ...(payload as Partial<ProductRecord>),
       status: "draft",
-      sellerId: (body as any).sellerId ?? user?.uid,
+      sellerId:
+        typeof payload.sellerId === "string"
+          ? payload.sellerId
+          : typeof userRecord.uid === "string"
+            ? userRecord.uid
+            : undefined,
       sellerName:
-        (body as any).sellerName ?? (user?.displayName as string | undefined),
+        typeof payload.sellerName === "string"
+          ? payload.sellerName
+          : typeof userRecord.displayName === "string"
+            ? userRecord.displayName
+            : undefined,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

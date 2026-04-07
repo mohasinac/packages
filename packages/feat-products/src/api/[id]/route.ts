@@ -18,10 +18,14 @@ import type { ProductItem } from "../../types/index.js";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
+type ProductRecord = ProductItem & {
+  sellerId?: string;
+};
+
 function getRepo() {
   const { db } = getProviders();
   if (!db) return null;
-  return db.getRepository<ProductItem>("products");
+  return db.getRepository<ProductRecord>("products");
 }
 
 const productUpdateSchema = z
@@ -123,7 +127,7 @@ export const PATCH = createRouteHandler<
       );
     }
 
-    const isOwner = (product as any).sellerId === user?.uid;
+    const isOwner = product.sellerId === user?.uid;
     const isModerator = user?.role === "moderator";
     const isAdmin = user?.role === "admin";
 
@@ -165,7 +169,7 @@ export const DELETE = createRouteHandler<never, { id: string }>({
       );
     }
 
-    const isOwner = (product as any).sellerId === user?.uid;
+    const isOwner = product.sellerId === user?.uid;
     const isModerator = user?.role === "moderator";
     const isAdmin = user?.role === "admin";
 

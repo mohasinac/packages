@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import type { BookConsultationInput, ConsultationMode } from "../types";
+import { Button, Input, Select, Textarea } from "@mohasinac/ui";
+import type { BookConsultationInput } from "../types";
 
 interface ConsultationFormProps {
   onSubmit: (data: BookConsultationInput) => Promise<void>;
@@ -9,11 +10,21 @@ interface ConsultationFormProps {
 }
 
 const TIME_SLOTS = [
-  "9:00 AM", "10:00 AM", "11:00 AM",
-  "12:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
 ];
 
-export function ConsultationForm({ onSubmit, isPending, concerns = [] }: ConsultationFormProps) {
+export function ConsultationForm({
+  onSubmit,
+  isPending,
+  concerns = [],
+}: ConsultationFormProps) {
   const [form, setForm] = React.useState<BookConsultationInput>({
     name: "",
     email: "",
@@ -25,8 +36,19 @@ export function ConsultationForm({ onSubmit, isPending, concerns = [] }: Consult
     message: "",
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+  function handleChange(
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) {
     const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleValueChange<K extends keyof BookConsultationInput>(
+    name: K,
+    value: BookConsultationInput[K],
+  ) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
@@ -46,7 +68,7 @@ export function ConsultationForm({ onSubmit, isPending, concerns = [] }: Consult
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input
+      <Input
         name="name"
         type="text"
         placeholder="Full name"
@@ -55,7 +77,7 @@ export function ConsultationForm({ onSubmit, isPending, concerns = [] }: Consult
         required
         className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
       />
-      <input
+      <Input
         name="email"
         type="email"
         placeholder="Email address"
@@ -64,7 +86,7 @@ export function ConsultationForm({ onSubmit, isPending, concerns = [] }: Consult
         required
         className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
       />
-      <input
+      <Input
         name="phone"
         type="tel"
         placeholder="Phone number"
@@ -76,9 +98,11 @@ export function ConsultationForm({ onSubmit, isPending, concerns = [] }: Consult
       {concerns.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {concerns.map((c) => (
-            <button
+            <Button
               key={c}
               type="button"
+              variant="outline"
+              size="sm"
               onClick={() => toggleConcern(c)}
               className={`rounded-full border px-3 py-1 text-xs transition ${
                 form.concern.includes(c)
@@ -87,12 +111,12 @@ export function ConsultationForm({ onSubmit, isPending, concerns = [] }: Consult
               }`}
             >
               {c}
-            </button>
+            </Button>
           ))}
         </div>
       )}
       <div className="flex gap-3">
-        <input
+        <Input
           name="preferredDate"
           type="date"
           value={form.preferredDate}
@@ -100,27 +124,23 @@ export function ConsultationForm({ onSubmit, isPending, concerns = [] }: Consult
           required
           className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm"
         />
-        <select
-          name="preferredTime"
+        <Select
           value={form.preferredTime}
-          onChange={handleChange}
+          onChange={(value) => handleValueChange("preferredTime", value)}
+          options={TIME_SLOTS.map((t) => ({ value: t, label: t }))}
           className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm"
-        >
-          {TIME_SLOTS.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+        />
       </div>
-      <select
-        name="mode"
+      <Select
         value={form.mode}
-        onChange={handleChange}
+        onChange={(value) => handleValueChange("mode", value)}
+        options={[
+          { value: "remote", label: "Remote (Video Call)" },
+          { value: "in-person", label: "In-Person" },
+        ]}
         className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-      >
-        <option value="remote">Remote (Video Call)</option>
-        <option value="in-person">In-Person</option>
-      </select>
-      <textarea
+      />
+      <Textarea
         name="message"
         placeholder="Any additional notes (optional)"
         value={form.message}
@@ -128,13 +148,14 @@ export function ConsultationForm({ onSubmit, isPending, concerns = [] }: Consult
         rows={3}
         className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
       />
-      <button
+      <Button
         type="submit"
         disabled={isPending}
+        variant="primary"
         className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition hover:bg-primary/90 disabled:opacity-60"
       >
         {isPending ? "Booking..." : "Book Consultation"}
-      </button>
+      </Button>
     </form>
   );
 }

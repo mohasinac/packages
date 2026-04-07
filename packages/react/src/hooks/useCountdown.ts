@@ -67,7 +67,6 @@ export function useCountdown(
   useEffect(() => {
     const id = setInterval(() => setRemaining(getRemaining()), 1000);
     return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endDate]);
 
   return remaining;

@@ -58,7 +58,6 @@ export default function CameraCapture({
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -82,7 +81,6 @@ export default function CameraCapture({
     <div
       className={`relative rounded-xl overflow-hidden bg-black ${className ?? ""}`}
     >
-      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <video
         ref={camera.videoRef}
         autoPlay

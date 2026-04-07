@@ -1,6 +1,9 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
+import { Button } from "@mohasinac/ui";
 
 /** Minimal user shape required by the title bar. */
 export interface TitleBarUser {
@@ -45,7 +48,7 @@ export function TitleBarLayout({
   onToggleSidebar,
   sidebarOpen,
   onSearchToggle,
-  searchOpen: _searchOpen,
+  searchOpen,
   brandName,
   brandShortName,
   logoHref,
@@ -61,6 +64,8 @@ export function TitleBarLayout({
   id = "titlebar",
   className = "",
 }: TitleBarLayoutProps) {
+  void searchOpen;
+
   return (
     <header
       id={id}
@@ -77,8 +82,10 @@ export function TitleBarLayout({
         <div className="flex items-center justify-between h-12">
           {/* Left: hamburger (mobile) + logo */}
           <div className="flex items-center gap-3">
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               aria-label={sidebarOpen ? "Close menu" : "Open menu"}
               aria-expanded={sidebarOpen}
               aria-controls="secondary-sidebar"
@@ -108,9 +115,9 @@ export function TitleBarLayout({
                   />
                 )}
               </svg>
-            </button>
+            </Button>
 
-            <a
+            <Link
               href={logoHref}
               className="font-bold text-lg text-zinc-900 dark:text-zinc-50 hover:opacity-80 transition-opacity"
             >
@@ -122,7 +129,7 @@ export function TitleBarLayout({
               ) : (
                 brandName
               )}
-            </a>
+            </Link>
           </div>
 
           {/* Centre: nav slot (desktop only) */}
@@ -131,8 +138,10 @@ export function TitleBarLayout({
           {/* Right: actions */}
           <div className="flex items-center gap-1">
             {/* Search toggle */}
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               aria-label="Search"
               onClick={onSearchToggle}
               className="flex items-center justify-center w-9 h-9 rounded-lg text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-slate-800 transition-colors"
@@ -151,15 +160,17 @@ export function TitleBarLayout({
                   d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
                 />
               </svg>
-            </button>
+            </Button>
 
             {/* Notification slot */}
             {notificationSlot}
 
             {/* Theme toggle */}
             {onToggleTheme && (
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 aria-label={
                   isDark ? "Switch to light mode" : "Switch to dark mode"
                 }
@@ -197,12 +208,12 @@ export function TitleBarLayout({
                     />
                   </svg>
                 )}
-              </button>
+              </Button>
             )}
 
             {/* Cart */}
             {cartHref && (
-              <a
+              <Link
                 href={cartHref}
                 aria-label={`Cart${cartCount > 0 ? `, ${cartCount} items` : ""}`}
                 className="relative flex items-center justify-center w-9 h-9 rounded-lg text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-slate-800 transition-colors"
@@ -226,12 +237,12 @@ export function TitleBarLayout({
                     {cartCount > 9 ? "9+" : cartCount}
                   </span>
                 )}
-              </a>
+              </Link>
             )}
 
             {/* Profile */}
             {profileHref && (
-              <a
+              <Link
                 href={profileHref}
                 aria-label={
                   user
@@ -241,7 +252,7 @@ export function TitleBarLayout({
                 className="flex items-center justify-center w-9 h-9 rounded-lg text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-slate-800 transition-colors"
               >
                 {user?.photoURL ? (
-                  <img
+                  <Image
                     src={user.photoURL}
                     alt={user.displayName ?? "Profile"}
                     width={28}
@@ -264,7 +275,7 @@ export function TitleBarLayout({
                     />
                   </svg>
                 )}
-              </a>
+              </Link>
             )}
           </div>
         </div>

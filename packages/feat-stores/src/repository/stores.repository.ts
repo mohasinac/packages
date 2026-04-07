@@ -3,7 +3,7 @@ import type {
   PagedResult,
   SieveQuery,
 } from "@mohasinac/contracts";
-import type { StoreListItem, StoreDetail } from "../types";
+import type { StoreListItem } from "../types";
 
 export class StoresRepository {
   constructor(private readonly repo: IRepository<StoreListItem>) {}

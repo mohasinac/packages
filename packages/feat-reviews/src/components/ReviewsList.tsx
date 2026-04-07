@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, Heading, Span, Text } from "@mohasinac/ui";
 import type { Review } from "../types";
 
 interface StarRatingProps {
@@ -49,10 +50,11 @@ export function ReviewCard({ review, className = "" }: ReviewCardProps) {
     >
       <div className="flex items-start gap-3">
         {review.userAvatar ? (
-          <img
-            src={review.userAvatar}
-            alt={review.userName}
-            className="h-9 w-9 rounded-full object-cover"
+          <div
+            role="img"
+            aria-label={review.userName}
+            className="h-9 w-9 rounded-full bg-center bg-cover"
+            style={{ backgroundImage: `url(${review.userAvatar})` }}
           />
         ) : (
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-200 text-sm font-medium text-neutral-600">
@@ -61,15 +63,15 @@ export function ReviewCard({ review, className = "" }: ReviewCardProps) {
         )}
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-medium text-neutral-900">
+            <Span className="font-medium text-neutral-900">
               {review.userName}
-            </span>
+            </Span>
             {review.verified && (
-              <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+              <Span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
                 Verified
-              </span>
+              </Span>
             )}
-            {date && <span className="text-xs text-neutral-400">{date}</span>}
+            {date && <Span className="text-xs text-neutral-400">{date}</Span>}
           </div>
           <div className="mt-1">
             <StarRating value={review.rating} size="sm" />
@@ -77,27 +79,33 @@ export function ReviewCard({ review, className = "" }: ReviewCardProps) {
         </div>
       </div>
       {review.title && (
-        <p className="mt-3 font-semibold text-neutral-900">{review.title}</p>
+        <Heading
+          level={3}
+          className="mt-3 font-semibold text-neutral-900 text-base"
+        >
+          {review.title}
+        </Heading>
       )}
       {review.comment && (
-        <p className="mt-2 text-sm text-neutral-600">{review.comment}</p>
+        <Text className="mt-2 text-sm text-neutral-600">{review.comment}</Text>
       )}
       {review.images && review.images.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
           {review.images.map((img, i) => (
-            <img
+            <div
               key={i}
-              src={img.thumbnailUrl ?? img.url}
-              alt={`Review image ${i + 1}`}
-              className="h-16 w-16 rounded-lg object-cover"
+              role="img"
+              aria-label={`Review image ${i + 1}`}
+              className="h-16 w-16 rounded-lg bg-center bg-cover"
+              style={{ backgroundImage: `url(${img.thumbnailUrl ?? img.url})` }}
             />
           ))}
         </div>
       )}
       {review.helpfulCount !== undefined && review.helpfulCount > 0 && (
-        <p className="mt-3 text-xs text-neutral-400">
+        <Text className="mt-3 text-xs text-neutral-400">
           {review.helpfulCount} found this helpful
-        </p>
+        </Text>
       )}
     </div>
   );
@@ -147,7 +155,9 @@ export function ReviewsList({
 
   if (reviews.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-neutral-500">{emptyLabel}</p>
+      <Text className="py-12 text-center text-sm text-neutral-500">
+        {emptyLabel}
+      </Text>
     );
   }
 
@@ -161,13 +171,16 @@ export function ReviewsList({
       {totalPages > 1 && onPageChange && (
         <div className="flex justify-center gap-2">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button
+            <Button
               key={p}
+              type="button"
+              variant={p === currentPage ? "primary" : "outline"}
+              size="sm"
               onClick={() => onPageChange(p)}
               className={`h-9 w-9 rounded-lg text-sm font-medium transition ${p === currentPage ? "bg-neutral-900 text-white" : "border border-neutral-200 text-neutral-600 hover:bg-neutral-100"}`}
             >
               {p}
-            </button>
+            </Button>
           ))}
         </div>
       )}

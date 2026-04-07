@@ -9,7 +9,7 @@ import { Logger } from "./Logger";
 
 const logger = Logger.getInstance();
 
-type EventCallback = (...args: any[]) => void;
+type EventCallback = (...args: unknown[]) => void;
 
 export interface EventSubscription {
   unsubscribe: () => void;
@@ -37,7 +37,7 @@ export class EventBus {
   }
 
   public once(event: string, callback: EventCallback): EventSubscription {
-    const wrapped = (...args: any[]) => {
+    const wrapped = (...args: unknown[]) => {
       callback(...args);
       this.off(event, wrapped);
     };
@@ -52,7 +52,7 @@ export class EventBus {
     if (callbacks.length === 0) this.events.delete(event);
   }
 
-  public emit(event: string, ...args: any[]): void {
+  public emit(event: string, ...args: unknown[]): void {
     const callbacks = this.events.get(event);
     if (!callbacks) return;
     callbacks.forEach((cb) => {

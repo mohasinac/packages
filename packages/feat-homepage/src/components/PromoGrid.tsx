@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Heading, Section, Span, Text } from "@mohasinac/ui";
 import type { PromoBanner } from "../types";
 
 export interface PromoGridProps {
@@ -18,7 +19,7 @@ export function PromoGrid({
   if (banners.length === 0) return null;
 
   return (
-    <section
+    <Section
       className="py-10 sm:py-16"
       style={{
         background: "var(--dark-section-alt)",
@@ -29,13 +30,14 @@ export function PromoGrid({
       <div className="mx-auto max-w-7xl px-4">
         <div className="mb-7 flex flex-wrap items-end justify-between gap-y-2">
           <div>
-            <p
+            <Text
               className="mb-1 text-xs font-black uppercase tracking-widest"
               style={{ color: "var(--color-red)", letterSpacing: "0.18em" }}
             >
               {eyebrow}
-            </p>
-            <h2
+            </Text>
+            <Heading
+              level={2}
               style={{
                 fontFamily: "var(--font-bangers, Bangers, cursive)",
                 fontSize: "clamp(1.6rem, 4vw, 2.4rem)",
@@ -45,7 +47,7 @@ export function PromoGrid({
               }}
             >
               {heading}
-            </h2>
+            </Heading>
           </div>
         </div>
 
@@ -62,7 +64,10 @@ export function PromoGrid({
               href={banner.ctaUrl}
               className={`group relative block overflow-hidden ${i === 0 ? "sm:row-span-2" : ""}`}
               style={{
-                minHeight: i === 0 ? "clamp(220px, 32vh, 480px)" : "clamp(130px, 16vh, 240px)",
+                minHeight:
+                  i === 0
+                    ? "clamp(220px, 32vh, 480px)"
+                    : "clamp(130px, 16vh, 240px)",
                 background: "var(--dark-section-card)",
               }}
             >
@@ -71,7 +76,11 @@ export function PromoGrid({
                 alt={banner.title}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
-                sizes={i === 0 ? "(max-width: 640px) 100vw, 40vw" : "(max-width: 640px) 50vw, 30vw"}
+                sizes={
+                  i === 0
+                    ? "(max-width: 640px) 100vw, 40vw"
+                    : "(max-width: 640px) 50vw, 30vw"
+                }
               />
               <div
                 className="absolute inset-0"
@@ -88,7 +97,7 @@ export function PromoGrid({
                 style={{ boxShadow: "inset 0 0 0 2px var(--color-yellow)" }}
               />
               <div className="absolute bottom-0 left-0 right-0 p-4">
-                <p
+                <Text
                   className="leading-tight"
                   style={{
                     fontFamily: "var(--font-bangers, Bangers, cursive)",
@@ -98,18 +107,18 @@ export function PromoGrid({
                   }}
                 >
                   {banner.title}
-                </p>
-                <span
+                </Text>
+                <Span
                   className="mt-1 inline-flex items-center gap-1 text-xs font-black uppercase"
                   style={{ color: "var(--color-yellow)" }}
                 >
                   {banner.ctaLabel} →
-                </span>
+                </Span>
               </div>
             </Link>
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

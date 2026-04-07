@@ -1,13 +1,11 @@
-import { FirebaseRepository, getAdminDb } from "@mohasinac/db-firebase";
+import type { IRepository } from "@mohasinac/contracts";
 import type { LoyaltyBalance, CoinHistoryEntry } from "../types";
 
-export class LoyaltyRepository extends FirebaseRepository<LoyaltyBalance> {
-  constructor() {
-    super("users");
-  }
+export class LoyaltyRepository {
+  constructor(private readonly repo: IRepository<LoyaltyBalance>) {}
 
   async getBalance(uid: string): Promise<LoyaltyBalance | null> {
-    return this.findById(uid);
+    return this.repo.findById(uid);
   }
 
   async addCoins(
@@ -15,13 +13,12 @@ export class LoyaltyRepository extends FirebaseRepository<LoyaltyBalance> {
     delta: number,
     entry: Omit<CoinHistoryEntry, "timestamp">,
   ): Promise<void> {
-    const db = getAdminDb();
-    const ref = db.collection("users").doc(uid);
-    const snap = await ref.get();
-    if (!snap.exists) return;
-    const current = (snap.data()?.hcCoins as number) ?? 0;
-    const history = (snap.data()?.coinHistory as CoinHistoryEntry[]) ?? [];
-    await ref.update({
+    const user = await this.repo.findById(uid);
+    if (!user) return;
+
+    const current = user.hcCoins ?? 0;
+    const history = user.coinHistory ?? [];
+    await this.repo.update(uid, {
       hcCoins: current + delta,
       coinHistory: [
         ...history,

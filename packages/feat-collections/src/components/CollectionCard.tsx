@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Article, Heading, Text } from "@mohasinac/ui";
 import type { CollectionListItem } from "../types";
 
 interface CollectionCardProps {
@@ -10,31 +11,45 @@ interface CollectionCardProps {
 
 export function CollectionCard({ collection, href }: CollectionCardProps) {
   return (
-    <a
-      href={href}
+    <Article
+      role="link"
+      tabIndex={0}
+      onClick={() => window.location.assign(href)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          window.location.assign(href);
+        }
+      }}
       className="group relative block overflow-hidden rounded-xl bg-gray-100 transition-shadow hover:shadow-lg"
     >
       {collection.image ? (
-        <img
-          src={collection.image}
-          alt={collection.title}
-          className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        <div
+          role="img"
+          aria-label={collection.title}
+          className="h-48 w-full bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
+          style={{ backgroundImage: `url(${collection.image})` }}
         />
       ) : (
         <div className="h-48 w-full bg-gradient-to-br from-indigo-100 to-purple-100" />
       )}
       <div className="p-4">
-        <h3 className="font-semibold text-gray-900">{collection.title}</h3>
+        <Heading level={3} className="font-semibold text-gray-900">
+          {collection.title}
+        </Heading>
         {collection.subtitle && (
-          <p className="mt-1 text-sm text-gray-500">{collection.subtitle}</p>
+          <Text className="mt-1 text-sm text-gray-500">
+            {collection.subtitle}
+          </Text>
         )}
         {collection.productCount !== undefined && (
-          <p className="mt-2 text-xs text-gray-400">
-            {collection.productCount} {collection.productCount === 1 ? "item" : "items"}
-          </p>
+          <Text className="mt-2 text-xs text-gray-400">
+            {collection.productCount}{" "}
+            {collection.productCount === 1 ? "item" : "items"}
+          </Text>
         )}
       </div>
-    </a>
+    </Article>
   );
 }
 

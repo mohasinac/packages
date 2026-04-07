@@ -31,6 +31,7 @@ export const firebaseSessionProvider: ISessionProvider = {
    * In practice, callers should use `createSessionCookieFromToken()`.
    */
   async createSession(payload: AuthPayload): Promise<string> {
+    void payload;
     // Custom tokens cannot be used to mint a session cookie directly —
     // createSession via ISessionProvider is called at the point where
     // the caller already has a verified payload.  We delegate to a helper

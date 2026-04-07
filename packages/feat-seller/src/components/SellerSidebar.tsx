@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+import { Aside, Li, Nav, Span, Text, Ul } from "@mohasinac/ui";
 
 export interface SellerNavItem {
   href: string;
@@ -23,34 +25,38 @@ export function SellerSidebar({
   className = "",
 }: SellerSidebarProps) {
   return (
-    <aside
+    <Aside
       className={`w-64 shrink-0 bg-white border-r border-gray-200 flex flex-col ${className}`}
     >
       {storeName && (
         <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100">
           {storeLogoURL ? (
-            <img
-              src={storeLogoURL}
-              alt={storeName}
-              className="h-8 w-8 rounded-full object-cover"
+            <div
+              role="img"
+              aria-label={storeName}
+              className="h-8 w-8 rounded-full bg-center bg-cover"
+              style={{ backgroundImage: `url(${storeLogoURL})` }}
             />
           ) : (
             <div className="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-sm">
               {storeName[0]?.toUpperCase()}
             </div>
           )}
-          <span className="font-semibold text-gray-900 text-sm truncate">
+          <Text className="font-semibold text-gray-900 text-sm truncate">
             {storeName}
-          </span>
+          </Text>
         </div>
       )}
-      <nav className="flex-1 overflow-y-auto py-3">
-        <ul className="space-y-0.5 px-2">
+      <Nav
+        aria-label="Seller navigation"
+        className="flex-1 overflow-y-auto py-3"
+      >
+        <Ul className="space-y-0.5 px-2">
           {items.map((item) => {
             const isActive = activeHref === item.href;
             return (
-              <li key={item.href}>
-                <a
+              <Li key={item.href}>
+                <Link
                   href={item.href}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                     isActive
@@ -59,20 +65,20 @@ export function SellerSidebar({
                   }`}
                 >
                   {item.icon && (
-                    <span className="shrink-0 text-[1.1rem]">{item.icon}</span>
+                    <Span className="shrink-0 text-[1.1rem]">{item.icon}</Span>
                   )}
-                  <span className="flex-1 truncate">{item.label}</span>
+                  <Span className="flex-1 truncate">{item.label}</Span>
                   {item.badge != null && item.badge > 0 && (
-                    <span className="shrink-0 rounded-full bg-orange-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                    <Span className="shrink-0 rounded-full bg-orange-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
                       {item.badge}
-                    </span>
+                    </Span>
                   )}
-                </a>
-              </li>
+                </Link>
+              </Li>
             );
           })}
-        </ul>
-      </nav>
-    </aside>
+        </Ul>
+      </Nav>
+    </Aside>
   );
 }

@@ -1,13 +1,11 @@
-import { FirebaseSieveRepository } from "@mohasinac/db-firebase";
+import type { IRepository } from "@mohasinac/contracts";
 import type { PreorderItem } from "../types";
 
-export class PreordersRepository extends FirebaseSieveRepository<PreorderItem> {
-  constructor() {
-    super("products");
-  }
+export class PreordersRepository {
+  constructor(private readonly repo: IRepository<PreorderItem>) {}
 
   async findPreorders(): Promise<PreorderItem[]> {
-    const result = await this.findAll({
+    const result = await this.repo.findAll({
       filters: "isPreorder==true,active==true",
       sort: "createdAt",
       order: "desc",
@@ -16,7 +14,7 @@ export class PreordersRepository extends FirebaseSieveRepository<PreorderItem> {
   }
 
   async findFeaturedPreorders(): Promise<PreorderItem[]> {
-    const result = await this.findAll({
+    const result = await this.repo.findAll({
       filters: "isPreorder==true,active==true,isFeatured==true",
       sort: "createdAt",
       order: "desc",

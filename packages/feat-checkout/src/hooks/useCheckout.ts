@@ -5,8 +5,8 @@ import type {
   CheckoutStep,
   UserAddress,
   ShippingOption,
+  PaymentGateway,
 } from "../types";
-import type { PaymentGateway } from "@mohasinac/feat-payments";
 
 export function useCheckout(initial?: Partial<CheckoutState>) {
   const [state, setState] = useState<CheckoutState>({

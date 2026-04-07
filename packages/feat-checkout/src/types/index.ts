@@ -1,7 +1,23 @@
-import type { PaymentGateway } from "@mohasinac/feat-payments";
-import type { UserAddress } from "@mohasinac/feat-account";
+export type PaymentGateway =
+  | "razorpay"
+  | "stripe"
+  | "paypal"
+  | "cod"
+  | "upi"
+  | "whatsapp";
 
-export { UserAddress };
+export interface UserAddress {
+  id: string;
+  label?: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  isDefault?: boolean;
+  phone?: string;
+}
 
 export type CheckoutStep =
   | "address"

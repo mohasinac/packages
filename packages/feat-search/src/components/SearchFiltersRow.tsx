@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button, Input, Label, Select } from "@mohasinac/ui";
 import type { SearchCategoryOption } from "../types";
 
 interface SearchFiltersRowProps {
@@ -51,30 +52,27 @@ export function SearchFiltersRow({
     <div className="flex flex-wrap gap-4 items-end">
       {/* Category filter */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+        <Label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
           {L.categoryFilter}
-        </label>
-        <select
+        </Label>
+        <Select
           value={urlCategory}
-          onChange={(e) => onCategoryChange(e.target.value)}
+          onChange={(value) => onCategoryChange(value)}
+          options={[
+            { value: "", label: L.allCategories },
+            ...categories.map((cat) => ({ value: cat.id, label: cat.name })),
+          ]}
           className="rounded-lg border border-zinc-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
-        >
-          <option value="">{L.allCategories}</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
+        />
       </div>
 
       {/* Price range */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+        <Label className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
           {L.priceRange}
-        </label>
+        </Label>
         <div className="flex items-center gap-2">
-          <input
+          <Input
             type="number"
             min={0}
             value={minPrice}
@@ -83,7 +81,7 @@ export function SearchFiltersRow({
             className="w-28 rounded-lg border border-zinc-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
           />
           <span className="text-sm text-zinc-500 dark:text-zinc-400">–</span>
-          <input
+          <Input
             type="number"
             min={0}
             value={maxPrice}
@@ -91,25 +89,29 @@ export function SearchFiltersRow({
             placeholder={L.maxPrice}
             className="w-28 rounded-lg border border-zinc-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
           />
-          <button
+          <Button
             type="button"
+            variant="primary"
+            size="sm"
             onClick={() => onPriceFilter(minPrice, maxPrice)}
             className="h-10 px-4 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium transition-colors"
           >
             {L.apply}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Clear filters */}
       {showClear && (
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="sm"
           onClick={onClearFilters}
           className="h-10 px-4 rounded-lg border border-zinc-200 dark:border-slate-700 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-slate-800 transition-colors"
         >
           {L.clearFilters}
-        </button>
+        </Button>
       )}
     </div>
   );

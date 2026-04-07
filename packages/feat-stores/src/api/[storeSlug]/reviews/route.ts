@@ -19,6 +19,24 @@ import { getProviders } from "@mohasinac/contracts";
 
 type RouteContext = { params: Promise<{ storeSlug: string }> };
 
+interface StoreEntity {
+  id: string;
+  ownerId: string;
+}
+
+interface ProductEntity {
+  id: string;
+  title?: string;
+  mainImage?: string | null;
+}
+
+interface ReviewEntity {
+  productId: string;
+  createdAt?: string;
+  rating: number;
+  productTitle?: string;
+}
+
 // ─── GET /api/stores/[storeSlug]/reviews ──────────────────────────────────────
 export async function GET(
   _request: Request,
@@ -36,7 +54,7 @@ export async function GET(
     }
 
     // Resolve store by slug
-    const storesRepo = db.getRepository<any>("stores");
+    const storesRepo = db.getRepository<StoreEntity>("stores");
     const storeResult = await storesRepo.findAll({
       filters: `storeSlug==${storeSlug},status==active,isPublic==true`,
       perPage: 1,
@@ -50,7 +68,7 @@ export async function GET(
     }
 
     // Fetch up to 20 published products for this seller
-    const productsRepo = db.getRepository<any>("products");
+    const productsRepo = db.getRepository<ProductEntity>("products");
     const productsResult = await productsRepo.findAll({
       filters: `sellerId==${store.ownerId},status==published`,
       sort: "itemsSold",
@@ -60,9 +78,9 @@ export async function GET(
     const products = productsResult.data;
 
     // Fetch approved reviews for each product in parallel (cap 50 per product)
-    const reviewsRepo = db.getRepository<any>("reviews");
+    const reviewsRepo = db.getRepository<ReviewEntity>("reviews");
     const reviewArrays = await Promise.all(
-      products.map((p: any) =>
+      products.map((p) =>
         reviewsRepo
           .findAll({
             filters: `productId==${p.id},status==approved`,
@@ -70,16 +88,17 @@ export async function GET(
             order: "desc",
             perPage: 50,
           })
-          .then((r: any) => r.data),
+          .then((r) => r.data),
       ),
     );
 
     // Flatten, sort by date desc, cap to 10 most recent
-    const allReviews: any[] = reviewArrays
+    const allReviews: ReviewEntity[] = reviewArrays
       .flat()
       .sort(
-        (a: any, b: any) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        (a, b) =>
+          new Date(b.createdAt ?? 0).getTime() -
+          new Date(a.createdAt ?? 0).getTime(),
       )
       .slice(0, 10);
 
@@ -95,24 +114,23 @@ export async function GET(
     let totalReviews = 0;
 
     for (const reviews of reviewArrays) {
-      for (const review of reviews as any[]) {
+      for (const review of reviews) {
         totalReviews++;
         ratingSum += review.rating;
-        ratingDistribution[review.rating as number] =
-          (ratingDistribution[review.rating as number] ?? 0) + 1;
+        ratingDistribution[review.rating] =
+          (ratingDistribution[review.rating] ?? 0) + 1;
       }
     }
 
     const averageRating = totalReviews > 0 ? ratingSum / totalReviews : 0;
 
     // Enrich reviews with product title + main image
-    const productMap = new Map(products.map((p: any) => [p.id, p]));
-    const reviewsWithProduct = allReviews.map((review: any) => ({
+    const productMap = new Map(products.map((p) => [p.id, p]));
+    const reviewsWithProduct = allReviews.map((review) => ({
       ...review,
       productTitle:
-        (productMap.get(review.productId) as any)?.title ?? review.productTitle,
-      productMainImage:
-        (productMap.get(review.productId) as any)?.mainImage ?? null,
+        productMap.get(review.productId)?.title ?? review.productTitle,
+      productMainImage: productMap.get(review.productId)?.mainImage ?? null,
     }));
 
     return NextResponse.json({

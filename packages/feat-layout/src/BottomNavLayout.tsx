@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Nav, Ul } from "@mohasinac/ui";
 
 export interface BottomNavLayoutProps {
   ariaLabel: string;
@@ -22,12 +23,12 @@ export function BottomNavLayout({
   className,
 }: BottomNavLayoutProps) {
   return (
-    <nav
+    <Nav
       id={id}
       aria-label={ariaLabel}
       className={`fixed bottom-0 left-0 right-0 md:hidden z-40 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-t border-zinc-200/80 dark:border-slate-800/80 shadow-2xl pb-safe${className ? ` ${className}` : ""}`}
     >
-      <ul className="flex items-stretch h-14">{children}</ul>
-    </nav>
+      <Ul className="flex items-stretch h-14">{children}</Ul>
+    </Nav>
   );
 }

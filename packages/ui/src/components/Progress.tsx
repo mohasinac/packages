@@ -132,7 +132,6 @@ export function IndeterminateProgress({
 
   return (
     <div className={className}>
-      {/* eslint-disable-next-line react/no-danger */}
       <style dangerouslySetInnerHTML={{ __html: INDETERMINATE_CSS }} />
       {label && (
         <Span className={`block text-sm font-medium mb-2 ${TEXT_PRIMARY}`}>

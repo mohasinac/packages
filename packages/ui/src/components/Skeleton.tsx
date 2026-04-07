@@ -67,7 +67,6 @@ export function Skeleton({
   return (
     <>
       {animation === "wave" && (
-        // eslint-disable-next-line react/no-danger
         <style dangerouslySetInnerHTML={{ __html: WAVE_CSS }} />
       )}
       <div

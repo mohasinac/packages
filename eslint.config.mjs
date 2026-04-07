@@ -9,6 +9,11 @@ export default tseslint.config(
   {
     files: ["packages/*/src/**/*.{ts,tsx}"],
     rules: {
+      // Some packages carry compatibility disables for plugins not loaded in this workspace config.
+      "react-hooks/exhaustive-deps": "off",
+      "@next/next/no-img-element": "off",
+      "jsx-a11y/media-has-caption": "off",
+      "react/no-danger": "off",
       // @/ barrel aliases don't exist in packages — each package imports @mohasinac/* directly
       "lir/no-deep-barrel-import": "off",
       // @/features/ path pattern not applicable — replaced by PKG-002 (no-cross-feat-import)

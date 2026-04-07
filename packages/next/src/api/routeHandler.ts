@@ -21,10 +21,11 @@ import { getProviders } from "@mohasinac/contracts";
 
 /** Minimal schema interface compatible with Zod v3 and v4. */
 interface ParseableSchema<TOutput> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   safeParse(
     data: unknown,
-  ): { success: true; data: TOutput } | { success: false; error: any };
+  ):
+    | { success: true; data: TOutput }
+    | { success: false; error: { issues?: unknown[] } };
 }
 
 export interface RouteUser {
@@ -53,8 +54,7 @@ interface RouteHandlerOptions<
     user?: RouteUser;
     body?: TInput;
     params?: TParams;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  }) => Promise<any>;
+  }) => Promise<NextResponse>;
 }
 
 /** Read the `__session` HTTP-only cookie from request headers. */
@@ -143,7 +143,7 @@ export function createRouteHandler<
             {
               success: false,
               error: "Validation failed",
-              issues: (result.error as any)?.issues ?? [],
+              issues: result.error.issues ?? [],
             },
             { status: 400 },
           );
@@ -163,7 +163,9 @@ export function createRouteHandler<
     } catch (err: unknown) {
       // Structured errors thrown with .status
       const status =
-        typeof (err as any)?.status === "number" ? (err as any).status : 500;
+        typeof (err as { status?: unknown })?.status === "number"
+          ? (err as { status: number }).status
+          : 500;
       const message =
         err instanceof Error ? err.message : "Internal server error";
       console.error(`[createRouteHandler] ${request.method} failed`, err);

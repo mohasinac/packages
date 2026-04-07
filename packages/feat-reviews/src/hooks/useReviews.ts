@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@mohasinac/http";
-import type { Review, ReviewListResponse, ReviewListParams } from "../types";
+import type { ReviewListResponse, ReviewListParams } from "../types";
 
 interface UseReviewsOptions {
   initialData?: ReviewListResponse;

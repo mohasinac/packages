@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
+import { Aside } from "@mohasinac/ui";
 
 export interface SidebarLayoutProps {
   isOpen: boolean;
@@ -41,7 +42,7 @@ export const SidebarLayout = forwardRef<HTMLElement, SidebarLayoutProps>(
           />
         )}
 
-        <aside
+        <Aside
           ref={ref as React.RefObject<HTMLElement>}
           id={id}
           aria-label={ariaLabel}
@@ -65,7 +66,7 @@ export const SidebarLayout = forwardRef<HTMLElement, SidebarLayoutProps>(
           <div className="flex-1 overflow-y-auto scrollbar-thin px-6 py-4">
             {children}
           </div>
-        </aside>
+        </Aside>
       </>
     );
   },

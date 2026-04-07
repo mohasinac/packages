@@ -1,17 +1,15 @@
-import { FirebaseSieveRepository } from "@mohasinac/db-firebase";
+import type { IRepository } from "@mohasinac/contracts";
 import type { CollectionItem } from "../types";
 
-export class CollectionsRepository extends FirebaseSieveRepository<CollectionItem> {
-  constructor() {
-    super("curated_collections");
-  }
+export class CollectionsRepository {
+  constructor(private readonly repo: IRepository<CollectionItem>) {}
 
   async findBySlug(slug: string): Promise<CollectionItem | null> {
-    return this.findById(slug);
+    return this.repo.findById(slug);
   }
 
   async findActive(): Promise<CollectionItem[]> {
-    const result = await this.findAll({
+    const result = await this.repo.findAll({
       filters: "active==true",
       sort: "sortOrder",
       order: "asc",

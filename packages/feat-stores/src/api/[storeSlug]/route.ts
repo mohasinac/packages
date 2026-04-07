@@ -18,6 +18,38 @@ import type { StoreDetail } from "../../types/index.js";
 
 type RouteContext = { params: Promise<{ storeSlug: string }> };
 
+interface StoreEntity {
+  id: string;
+  storeSlug: string;
+  ownerId: string;
+  storeName: string;
+  storeDescription?: string;
+  storeCategory?: string;
+  storeLogoURL?: string;
+  storeBannerURL?: string;
+  status: string;
+  isPublic: boolean;
+  stats?: {
+    totalProducts?: number;
+    itemsSold?: number;
+    totalReviews?: number;
+    averageRating?: number;
+  };
+  totalProducts?: number;
+  itemsSold?: number;
+  totalReviews?: number;
+  averageRating?: number;
+  bio?: string;
+  location?: string;
+  website?: string;
+  socialLinks?: StoreDetail["socialLinks"];
+  returnPolicy?: string;
+  shippingPolicy?: string;
+  isVacationMode?: boolean;
+  vacationMessage?: string;
+  createdAt?: string;
+}
+
 // ─── GET /api/stores/[storeSlug] ─────────────────────────────────────────────
 
 export async function GET(
@@ -36,7 +68,7 @@ export async function GET(
     }
 
     // Look up store by slug — filters for active + public stores only
-    const repo = db.getRepository<any>("stores");
+    const repo = db.getRepository<StoreEntity>("stores");
     const result = await repo.findAll({
       filters: `storeSlug==${storeSlug},status==active,isPublic==true`,
       perPage: 1,

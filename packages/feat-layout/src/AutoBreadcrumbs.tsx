@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Li, Nav, Ol } from "@mohasinac/ui";
 
 /** Map of path segments → human-readable labels. */
 const DEFAULT_PATH_LABELS: Record<string, string> = {
@@ -99,12 +101,12 @@ export function AutoBreadcrumbs({
   const allCrumbs = [{ label: "Home", href: "/" }, ...crumbs];
 
   return (
-    <nav aria-label="Breadcrumb" className={className}>
-      <ol className="flex items-center gap-2 text-sm flex-wrap">
+    <Nav aria-label="Breadcrumb" className={className}>
+      <Ol className="flex items-center gap-2 text-sm flex-wrap">
         {allCrumbs.map((crumb, index) => {
           const isLast = index === allCrumbs.length - 1;
           return (
-            <li key={crumb.href} className="flex items-center gap-2">
+            <Li key={crumb.href} className="flex items-center gap-2">
               {isLast ? (
                 <span
                   aria-current="page"
@@ -115,12 +117,12 @@ export function AutoBreadcrumbs({
               ) : renderLink ? (
                 renderLink(crumb.href, crumb.label)
               ) : (
-                <a
+                <Link
                   href={crumb.href}
                   className="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
                 >
                   {crumb.label}
-                </a>
+                </Link>
               )}
               {!isLast && (
                 <span
@@ -130,10 +132,10 @@ export function AutoBreadcrumbs({
                   {separator}
                 </span>
               )}
-            </li>
+            </Li>
           );
         })}
-      </ol>
-    </nav>
+      </Ol>
+    </Nav>
   );
 }

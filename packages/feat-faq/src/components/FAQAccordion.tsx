@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, Span, Text } from "@mohasinac/ui";
 import type { FAQ, FAQCategory } from "../types";
 
 interface FAQAccordionItemProps {
@@ -10,13 +11,13 @@ interface FAQAccordionItemProps {
 function FAQAccordionItem({ faq, isOpen, onToggle }: FAQAccordionItemProps) {
   return (
     <div className="border-b border-neutral-200 last:border-0">
-      <button
+      <Button
         onClick={onToggle}
         aria-expanded={isOpen}
         className="flex w-full items-center justify-between gap-4 py-4 text-left text-sm font-medium text-neutral-900 transition hover:text-primary"
       >
-        <span>{faq.question}</span>
-        <span
+        <Span>{faq.question}</Span>
+        <Span
           className={`flex-shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
         >
           <svg
@@ -34,8 +35,8 @@ function FAQAccordionItem({ faq, isOpen, onToggle }: FAQAccordionItemProps) {
               strokeLinejoin="round"
             />
           </svg>
-        </span>
-      </button>
+        </Span>
+      </Button>
       {isOpen && (
         <div className="pb-4 text-sm text-neutral-600">
           {faq.answer.format === "html" ? (
@@ -44,7 +45,7 @@ function FAQAccordionItem({ faq, isOpen, onToggle }: FAQAccordionItemProps) {
               dangerouslySetInnerHTML={{ __html: faq.answer.text }}
             />
           ) : (
-            <p className="whitespace-pre-line">{faq.answer.text}</p>
+            <Text className="whitespace-pre-line">{faq.answer.text}</Text>
           )}
         </div>
       )}
@@ -91,20 +92,20 @@ export function FAQCategoryTabs({
 }: FAQCategoryTabsProps) {
   return (
     <div className="scrollbar-none flex flex-wrap gap-2">
-      <button
+      <Button
         onClick={() => onSelect(null)}
         className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${!active ? "bg-neutral-900 text-white" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"}`}
       >
         {labels.all ?? "All"}
-      </button>
+      </Button>
       {categories.map((cat) => (
-        <button
+        <Button
           key={cat}
           onClick={() => onSelect(cat)}
           className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium capitalize transition ${active === cat ? "bg-neutral-900 text-white" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"}`}
         >
           {labels[cat] ?? cat.replace(/_/g, " ")}
-        </button>
+        </Button>
       ))}
     </div>
   );

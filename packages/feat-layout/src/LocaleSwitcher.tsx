@@ -1,5 +1,7 @@
 "use client";
 
+import { Select } from "@mohasinac/ui";
+
 export interface LocaleSwitcherOption {
   value: string;
   label: string;
@@ -31,17 +33,12 @@ export function LocaleSwitcher({
   className = "",
 }: LocaleSwitcherProps) {
   return (
-    <select
+    <Select
       value={locale}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={onChange}
+      options={options}
       aria-label={ariaLabel}
-      className={`rounded-md border border-zinc-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-zinc-900 dark:text-zinc-100 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500/30 dark:focus:ring-secondary-400/30 cursor-pointer ${className}`}
-    >
-      {options.map((opt) => (
-        <option key={opt.value} value={opt.value}>
-          {opt.label}
-        </option>
-      ))}
-    </select>
+      className={className}
+    />
   );
 }

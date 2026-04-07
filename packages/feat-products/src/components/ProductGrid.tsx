@@ -1,5 +1,6 @@
 import React from "react";
 import type { LayoutSlots } from "@mohasinac/contracts";
+import { Button, Span, Text } from "@mohasinac/ui";
 import type { ProductItem } from "../types";
 
 // ─── ProductCard ──────────────────────────────────────────────────────────────
@@ -41,26 +42,30 @@ export function ProductCard<T extends ProductItem = ProductItem>({
     >
       <div className="relative aspect-square overflow-hidden bg-neutral-100">
         {product.mainImage ? (
-          <img
-            src={product.mainImage}
-            alt={product.title}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          <div
+            role="img"
+            aria-label={product.title}
+            className="h-full w-full bg-center bg-cover transition-transform duration-300 group-hover:scale-105"
+            style={{ backgroundImage: `url(${product.mainImage})` }}
           />
         ) : (
           <div className="h-full w-full bg-neutral-200" />
         )}
         {discount && (
-          <span className="absolute left-2 top-2 rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+          <Span className="absolute left-2 top-2 rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
             -{discount}%
-          </span>
+          </Span>
         )}
         {product.isAuction && (
-          <span className="absolute right-2 top-2 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white">
+          <Span className="absolute right-2 top-2 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white">
             Auction
-          </span>
+          </Span>
         )}
         {onAddToWishlist && (
-          <button
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
             onClick={(e) => {
               e.stopPropagation();
               onAddToWishlist(product.id);
@@ -71,37 +76,37 @@ export function ProductCard<T extends ProductItem = ProductItem>({
             className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-neutral-600 shadow transition hover:bg-white hover:text-red-500"
           >
             {isWishlisted ? "♥" : "♡"}
-          </button>
+          </Button>
         )}
       </div>
       <div className="flex flex-1 flex-col p-3">
-        <p className="line-clamp-2 text-sm font-medium text-neutral-900">
+        <Text className="line-clamp-2 text-sm font-medium text-neutral-900">
           {product.title}
-        </p>
+        </Text>
         {product.sellerName && (
-          <p className="mt-0.5 text-xs text-neutral-400">
+          <Text className="mt-0.5 text-xs text-neutral-400">
             {product.sellerName}
-          </p>
+          </Text>
         )}
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="font-semibold text-neutral-900">
+          <Span className="font-semibold text-neutral-900">
             {product.currency ?? "₹"}
             {product.price.toLocaleString()}
-          </span>
+          </Span>
           {product.originalPrice && (
-            <span className="text-xs text-neutral-400 line-through">
+            <Span className="text-xs text-neutral-400 line-through">
               {product.currency ?? "₹"}
               {product.originalPrice.toLocaleString()}
-            </span>
+            </Span>
           )}
         </div>
         {product.rating !== undefined && (
           <div className="mt-1 flex items-center gap-1">
-            <span className="text-xs text-yellow-500">★</span>
-            <span className="text-xs text-neutral-500">
+            <Span className="text-xs text-yellow-500">★</Span>
+            <Span className="text-xs text-neutral-500">
               {product.rating.toFixed(1)}
               {product.reviewCount ? ` (${product.reviewCount})` : ""}
-            </span>
+            </Span>
           </div>
         )}
       </div>
@@ -205,9 +210,9 @@ export function ProductGrid<T extends ProductItem = ProductItem>({
       {resolvedHeader}
       {isEmpty ? (
         (resolvedEmpty ?? (
-          <p className="py-12 text-center text-sm text-neutral-500">
+          <Text className="py-12 text-center text-sm text-neutral-500">
             {emptyLabel}
-          </p>
+          </Text>
         ))
       ) : (
         <div

@@ -1,4 +1,5 @@
 import React from "react";
+import { Text } from "@mohasinac/ui";
 
 interface SellerStatCardProps {
   label: string;
@@ -23,17 +24,17 @@ export function SellerStatCard({
     >
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-gray-500 mb-1 truncate">{label}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <Text className="text-sm text-gray-500 mb-1 truncate">{label}</Text>
+          <Text className="text-2xl font-bold text-gray-900">{value}</Text>
           {subLabel && (
-            <p className="text-xs text-gray-400 mt-0.5">{subLabel}</p>
+            <Text className="text-xs text-gray-400 mt-0.5">{subLabel}</Text>
           )}
           {trend && (
-            <p
+            <Text
               className={`text-xs mt-1 font-medium ${trend.positive ? "text-green-600" : "text-red-500"}`}
             >
               {trend.positive ? "▲" : "▼"} {Math.abs(trend.value)}%
-            </p>
+            </Text>
           )}
         </div>
         {icon && <div className="shrink-0 text-gray-400 text-2xl">{icon}</div>}

@@ -1,4 +1,5 @@
 import React from "react";
+import { Button, Heading, Section, Text } from "@mohasinac/ui";
 import type { HomepageSection } from "../types";
 
 interface HeroSectionProps {
@@ -9,7 +10,7 @@ interface HeroSectionProps {
 export function HeroSection({ section, onCtaClick }: HeroSectionProps) {
   const { content } = section;
   return (
-    <section
+    <Section
       className="relative flex min-h-[60vh] items-center overflow-hidden bg-neutral-900"
       style={
         content?.imageUrl
@@ -24,24 +25,27 @@ export function HeroSection({ section, onCtaClick }: HeroSectionProps) {
       <div className="absolute inset-0 bg-black/40" />
       <div className="relative mx-auto max-w-7xl px-4 py-16 text-center text-white sm:px-6 lg:px-8">
         {content?.title && (
-          <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+          <Heading
+            level={1}
+            className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
+          >
             {content.title}
-          </h1>
+          </Heading>
         )}
         {content?.subtitle && (
-          <p className="mx-auto mt-4 max-w-2xl text-lg opacity-90">
+          <Text className="mx-auto mt-4 max-w-2xl text-lg opacity-90">
             {content.subtitle}
-          </p>
+          </Text>
         )}
         {content?.ctaLabel && (
-          <button
+          <Button
             onClick={onCtaClick}
             className="mt-8 inline-block rounded-full bg-white px-8 py-3 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-100"
           >
             {content.ctaLabel}
-          </button>
+          </Button>
         )}
       </div>
-    </section>
+    </Section>
   );
 }

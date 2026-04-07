@@ -128,7 +128,6 @@ export function MediaLightbox({
       setZoom(1);
       setOffset({ x: 0, y: 0 });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, initialIndex]);
 
   const resetZoom = useCallback(() => {
@@ -342,9 +341,6 @@ export function MediaLightbox({
   if (!isOpen || items.length === 0) return null;
 
   const current = items[index];
-  const CTRL =
-    "inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/15 hover:bg-white/30 text-white border-0 active:scale-95 transition-colors";
-
   return (
     <div
       ref={containerRef}

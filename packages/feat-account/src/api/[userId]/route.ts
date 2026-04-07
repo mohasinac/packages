@@ -14,12 +14,6 @@
 import { NextResponse } from "next/server.js";
 import { getProviders } from "@mohasinac/contracts";
 
-function numParam(url: URL, key: string, fallback: number): number {
-  const v = url.searchParams.get(key);
-  const n = v !== null ? Number(v) : NaN;
-  return Number.isFinite(n) ? n : fallback;
-}
-
 export async function GET(
   request: Request,
   { params }: { params: { userId: string } },
