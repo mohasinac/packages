@@ -52,12 +52,18 @@ function isTestFile(p) {
 
 /** @param {string} p */
 function isApiRoute(p) {
-  return p.includes("/app/api/");
+  return p.includes("/app/api/") || /\/packages\/[^/]+\/src\/api\//.test(p);
 }
 
 /** @param {string} p */
 function isLibDir(p) {
-  return p.includes("/src/lib/");
+  return (
+    p.includes("/src/lib/") ||
+    // Provider packages are the concrete implementations — they legitimately use Firebase/Resend etc.
+    /\/packages\/(db-firebase|auth-firebase|storage-firebase|email-resend|payment-[a-z-]+|shipping-[a-z-]+)\/src\//.test(
+      p,
+    )
+  );
 }
 
 /** @param {string} p */
@@ -77,7 +83,10 @@ function isI18nFile(p) {
 
 /** @param {string} p */
 function isRepositoryFile(p) {
-  return p.includes("/src/repositories/");
+  return (
+    p.includes("/src/repositories/") ||
+    /\/packages\/[^/]+\/src\/repository\//.test(p)
+  );
 }
 
 /** @param {string} p */
@@ -92,7 +101,9 @@ function isPageFile(p) {
 
 /** @param {string} p */
 function isFeatureFile(p) {
-  return p.includes("/src/features/");
+  return (
+    p.includes("/src/features/") || /\/packages\/feat-[^/]+\/src\//.test(p)
+  );
 }
 
 /** @param {string} p */
@@ -125,6 +136,12 @@ function isAppServerFile(p) {
 /** @param {string} p */
 function getFeatureName(p) {
   const m = p.match(/\/features\/([^/]+)\//);
+  return m ? m[1] : null;
+}
+
+/** Returns the feat-* package name for files in the packages workspace. @param {string} p */
+function getPackageFeatName(p) {
+  const m = p.match(/\/packages\/(feat-[^/]+)\/src\//);
   return m ? m[1] : null;
 }
 
@@ -595,21 +612,24 @@ const rules = {
       type: "suggestion",
       docs: {
         description:
-          "Never use raw HTML elements in TSX — use the matching component from @/components. (COMP-001 to COMP-009)",
+          "Never use raw HTML elements in TSX; use the matching wrapper from @/components or @mohasinac/ui. (COMP-001 to COMP-009)",
       },
       schema: [],
       messages: {
         rawHeading:
-          "Raw <h{{level}}> — use <Heading level={{{level}}}> from @/components.",
-        rawParagraph: "Raw <p> — use <Text> from @/components.",
-        rawLabel: "Raw <label> — use <Label> from @/components.",
-        rawAnchor: "Raw <a> — use <TextLink href={...}> from @/components.",
+          "Raw <h{{level}}> - use <Heading level={{{level}}}> from wrapper components.",
+        rawParagraph: "Raw <p> - use <Text> from wrapper components.",
+        rawLabel: "Raw <label> - use <Label> from wrapper components.",
+        rawAnchor:
+          "Raw <a> - use <TextLink href={...}> from wrapper components.",
         rawButton:
-          'Raw <button> — use <Button variant="..."> from @/components.',
-        rawInput: "Raw <input> — use <Input> or <FormField> from @/components.",
-        rawSelect: "Raw <select> — use <Select> from @/components.",
-        rawTextarea: "Raw <textarea> — use <Textarea> from @/components.",
-        rawSemantic: "Raw <{{tag}}> — use <{{component}}> from @/components.",
+          'Raw <button> - use <Button variant="..."> from wrapper components.',
+        rawInput:
+          "Raw <input> - use <Input> or <FormField> from wrapper components.",
+        rawSelect: "Raw <select> - use <Select> from wrapper components.",
+        rawTextarea: "Raw <textarea> - use <Textarea> from wrapper components.",
+        rawSemantic:
+          "Raw <{{tag}}> - use <{{component}}> from wrapper components.",
       },
     },
     create(context) {
@@ -1185,11 +1205,91 @@ const rules = {
   },
 };
 
+// ─── Package-workspace rules ─────────────────────────────────────────────────
+
+const pkgRules = {
+  // ── PKG-001: feat-* packages must not import concrete provider packages ────
+  "no-concrete-provider-in-feat": {
+    meta: {
+      type: "problem",
+      docs: {
+        description:
+          "feat-* packages must not import concrete provider packages — use getProviders() from @mohasinac/contracts. (PKG-001)",
+      },
+      schema: [],
+      messages: {
+        concreteProvider:
+          "feat-* package imports concrete provider '{{pkg}}' — use getProviders() from @mohasinac/contracts instead.",
+      },
+    },
+    create(context) {
+      const filename = getFilename(context);
+      if (isTestFile(filename)) return {};
+      if (!getPackageFeatName(filename)) return {};
+      return {
+        ImportDeclaration(node) {
+          const src = node.source.value;
+          if (
+            /^@mohasinac\/(db-firebase|auth-firebase|storage-firebase|email-resend)(\/|$)/.test(
+              src,
+            ) ||
+            /^@mohasinac\/(payment|shipping)-/.test(src)
+          ) {
+            context.report({
+              node: node.source,
+              messageId: "concreteProvider",
+              data: { pkg: src },
+            });
+          }
+        },
+      };
+    },
+  },
+
+  // ── PKG-002: feat-* packages must not import other feat-* packages ─────────
+  "no-cross-feat-import": {
+    meta: {
+      type: "problem",
+      docs: {
+        description:
+          "feat-* packages must not import from other feat-* packages — elevate shared logic to a primitive package. (PKG-002)",
+      },
+      schema: [],
+      messages: {
+        crossFeat:
+          "Package '{{thisPkg}}' imports '{{otherPkg}}' — cross-feat imports are forbidden.",
+      },
+    },
+    create(context) {
+      const filename = getFilename(context);
+      if (isTestFile(filename)) return {};
+      const thisPkg = getPackageFeatName(filename);
+      if (!thisPkg) return {};
+      return {
+        ImportDeclaration(node) {
+          const src = node.source.value;
+          if (/^@mohasinac\/feat-/.test(src)) {
+            const m = src.match(/^(@mohasinac\/feat-[^/]+)/);
+            const otherPkg = m ? m[1] : src;
+            if (otherPkg !== `@mohasinac/${thisPkg}`) {
+              context.report({
+                node: node.source,
+                messageId: "crossFeat",
+                data: { thisPkg, otherPkg },
+              });
+            }
+          }
+        },
+      };
+    },
+  },
+};
+
 // ─── Plugin object ────────────────────────────────────────────────────────────
 
 const plugin = {
   meta: { name: "@mohasinac/eslint-plugin", version: "0.1.0" },
-  rules,
+  rules: { ...rules, ...pkgRules },
 };
 
 // Recommended flat config — spread into your eslint.config.mjs array.
@@ -1198,7 +1298,7 @@ plugin.configs = {
   recommended: [
     // ── All TS/TSX files in src/ ─────────────────────────────────────────────
     {
-      files: ["src/**/*.{ts,tsx}"],
+      files: ["src/**/*.{ts,tsx}", "packages/*/src/**/*.{ts,tsx}"],
       plugins: { lir: plugin },
       rules: {
         // Architecture
@@ -1232,15 +1332,24 @@ plugin.configs = {
     },
     // ── TSX files only — JSX-specific rules ──────────────────────────────────
     {
-      files: ["src/**/*.tsx"],
+      files: ["src/**/*.tsx", "packages/*/src/**/*.tsx"],
       plugins: { lir: plugin },
       rules: {
-        "lir/no-raw-html-elements": "warn", // COMP-001 → COMP-009
-        "lir/no-raw-media-elements": "warn", // MEDIA-001 → MEDIA-003
+        "lir/no-raw-html-elements": "error", // COMP-001 → COMP-009
+        "lir/no-raw-media-elements": "error", // MEDIA-001 → MEDIA-003
         "lir/no-inline-static-style": "warn", // STYL-002
         "lir/no-module-scope-translations": "warn", // I18N-003
         "lir/no-fixed-media-height": "warn", // MEDIA-004
         "lir/require-xl-breakpoints": "warn", // STYL-001
+      },
+    },
+    // ── Package workspace — feat-* architecture enforcement ──────────────────
+    {
+      files: ["packages/feat-*/src/**/*.{ts,tsx}"],
+      plugins: { lir: plugin },
+      rules: {
+        "lir/no-concrete-provider-in-feat": "error", // PKG-001 — no @mohasinac/db-firebase etc. in feat-*
+        "lir/no-cross-feat-import": "error", // PKG-002 — no cross-feat-* imports
       },
     },
   ],

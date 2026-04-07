@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@mohasinac/ui";
+
 interface SocialAuthButtonsProps {
   onGoogle: () => void;
   disabled?: boolean;
@@ -25,10 +27,11 @@ export function SocialAuthButtons({
       </div>
 
       <div className="grid grid-cols-1 gap-3">
-        <button
+        <Button
           type="button"
           onClick={onGoogle}
           disabled={disabled}
+          variant="outline"
           className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-900 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
@@ -50,7 +53,7 @@ export function SocialAuthButtons({
             />
           </svg>
           {googleLabel}
-        </button>
+        </Button>
       </div>
     </>
   );

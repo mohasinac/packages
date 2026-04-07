@@ -1,5 +1,6 @@
 import React from "react";
 import type { UserAddress } from "../types";
+import { Button, Span, Text } from "@mohasinac/ui";
 
 interface AddressCardProps {
   address: UserAddress;
@@ -17,42 +18,46 @@ export function AddressCard({
   return (
     <div className="relative rounded-xl border border-neutral-200 bg-white p-4">
       {address.isDefault && (
-        <span className="absolute right-3 top-3 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+        <Span className="absolute right-3 top-3 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
           {labels.defaultBadge ?? "Default"}
-        </span>
+        </Span>
       )}
       {address.label && (
-        <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+        <Text className="mb-1 text-xs font-semibold uppercase tracking-wide text-neutral-500">
           {address.label}
-        </p>
+        </Text>
       )}
-      <p className="text-sm text-neutral-900">{address.line1}</p>
+      <Text className="text-sm text-neutral-900">{address.line1}</Text>
       {address.line2 && (
-        <p className="text-sm text-neutral-900">{address.line2}</p>
+        <Text className="text-sm text-neutral-900">{address.line2}</Text>
       )}
-      <p className="text-sm text-neutral-900">
+      <Text className="text-sm text-neutral-900">
         {address.city}, {address.state} {address.postalCode}
-      </p>
-      <p className="text-sm text-neutral-900">{address.country}</p>
+      </Text>
+      <Text className="text-sm text-neutral-900">{address.country}</Text>
       {address.phone && (
-        <p className="mt-1 text-sm text-neutral-500">{address.phone}</p>
+        <Text className="mt-1 text-sm text-neutral-500">{address.phone}</Text>
       )}
       <div className="mt-3 flex gap-3">
         {onEdit && (
-          <button
+          <Button
             onClick={() => onEdit(address)}
+            variant="ghost"
+            size="sm"
             className="text-xs font-medium text-primary hover:underline"
           >
             {labels.edit ?? "Edit"}
-          </button>
+          </Button>
         )}
         {onDelete && (
-          <button
+          <Button
             onClick={() => onDelete(address.id)}
+            variant="ghost"
+            size="sm"
             className="text-xs font-medium text-red-500 hover:underline"
           >
             {labels.delete ?? "Delete"}
-          </button>
+          </Button>
         )}
       </div>
     </div>
@@ -79,7 +84,7 @@ export function AddressBook({
   return (
     <div className="space-y-4">
       {addresses.length === 0 && (
-        <p className="text-sm text-neutral-500">{emptyLabel}</p>
+        <Text className="text-sm text-neutral-500">{emptyLabel}</Text>
       )}
       <div className="grid gap-4 sm:grid-cols-2">
         {addresses.map((addr) => (
@@ -92,12 +97,13 @@ export function AddressBook({
         ))}
       </div>
       {onAdd && (
-        <button
+        <Button
           onClick={onAdd}
+          variant="outline"
           className="mt-2 rounded-lg border border-dashed border-neutral-300 px-4 py-3 text-sm font-medium text-neutral-500 transition hover:border-neutral-400 hover:text-neutral-700"
         >
           + {addLabel}
-        </button>
+        </Button>
       )}
     </div>
   );

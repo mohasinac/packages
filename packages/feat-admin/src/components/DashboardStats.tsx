@@ -1,5 +1,6 @@
 import React from "react";
 import type { DashboardStats } from "../types";
+import { Text } from "@mohasinac/ui";
 
 interface StatCardProps {
   label: string;
@@ -18,11 +19,11 @@ function StatCard({ label, value, sub, color = "default" }: StatCardProps) {
   }[color];
   return (
     <div className={`rounded-xl border border-neutral-200 p-5 ${colorClass}`}>
-      <p className="text-xs font-medium uppercase tracking-wide text-neutral-500">
+      <Text className="text-xs font-medium uppercase tracking-wide text-neutral-500">
         {label}
-      </p>
-      <p className="mt-2 text-2xl font-bold text-neutral-900">{value}</p>
-      {sub && <p className="mt-1 text-xs text-neutral-500">{sub}</p>}
+      </Text>
+      <Text className="mt-2 text-2xl font-bold text-neutral-900">{value}</Text>
+      {sub && <Text className="mt-1 text-xs text-neutral-500">{sub}</Text>}
     </div>
   );
 }

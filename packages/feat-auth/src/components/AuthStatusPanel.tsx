@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Heading, Text } from "@mohasinac/ui";
 
 type AuthStatusTone = "success" | "error" | "loading";
 
@@ -52,11 +53,13 @@ export function AuthStatusPanel({
         </svg>
       </div>
 
-      <h2 className="mb-2 text-xl font-semibold">{title}</h2>
+      <Heading level={2} className="mb-2 text-xl font-semibold">
+        {title}
+      </Heading>
       {message ? (
-        <p className="mb-6 text-sm text-zinc-600 dark:text-zinc-400">
+        <Text className="mb-6 text-sm text-zinc-600 dark:text-zinc-400">
           {message}
-        </p>
+        </Text>
       ) : null}
       {actions}
     </>

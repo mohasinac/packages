@@ -1,5 +1,6 @@
 import React from "react";
 import type { CheckoutStep } from "../types";
+import { Nav } from "@mohasinac/ui";
 
 interface CheckoutStepperProps {
   steps: { id: CheckoutStep; label: string }[];
@@ -9,7 +10,7 @@ interface CheckoutStepperProps {
 export function CheckoutStepper({ steps, current }: CheckoutStepperProps) {
   const currentIdx = steps.findIndex((s) => s.id === current);
   return (
-    <nav aria-label="Checkout steps" className="flex items-center gap-2">
+    <Nav aria-label="Checkout steps" className="flex items-center gap-2">
       {steps.map((step, idx) => {
         const isDone = idx < currentIdx;
         const isActive = step.id === current;
@@ -39,6 +40,6 @@ export function CheckoutStepper({ steps, current }: CheckoutStepperProps) {
           </React.Fragment>
         );
       })}
-    </nav>
+    </Nav>
   );
 }

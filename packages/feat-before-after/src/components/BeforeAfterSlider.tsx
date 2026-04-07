@@ -1,13 +1,17 @@
 "use client";
 import React, { useRef, useState } from "react";
 import type { BeforeAfterItem } from "../types";
+import { Span } from "@mohasinac/ui";
 
 interface BeforeAfterSliderProps {
   item: BeforeAfterItem;
   className?: string;
 }
 
-export function BeforeAfterSlider({ item, className = "" }: BeforeAfterSliderProps) {
+export function BeforeAfterSlider({
+  item,
+  className = "",
+}: BeforeAfterSliderProps) {
   const [position, setPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -35,11 +39,11 @@ export function BeforeAfterSlider({ item, className = "" }: BeforeAfterSliderPro
       onTouchMove={handleTouchMove}
     >
       {/* After image (base layer) */}
-      <img
-        src={item.afterImageUrl}
-        alt="After"
-        className="absolute inset-0 h-full w-full object-cover"
-        draggable={false}
+      <div
+        role="img"
+        aria-label="After"
+        className="absolute inset-0 h-full w-full bg-center bg-cover"
+        style={{ backgroundImage: `url(${item.afterImageUrl})` }}
       />
 
       {/* Before image (clipped layer) */}
@@ -47,12 +51,14 @@ export function BeforeAfterSlider({ item, className = "" }: BeforeAfterSliderPro
         className="absolute inset-0 overflow-hidden"
         style={{ width: `${position}%` }}
       >
-        <img
-          src={item.beforeImageUrl}
-          alt="Before"
-          className="h-full w-full object-cover"
-          style={{ width: containerRef.current?.offsetWidth ?? "100%" }}
-          draggable={false}
+        <div
+          role="img"
+          aria-label="Before"
+          className="h-full w-full bg-center bg-cover"
+          style={{
+            width: containerRef.current?.offsetWidth ?? "100%",
+            backgroundImage: `url(${item.beforeImageUrl})`,
+          }}
         />
       </div>
 
@@ -66,17 +72,17 @@ export function BeforeAfterSlider({ item, className = "" }: BeforeAfterSliderPro
       </div>
 
       {/* Labels */}
-      <span className="absolute left-2 top-2 rounded bg-black/40 px-2 py-0.5 text-xs font-medium text-white">
+      <Span className="absolute left-2 top-2 rounded bg-black/40 px-2 py-0.5 text-xs font-medium text-white">
         Before
-      </span>
-      <span className="absolute right-2 top-2 rounded bg-black/40 px-2 py-0.5 text-xs font-medium text-white">
+      </Span>
+      <Span className="absolute right-2 top-2 rounded bg-black/40 px-2 py-0.5 text-xs font-medium text-white">
         After
-      </span>
+      </Span>
 
       {item.durationWeeks && (
-        <span className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded bg-black/50 px-3 py-1 text-xs font-medium text-white">
+        <Span className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded bg-black/50 px-3 py-1 text-xs font-medium text-white">
           {item.durationWeeks} weeks
-        </span>
+        </Span>
       )}
     </div>
   );

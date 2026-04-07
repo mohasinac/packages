@@ -1,5 +1,6 @@
 import React from "react";
 import type { AdminTableColumn } from "../types";
+import { Button } from "@mohasinac/ui";
 
 interface DataTableProps<T extends { id: string }> {
   columns: AdminTableColumn<T>[];
@@ -98,13 +99,15 @@ export function DataTable<T extends { id: string }>({
       {totalPages > 1 && onPageChange && (
         <div className="flex items-center justify-end gap-2 border-t border-neutral-200 px-4 py-3">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button
+            <Button
               key={p}
               onClick={() => onPageChange(p)}
+              variant={p === currentPage ? "primary" : "ghost"}
+              size="sm"
               className={`h-8 w-8 rounded text-xs font-medium transition ${p === currentPage ? "bg-neutral-900 text-white" : "text-neutral-600 hover:bg-neutral-100"}`}
             >
               {p}
-            </button>
+            </Button>
           ))}
         </div>
       )}

@@ -126,6 +126,27 @@ export { CountdownDisplay } from "./components/CountdownDisplay";
 export type { ItemRowProps } from "./components/ItemRow";
 export { ItemRow } from "./components/ItemRow";
 
+export type {
+  HorizontalScrollerProps,
+  PerViewConfig,
+} from "./components/HorizontalScroller";
+export { HorizontalScroller } from "./components/HorizontalScroller";
+
+export type {
+  ActiveFilter,
+  ActiveFilterChipsProps,
+} from "./components/ActiveFilterChips";
+export { ActiveFilterChips } from "./components/ActiveFilterChips";
+
+export type { SortOption, SortDropdownProps } from "./components/SortDropdown";
+export { SortDropdown } from "./components/SortDropdown";
+
+export type {
+  TablePaginationProps,
+  TablePaginationLabels,
+} from "./components/TablePagination";
+export { TablePagination } from "./components/TablePagination";
+
 // ─── S1-2: DataTable ──────────────────────────────────────────────────────────
 export type { DataTableProps, DataTableColumn } from "./DataTable";
 export { DataTable } from "./DataTable";

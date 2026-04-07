@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import type { AuctionItem } from "../types";
+import { Article, Button, Heading, Span, Text } from "@mohasinac/ui";
 
 interface AuctionCountdownProps {
   endsAt: string;
@@ -36,9 +37,9 @@ export function AuctionCountdown({
 
   if (!countdown) {
     return (
-      <span className={`text-sm font-medium text-red-600 ${className}`}>
+      <Span className={`text-sm font-medium text-red-600 ${className}`}>
         {labels.ended ?? "Ended"}
-      </span>
+      </Span>
     );
   }
 
@@ -46,17 +47,17 @@ export function AuctionCountdown({
 
   return (
     <div className={`flex items-center gap-1 text-sm font-mono ${className}`}>
-      <span className="rounded bg-gray-900 px-1.5 py-0.5 text-white">
+      <Span className="rounded bg-gray-900 px-1.5 py-0.5 text-white">
         {pad(countdown.h)}
-      </span>
-      <span className="text-gray-400">:</span>
-      <span className="rounded bg-gray-900 px-1.5 py-0.5 text-white">
+      </Span>
+      <Span className="text-gray-400">:</Span>
+      <Span className="rounded bg-gray-900 px-1.5 py-0.5 text-white">
         {pad(countdown.m)}
-      </span>
-      <span className="text-gray-400">:</span>
-      <span className="rounded bg-gray-900 px-1.5 py-0.5 text-white">
+      </Span>
+      <Span className="text-gray-400">:</Span>
+      <Span className="rounded bg-gray-900 px-1.5 py-0.5 text-white">
         {pad(countdown.s)}
-      </span>
+      </Span>
     </div>
   );
 }
@@ -84,39 +85,43 @@ export function AuctionCard({
   const displayBid = auction.currentBid ?? auction.startingBid;
 
   return (
-    <article
+    <Article
       className={`rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}
     >
       {auction.mainImage && (
         <div className="aspect-square overflow-hidden relative">
-          <img
-            src={auction.mainImage}
-            alt={auction.title}
-            className="h-full w-full object-cover"
+          <div
+            role="img"
+            aria-label={auction.title}
+            className="h-full w-full bg-center bg-cover"
+            style={{ backgroundImage: `url(${auction.mainImage})` }}
           />
-          <div className="absolute top-2 left-2 rounded-full bg-orange-500 px-2 py-0.5 text-xs font-bold text-white">
+          <Span className="absolute top-2 left-2 rounded-full bg-orange-500 px-2 py-0.5 text-xs font-bold text-white">
             AUCTION
-          </div>
+          </Span>
         </div>
       )}
       <div className="p-4">
-        <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-2 line-clamp-2">
+        <Heading
+          level={3}
+          className="font-semibold text-gray-900 text-sm leading-snug mb-2 line-clamp-2"
+        >
           {auction.title}
-        </h3>
+        </Heading>
 
         <div className="flex items-center justify-between mb-2">
           <div>
-            <p className="text-xs text-gray-400">
+            <Text className="text-xs text-gray-400">
               {labels.currentBid ?? "Current bid"}
-            </p>
-            <p className="text-base font-bold text-gray-900">
+            </Text>
+            <Text className="text-base font-bold text-gray-900">
               {auction.currency} {displayBid.toLocaleString()}
-            </p>
+            </Text>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-400">
+            <Text className="text-xs text-gray-400">
               {auction.bidCount} {labels.bids ?? "bids"}
-            </p>
+            </Text>
           </div>
         </div>
 
@@ -128,15 +133,16 @@ export function AuctionCard({
         </div>
 
         {!hasEnded && onBid && (
-          <button
+          <Button
             type="button"
+            variant="warning"
             onClick={() => onBid(auction)}
             className="w-full rounded-lg bg-orange-500 py-2 text-sm font-medium text-white hover:bg-orange-600 transition-colors"
           >
             {labels.placeBid ?? "Place Bid"}
-          </button>
+          </Button>
         )}
       </div>
-    </article>
+    </Article>
   );
 }
