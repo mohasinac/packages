@@ -59,10 +59,7 @@ export async function GET(
       perPage: pageSize,
     });
 
-    const totalPages = Math.max(
-      1,
-      Math.ceil(result.total / pageSize),
-    );
+    const totalPages = Math.max(1, Math.ceil(result.total / pageSize));
 
     return NextResponse.json({
       success: true,

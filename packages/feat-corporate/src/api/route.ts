@@ -36,7 +36,9 @@ export async function GET(request: Request): Promise<NextResponse> {
         { status: 503 },
       );
 
-    const repo = db.getRepository<Record<string, unknown>>("corporate_inquiries");
+    const repo = db.getRepository<Record<string, unknown>>(
+      "corporate_inquiries",
+    );
     const result = await repo.findAll({
       filters,
       sort,
@@ -79,7 +81,9 @@ export async function POST(request: Request): Promise<NextResponse> {
         { status: 503 },
       );
 
-    const repo = db.getRepository<Record<string, unknown>>("corporate_inquiries");
+    const repo = db.getRepository<Record<string, unknown>>(
+      "corporate_inquiries",
+    );
     const created = await repo.create({
       ...body,
       createdAt: new Date(),

@@ -39,7 +39,9 @@ export async function GET(request: Request): Promise<NextResponse> {
         { status: 503 },
       );
 
-    const repo = db.getRepository<Record<string, unknown>>("loyalty_transactions");
+    const repo = db.getRepository<Record<string, unknown>>(
+      "loyalty_transactions",
+    );
     const result = await repo.findAll({
       filters: `userId==${userId}`,
       sort: "-createdAt",

@@ -23,7 +23,9 @@ export async function POST(request: Request): Promise<NextResponse> {
         { status: 503 },
       );
 
-    const repo = db.getRepository<Record<string, unknown>>("loyalty_transactions");
+    const repo = db.getRepository<Record<string, unknown>>(
+      "loyalty_transactions",
+    );
     const created = await repo.create({
       ...body,
       type: "redeem",

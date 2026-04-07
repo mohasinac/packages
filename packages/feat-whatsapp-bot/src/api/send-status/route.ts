@@ -24,7 +24,9 @@ export async function POST(request: Request): Promise<NextResponse> {
       );
 
     // Update message status in database
-    const repo = db.getRepository<Record<string, unknown>>("whatsapp_message_status");
+    const repo = db.getRepository<Record<string, unknown>>(
+      "whatsapp_message_status",
+    );
     const updated = await repo.create({
       ...body,
       updatedAt: new Date(),
