@@ -61,6 +61,25 @@ function numParam(url: URL, key: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+const SAFE_CATEGORY_FILTER_FIELDS = new Set([
+  "type", "parentIds", "isFeatured", "showOnHomepage",
+  "tier", "isActive", "isLeaf", "isBrand", "isSearchable",
+]);
+
+function validateSieveFilters(
+  raw: string,
+  allowedFields: ReadonlySet<string>,
+): string {
+  return raw
+    .split(",")
+    .map((c) => c.trim())
+    .filter((c) => {
+      const m = c.match(/^([^<>=!@]+)\s*(?:==|!=|<=|>=|<|>|@=\*?)/);
+      return m ? allowedFields.has(m[1].trim()) : false;
+    })
+    .join(",");
+}
+
 // ─── GET /api/categories ──────────────────────────────────────────────────────
 
 export async function GET(request: Request): Promise<NextResponse> {
@@ -114,7 +133,10 @@ export async function GET(request: Request): Promise<NextResponse> {
     if (isBrand === "true") parts.push("type==brand");
     if (showOnHomepage === "true") parts.push("showOnHomepage==true");
     if (tier !== null) parts.push(`tier==${tier}`);
-    if (rawFilters) parts.push(rawFilters);
+    if (rawFilters) {
+      const safe = validateSieveFilters(rawFilters, SAFE_CATEGORY_FILTER_FIELDS);
+      if (safe) parts.push(safe);
+    }
     const filters = parts.join(",");
 
     // ── Filtered flat list modes ───────────────────────────────────────────────

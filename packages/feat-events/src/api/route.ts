@@ -23,6 +23,24 @@ function numParam(url: URL, key: string, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
+const SAFE_EVENT_FILTER_FIELDS = new Set([
+  "status", "title", "type", "startsAt", "endsAt", "createdAt",
+]);
+
+function validateSieveFilters(
+  raw: string,
+  allowedFields: ReadonlySet<string>,
+): string {
+  return raw
+    .split(",")
+    .map((c) => c.trim())
+    .filter((c) => {
+      const m = c.match(/^([^<>=!@]+)\s*(?:==|!=|<=|>=|<|>|@=\*?)/);
+      return m ? allowedFields.has(m[1].trim()) : false;
+    })
+    .join(",");
+}
+
 // ——— GET /api/events ————————————————————————————————
 export async function GET(request: Request): Promise<NextResponse> {
   try {
@@ -35,7 +53,10 @@ export async function GET(request: Request): Promise<NextResponse> {
     const q = param(url, "q");
     if (q) parts.push(`title@=*${q}`);
     const raw = param(url, "filters");
-    if (raw) parts.push(raw);
+    if (raw) {
+      const safe = validateSieveFilters(raw, SAFE_EVENT_FILTER_FIELDS);
+      if (safe) parts.push(safe);
+    }
     const filters = parts.join(",");
 
     const { db } = getProviders();

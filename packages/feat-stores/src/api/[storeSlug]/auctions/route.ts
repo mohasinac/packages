@@ -21,6 +21,24 @@ import type {
   StoreProductsResponse,
 } from "../../../types/index.js";
 
+const SAFE_STORE_AUCTION_FILTER_FIELDS = new Set([
+  "price", "category",
+]);
+
+function validateSieveFilters(
+  raw: string,
+  allowedFields: ReadonlySet<string>,
+): string {
+  return raw
+    .split(",")
+    .map((c) => c.trim())
+    .filter((c) => {
+      const m = c.match(/^([^<>=!@]+)\s*(?:==|!=|<=|>=|<|>|@=\*?)/);
+      return m ? allowedFields.has(m[1].trim()) : false;
+    })
+    .join(",");
+}
+
 type RouteContext = { params: Promise<{ storeSlug: string }> };
 
 function param(url: URL, key: string): string | null {
@@ -74,7 +92,10 @@ export async function GET(
       "isAuction==true",
     ];
     const extra = param(url, "filters");
-    if (extra) filterParts.push(extra);
+    if (extra) {
+      const safe = validateSieveFilters(extra, SAFE_STORE_AUCTION_FILTER_FIELDS);
+      if (safe) filterParts.push(safe);
+    }
 
     const productsRepo = db.getRepository<StoreAuctionItem>("products");
     const result = await productsRepo.findAll({

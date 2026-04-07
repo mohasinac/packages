@@ -23,6 +23,24 @@ function numParam(url: URL, key: string, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
+const SAFE_STORE_FILTER_FIELDS = new Set([
+  "storeName", "storeCategory", "status", "isPublic",
+]);
+
+function validateSieveFilters(
+  raw: string,
+  allowedFields: ReadonlySet<string>,
+): string {
+  return raw
+    .split(",")
+    .map((c) => c.trim())
+    .filter((c) => {
+      const m = c.match(/^([^<>=!@]+)\s*(?:==|!=|<=|>=|<|>|@=\*?)/);
+      return m ? allowedFields.has(m[1].trim()) : false;
+    })
+    .join(",");
+}
+
 // ─── GET /api/stores ────────────────────────────────────────────────────────
 export async function GET(request: Request): Promise<NextResponse> {
   try {
@@ -37,7 +55,10 @@ export async function GET(request: Request): Promise<NextResponse> {
     const category = param(url, "category");
     if (category) parts.push(`storeCategory==${category}`);
     const rawFilters = param(url, "filters");
-    if (rawFilters) parts.push(rawFilters);
+    if (rawFilters) {
+      const safe = validateSieveFilters(rawFilters, SAFE_STORE_FILTER_FIELDS);
+      if (safe) parts.push(safe);
+    }
     const filters = parts.join(",");
 
     const { db } = getProviders();

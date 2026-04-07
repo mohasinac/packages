@@ -66,6 +66,31 @@ function numParam(url: URL, key: string, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
+/** Public fields callers may filter on via the ?filters= param. */
+const SAFE_PRODUCT_FILTER_FIELDS = new Set([
+  "status", "category", "brand", "condition", "sellerId",
+  "title", "price", "isAuction", "isPreOrder", "featured",
+  "isPromoted", "stockQuantity", "availableQuantity", "tags",
+]);
+
+/**
+ * Validates a raw Sieve filter string against an allowlist of safe fields.
+ * Drops any clause whose field name is not in the allowlist.
+ */
+function validateSieveFilters(
+  raw: string,
+  allowedFields: ReadonlySet<string>,
+): string {
+  return raw
+    .split(",")
+    .map((c) => c.trim())
+    .filter((c) => {
+      const m = c.match(/^([^<>=!@]+)\s*(?:==|!=|<=|>=|<|>|@=\*?)/);
+      return m ? allowedFields.has(m[1].trim()) : false;
+    })
+    .join(",");
+}
+
 function buildFilters(url: URL): string {
   const parts: string[] = [];
   const status = param(url, "status");
@@ -94,9 +119,12 @@ function buildFilters(url: URL): string {
   if (isPreOrder !== null) parts.push(`isPreOrder==${isPreOrder}`);
   const featured = param(url, "featured");
   if (featured === "true") parts.push("featured==true");
-  // Merge explicit raw Sieve filters string from caller
+  // Merge validated Sieve filters — only safe public fields allowed
   const raw = param(url, "filters");
-  if (raw) parts.push(raw);
+  if (raw) {
+    const safe = validateSieveFilters(raw, SAFE_PRODUCT_FILTER_FIELDS);
+    if (safe) parts.push(safe);
+  }
   return parts.join(",");
 }
 

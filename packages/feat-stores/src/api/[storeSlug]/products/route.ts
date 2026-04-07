@@ -33,6 +33,24 @@ function numParam(url: URL, key: string, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
+const SAFE_STORE_PRODUCT_FILTER_FIELDS = new Set([
+  "category", "price", "brand", "condition",
+]);
+
+function validateSieveFilters(
+  raw: string,
+  allowedFields: ReadonlySet<string>,
+): string {
+  return raw
+    .split(",")
+    .map((c) => c.trim())
+    .filter((c) => {
+      const m = c.match(/^([^<>=!@]+)\s*(?:==|!=|<=|>=|<|>|@=\*?)/);
+      return m ? allowedFields.has(m[1].trim()) : false;
+    })
+    .join(",");
+}
+
 // ─── GET /api/stores/[storeSlug]/products ─────────────────────────────────────
 export async function GET(
   request: Request,
@@ -74,7 +92,10 @@ export async function GET(
       "isAuction==false",
     ];
     const extra = param(url, "filters");
-    if (extra) filterParts.push(extra);
+    if (extra) {
+      const safe = validateSieveFilters(extra, SAFE_STORE_PRODUCT_FILTER_FIELDS);
+      if (safe) filterParts.push(safe);
+    }
 
     const productsRepo = db.getRepository<StoreProductItem>("products");
     const result = await productsRepo.findAll({
