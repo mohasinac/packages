@@ -31,6 +31,15 @@ Layer 6  tooling            — cli, create-app, eslint-plugin-letitrip
 ONLY from `@mohasinac/contracts` plus Layer 2 primitives. They NEVER import a concrete
 provider (e.g. `@mohasinac/db-firebase`) directly.
 
+**Reuse-first rule (mandatory)**: Before adding any new implementation in any package,
+check existing `@mohasinac/*` packages and reuse/extend what already exists. Do NOT
+reimplement behavior already provided by another internal package.
+
+**Generic code placement rule (mandatory)**: If logic is generic (not domain-specific),
+move it to a common package (`@mohasinac/core`, `@mohasinac/react`, `@mohasinac/ui`,
+`@mohasinac/utils`, or another appropriate primitive package) and consume it from there.
+Do not keep duplicate generic utilities inside feat-* packages.
+
 ---
 
 ## @mohasinac/contracts
@@ -657,6 +666,8 @@ const className = style.cn("base-class", isActive && "active", className);
 - Do NOT import `@mohasinac/db-firebase` (or any concrete provider) from inside a `feat-*` package
 - Do NOT use `@lir/*` package names anywhere
 - Do NOT cross-import between feat-* packages (ARCH-002)
+- Do NOT reimplement code that already exists in another `@mohasinac/*` package; reuse or extend it
+- Do NOT create duplicate generic helpers/components/hooks inside domain packages; move them to common packages
 - Do NOT call `getProviders()` before `registerProviders()` at app startup
 - Do NOT use raw `<img>`, `<video>`, `<a>`, `<button>` elements in components — use `@mohasinac/ui` wrappers
 - Do NOT use `next/navigation` for routing in i18n apps — use `next-intl` navigation
