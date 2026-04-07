@@ -62,6 +62,11 @@ const BUILD_ORDER = [
   "feat-seller",
   "feat-stores",
   "feat-pre-orders",
+  // Layer 2b — optional providers / infrastructure extras
+  "instrumentation",
+  "search-algolia",
+  "payment-razorpay",
+  "shipping-shiprocket",
   // Layer 5b — licorice-specific features
   "feat-consultation",
   "feat-corporate",
