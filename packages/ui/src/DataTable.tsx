@@ -7,8 +7,15 @@ import { Pagination } from "./components/Pagination";
 import { Text } from "./components/Typography";
 import { GRID_MAP } from "./components/Layout";
 import type { GridCols } from "./components/Layout";
-import type { TableColumn, TableConfig, PaginationConfig } from "@mohasinac/contracts";
-import { mergeTableConfig, DEFAULT_PAGINATION_CONFIG } from "@mohasinac/contracts";
+import type {
+  TableColumn,
+  TableConfig,
+  PaginationConfig,
+} from "@mohasinac/contracts";
+import {
+  mergeTableConfig,
+  DEFAULT_PAGINATION_CONFIG,
+} from "@mohasinac/contracts";
 
 /**
  * DataTable — generic sortable + paginated table promoted to @mohasinac/ui.
@@ -93,7 +100,7 @@ export interface DataTableProps<T> {
   };
 }
 
-export function DataTable<T extends Record<string, unknown>>({
+export function DataTable<T extends object>({
   data,
   columns,
   keyExtractor,
@@ -125,14 +132,19 @@ export function DataTable<T extends Record<string, unknown>>({
 }: DataTableProps<T>) {
   // Merge tableConfig + paginationConfig with defaults; explicit flat props win
   const resolvedTable = mergeTableConfig(tableConfig);
-  const resolvedPag = { ...DEFAULT_PAGINATION_CONFIG, ...tableConfig?.pagination, ...paginationConfig };
+  const resolvedPag = {
+    ...DEFAULT_PAGINATION_CONFIG,
+    ...tableConfig?.pagination,
+    ...paginationConfig,
+  };
 
   const pageSize = pageSizeProp ?? resolvedTable.pageSize;
   const stickyHeader = stickyHeaderProp ?? resolvedTable.sticky.enabled;
   const striped = stripedProp ?? resolvedTable.striped;
   const showViewToggle = showViewToggleProp ?? resolvedTable.showViewToggle;
   const selectable = selectableProp ?? resolvedTable.selectable;
-  const defaultViewMode: ViewMode = defaultViewModeProp ?? resolvedTable.defaultViewMode;
+  const defaultViewMode: ViewMode =
+    defaultViewModeProp ?? resolvedTable.defaultViewMode;
 
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
@@ -176,8 +188,8 @@ export function DataTable<T extends Record<string, unknown>>({
     const sorted = [...data];
     if (sortKey && sortDirection) {
       sorted.sort((a, b) => {
-        const aVal = a[sortKey];
-        const bVal = b[sortKey];
+        const aVal = (a as Record<string, unknown>)[sortKey];
+        const bVal = (b as Record<string, unknown>)[sortKey];
         if (aVal == null) return 1;
         if (bVal == null) return -1;
         if (typeof aVal === "string" && typeof bVal === "string") {
@@ -523,7 +535,9 @@ export function DataTable<T extends Record<string, unknown>>({
                       >
                         {col.render
                           ? col.render(item)
-                          : ((item[col.key] as string) ?? "-")}
+                          : (((item as Record<string, unknown>)[
+                              col.key
+                            ] as string) ?? "-")}
                       </td>
                     ))}
                     {actions && (
