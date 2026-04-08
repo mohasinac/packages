@@ -100,7 +100,7 @@ export function HorizontalScroller<T = unknown>({
   }[arrowSize];
 
   const scrollerCls = [
-    "flex overflow-x-auto scroll-smooth",
+    "flex h-full overflow-x-auto scroll-smooth",
     snapToItems ? "snap-x snap-mandatory" : "",
     showScrollbar ? "" : "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
     "pb-1",

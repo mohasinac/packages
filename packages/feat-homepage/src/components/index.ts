@@ -5,6 +5,8 @@ export type { CharacterHotspotFormProps } from "./CharacterHotspotForm";
 export { CharacterHotspotForm } from "./CharacterHotspotForm";
 export type { HeroBannerProps } from "./HeroBanner";
 export { HeroBanner } from "./HeroBanner";
+export type { HeroCarouselProps } from "./HeroCarousel";
+export { HeroCarousel } from "./HeroCarousel";
 export type { PromoGridProps } from "./PromoGrid";
 export { PromoGrid } from "./PromoGrid";
 export type { TrustBadgesProps } from "./TrustBadges";

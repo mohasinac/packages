@@ -310,20 +310,15 @@ const GRID = {
   cards:
     "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5",
   /** Auto-fill product cards — min 200 px */
-  productCards:
-    "grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6",
+  productCards: "grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6",
   /** Auto-fill store cards — min 220 px */
-  storeCards:
-    "grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-6",
+  storeCards: "grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-6",
   /** Auto-fill category icon+label tiles — min 130 px */
-  categoryCards:
-    "grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] gap-4",
+  categoryCards: "grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] gap-4",
   /** Auto-fill coupon/promo cards — min 264 px */
-  couponCards:
-    "grid grid-cols-[repeat(auto-fill,minmax(264px,1fr))] gap-6",
+  couponCards: "grid grid-cols-[repeat(auto-fill,minmax(264px,1fr))] gap-6",
   /** Auto-fill address / wide cards — min 300 px */
-  addressCards:
-    "grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4",
+  addressCards: "grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4",
   /** Auto-fill KPI/stat tiles — min 180 px */
   statTiles: "grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-4",
   /** Auto-fill account nav tiles — min 160 px */
@@ -451,8 +446,7 @@ const POSITION = {
   sticky: "sticky",
   static: "static",
   fill: "absolute inset-0",
-  absoluteCenter:
-    "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+  absoluteCenter: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
   absoluteTop: "absolute top-0 inset-x-0",
   absoluteBottom: "absolute bottom-0 inset-x-0",
   absoluteTopRight: "absolute top-0 right-0",
@@ -519,7 +513,8 @@ const UTILITIES = {
     "[&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-zinc-100 dark:[&::-webkit-scrollbar-track]:bg-slate-800/60 [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb:hover]:bg-zinc-400 dark:[&::-webkit-scrollbar-thumb:hover]:bg-slate-500",
   safeAreaBottom: "pb-[env(safe-area-inset-bottom)]",
   safeAreaTop: "pt-[env(safe-area-inset-top)]",
-  safeAreaInline: "px-[env(safe-area-inset-left)] px-[env(safe-area-inset-right)]",
+  safeAreaInline:
+    "px-[env(safe-area-inset-left)] px-[env(safe-area-inset-right)]",
   gradientText:
     "bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent",
 } as const;
@@ -630,5 +625,19 @@ export const THEME_CONSTANTS = {
   base: {
     body: 'bg-white dark:bg-slate-950 text-zinc-900 dark:text-zinc-100 antialiased font-[Inter,ui-sans-serif,system-ui,-apple-system,"Segoe_UI",Roboto,"Helvetica_Neue",Arial,sans-serif]',
     html: "scroll-smooth",
+  },
+  /** Hero / homepage section layout tokens. */
+  homepage: {
+    heroMinH: "min-h-[clamp(420px,72vh,680px)]" as const,
+    heroMinHMobile: "min-h-[clamp(120px,14vh,200px)]" as const,
+  },
+  /** Carousel navigation tokens — shared by HeroCarousel and SectionCarousel. */
+  carousel: {
+    arrow:
+      "w-10 h-10 rounded-2xl bg-white/85 dark:bg-slate-800/90 backdrop-blur-sm shadow-lg border border-zinc-300/70 dark:border-slate-600 text-zinc-800 dark:text-zinc-200 hover:-translate-y-0.5 hover:bg-white hover:shadow-xl hover:border-zinc-400 dark:hover:border-slate-500 active:scale-95 transition-all duration-200 flex items-center justify-center" as const,
+    dotActive:
+      "w-8 h-2 !min-h-0 rounded-full bg-white shadow-sm transition-all duration-500" as const,
+    dotInactive:
+      "w-2 h-2 !min-h-0 rounded-full bg-white/55 shadow-sm transition-all duration-500" as const,
   },
 } as const;
