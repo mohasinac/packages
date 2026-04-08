@@ -35,7 +35,7 @@ export function EventCard({
 
   return (
     <Article
-      className={`rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}
+      className={`flex flex-col h-full rounded-xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow ${className}`}
     >
       {event.coverImageUrl && (
         <div className="aspect-video overflow-hidden">
@@ -47,7 +47,7 @@ export function EventCard({
           />
         </div>
       )}
-      <div className="p-4">
+      <div className="p-4 flex-1 flex flex-col">
         <div className="flex items-start justify-between gap-2 mb-2">
           <Span className="text-lg" aria-hidden="true">
             {TYPE_ICONS[event.type]}

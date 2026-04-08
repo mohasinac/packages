@@ -19,6 +19,25 @@ import { getDatabase, type Database } from "firebase-admin/database";
 import * as path from "path";
 import * as fs from "fs";
 
+// ─── Private key normalisation ────────────────────────────────────────────────
+//
+// Vercel (and other platforms) can store the private key in several formats:
+//   1. Literal \n sequences  (common — copied from JSON value)
+//   2. Real newlines          (set via CLI / multiline input)
+//   3. Windows \r\n endings   (copied on Windows)
+//   4. Wrapped in double-quotes (pasted with JSON quotes intact)
+//
+// OpenSSL 3 (Node 18+) rejects malformed PEM — ensure the key is normalised
+// before passing it to `cert()`.
+//
+function parsePrivateKey(raw: string): string {
+  return raw
+    .replace(/^["']|["']$/g, "") // strip optional surrounding quotes
+    .replace(/\\n/g, "\n") // literal \n → real newline
+    .replace(/\r\n/g, "\n") // Windows CRLF → LF
+    .trim();
+}
+
 // ─── Global singletons ────────────────────────────────────────────────────────
 // Stored on globalThis so all module instances (pnpm deduplication may create
 // multiple copies of this package in the same process) share one SDK instance.
@@ -81,10 +100,7 @@ export function getAdminApp(): App {
         credential: cert({
           projectId,
           clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL.trim(),
-          privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY.trim().replace(
-            /\\n/g,
-            "\n",
-          ),
+          privateKey: parsePrivateKey(process.env.FIREBASE_ADMIN_PRIVATE_KEY),
         }),
         databaseURL: dbUrl,
       });

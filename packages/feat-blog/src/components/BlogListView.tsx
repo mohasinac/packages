@@ -28,7 +28,7 @@ export function BlogCard({ post, onClick, className = "" }: BlogCardProps) {
           : undefined
       }
       onClick={onClick ? () => onClick(post) : undefined}
-      className={`group flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-md ${onClick ? "cursor-pointer" : ""} ${className}`}
+      className={`group flex flex-col h-full overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-md ${onClick ? "cursor-pointer" : ""} ${className}`}
     >
       {post.coverImage && (
         <div className="aspect-video w-full overflow-hidden bg-neutral-100">
@@ -199,7 +199,10 @@ export function BlogListView<T extends BlogPost = BlogPost>({
         )}
       </div>
       {slots?.renderFooter ? (
-        (slots.renderFooter({ page: currentPage, totalPages }) as React.ReactNode)
+        (slots.renderFooter({
+          page: currentPage,
+          totalPages,
+        }) as React.ReactNode)
       ) : totalPages > 1 && onPageChange ? (
         <div className="flex justify-center gap-2">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (

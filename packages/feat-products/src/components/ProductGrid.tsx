@@ -38,7 +38,7 @@ export function ProductCard<T extends ProductItem = ProductItem>({
           : undefined
       }
       onClick={onClick ? () => onClick(product) : undefined}
-      className={`group relative flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-md ${onClick ? "cursor-pointer" : ""} ${className}`}
+      className={`group relative flex flex-col h-full overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-md ${onClick ? "cursor-pointer" : ""} ${className}`}
     >
       <div className="relative aspect-square overflow-hidden bg-neutral-100">
         {product.mainImage ? (

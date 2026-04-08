@@ -41,7 +41,7 @@ export function Spinner({
       aria-label={label}
     >
       <div
-        className={`${sizeClasses[size]} ${variantClasses[variant]} rounded-full animate-spin`}
+        className={`${sizeClasses[size]} ${variantClasses[variant]} rounded-full animate-spin force-spin`}
       />
       {label && <span className="sr-only">{label}</span>}
     </div>

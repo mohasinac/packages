@@ -101,9 +101,9 @@ export async function GET(request: Request): Promise<NextResponse> {
       storeBannerURL: s.storeBannerURL,
       status: s.status,
       isPublic: s.isPublic,
-      totalProducts: s.stats?.totalProducts ?? s.totalProducts ?? 0,
-      itemsSold: s.stats?.itemsSold ?? s.itemsSold ?? 0,
-      totalReviews: s.stats?.totalReviews ?? s.totalReviews ?? 0,
+      totalProducts: s.stats?.totalProducts ?? s.totalProducts ?? undefined,
+      itemsSold: s.stats?.itemsSold ?? s.itemsSold ?? undefined,
+      totalReviews: s.stats?.totalReviews ?? s.totalReviews ?? undefined,
       averageRating: s.stats?.averageRating ?? s.averageRating,
       createdAt: s.createdAt,
     }));
