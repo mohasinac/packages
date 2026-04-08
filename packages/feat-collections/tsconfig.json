@@ -8,6 +8,7 @@
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "outDir": "./dist/types",
+    "rootDir": "./src",
     "paths": {
       "@mohasinac/auth-firebase": ["../../packages/auth-firebase/src"],
       "@mohasinac/auth-firebase/*": ["../../packages/auth-firebase/src/*"],
@@ -42,7 +43,9 @@
       "@mohasinac/feat-checkout": ["../../packages/feat-checkout/src"],
       "@mohasinac/feat-checkout/*": ["../../packages/feat-checkout/src/*"],
       "@mohasinac/feat-collections": ["../../packages/feat-collections/src"],
-      "@mohasinac/feat-collections/*": ["../../packages/feat-collections/src/*"],
+      "@mohasinac/feat-collections/*": [
+        "../../packages/feat-collections/src/*"
+      ],
       "@mohasinac/feat-faq": ["../../packages/feat-faq/src"],
       "@mohasinac/feat-faq/*": ["../../packages/feat-faq/src/*"],
       "@mohasinac/feat-filters": ["../../packages/feat-filters/src"],
@@ -70,7 +73,9 @@
       "@mohasinac/feat-search": ["../../packages/feat-search/src"],
       "@mohasinac/feat-search/*": ["../../packages/feat-search/src/*"],
       "@mohasinac/feat-whatsapp-bot": ["../../packages/feat-whatsapp-bot/src"],
-      "@mohasinac/feat-whatsapp-bot/*": ["../../packages/feat-whatsapp-bot/src/*"],
+      "@mohasinac/feat-whatsapp-bot/*": [
+        "../../packages/feat-whatsapp-bot/src/*"
+      ],
       "@mohasinac/feat-wishlist": ["../../packages/feat-wishlist/src"],
       "@mohasinac/feat-wishlist/*": ["../../packages/feat-wishlist/src/*"],
       "@mohasinac/http": ["../../packages/http/src"],
@@ -86,7 +91,9 @@
       "@mohasinac/seo": ["../../packages/seo/src"],
       "@mohasinac/seo/*": ["../../packages/seo/src/*"],
       "@mohasinac/storage-firebase": ["../../packages/storage-firebase/src"],
-      "@mohasinac/storage-firebase/*": ["../../packages/storage-firebase/src/*"],
+      "@mohasinac/storage-firebase/*": [
+        "../../packages/storage-firebase/src/*"
+      ],
       "@mohasinac/tokens": ["../../packages/tokens/src"],
       "@mohasinac/tokens/*": ["../../packages/tokens/src/*"],
       "@mohasinac/ui": ["../../packages/ui/src"],

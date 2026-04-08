@@ -8,6 +8,7 @@
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "outDir": "./dist/types",
+    "rootDir": "./src",
     "paths": {
       "@mohasinac/auth-firebase": ["../../packages/auth-firebase/src"],
       "@mohasinac/auth-firebase/*": ["../../packages/auth-firebase/src/*"],
