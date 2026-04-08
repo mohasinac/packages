@@ -15,7 +15,8 @@
 Layer 1  contracts          — pure TS interfaces, zero runtime deps
 Layer 2  primitives         — core, tokens, errors, utils, validation, http, next, react, ui,
                               monitoring, seo, security, css-tailwind, css-vanilla
-Layer 3  providers          — db-firebase, auth-firebase, email-resend, storage-firebase
+Layer 3  providers          — db-firebase, auth-firebase, email-resend, storage-firebase,
+                              payment-razorpay, search-algolia, shipping-shiprocket
 Layer 4  shell features     — feat-layout, feat-forms, feat-filters, feat-media
 Layer 5  domain features    — feat-auth, feat-account, feat-products, feat-cart, feat-checkout,
                               feat-orders, feat-payments, feat-events, feat-auctions, feat-seller,
@@ -372,7 +373,19 @@ Implements `IEmailProvider` using the Resend API.
 
 ### @mohasinac/storage-firebase
 
-Implements `IStorageProvider` using Firebase Storage.
+Implements `IStorageProvider` using Firebase Storage (Admin SDK).
+
+### @mohasinac/payment-razorpay
+
+Implements `IPaymentProvider` using the Razorpay API. Handles order creation, payment capture, and refunds.
+
+### @mohasinac/search-algolia
+
+Algolia integration for product/category/store indexing and browser search. Exports indexing helpers (server-side) and `algoliaSearch()` (browser/server).
+
+### @mohasinac/shipping-shiprocket
+
+Thin HTTP client for the Shiprocket REST API. Handles authentication, order creation, AWB generation, pickup scheduling, and tracking.
 
 ---
 

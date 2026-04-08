@@ -1,8 +1,8 @@
-# @mohasinac/* — Pluggable Feature Library
+# @mohasinac/\* — Pluggable Feature Library
 
 > SOLID · DRY · Provider/Adapter pattern — swap DB, CSS, email freely.
 
-A monorepo of **47 TypeScript packages** that form a pluggable, SOLID-compliant feature library for Next.js projects. Built from production code powering [letitrip.in](https://letitrip.in).
+A monorepo of **58 TypeScript packages** that form a pluggable, SOLID-compliant feature library for Next.js projects. Built from production code powering [letitrip.in](https://letitrip.in).
 
 ---
 
@@ -32,75 +32,96 @@ Every feature package depends **only on `@mohasinac/contracts` interfaces** — 
 ## Package Index
 
 ### Layer 1 — Contracts
-| Package | Description |
-|---------|-------------|
+
+| Package                | Description                                                                                                                                                                                                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@mohasinac/contracts` | All TypeScript interfaces: IRepository, IAuthProvider, IEmailProvider, IStorageProvider, IPaymentProvider, IShippingProvider, ISearchProvider, ICacheProvider, IQueueProvider, IStyleAdapter, ProviderRegistry |
 
 ### Layer 2 — Primitives
-| Package | Description |
-|---------|-------------|
-| `@mohasinac/core` | Logger, Queue, StorageManager, EventBus, CacheManager |
-| `@mohasinac/http` | ApiClient, ApiClientError, apiClient singleton |
-| `@mohasinac/next` | IAuthVerifier, createApiErrorHandler |
-| `@mohasinac/react` | 10 UI hooks: useMediaQuery, useBreakpoint, useClickOutside, useKeyPress, useLongPress, useGesture, useSwipe, useCamera, usePullToRefresh, useCountdown |
-| `@mohasinac/ui` | Semantic + Typography primitives with inlined design tokens |
-| `@mohasinac/tokens` | CSS custom properties + TS constants for all design tokens |
-| `@mohasinac/errors` | AppError subclasses, ERROR_CODES, handleApiError, isAppError |
-| `@mohasinac/utils` | Date/number/string formatters, type converters, ID generators |
-| `@mohasinac/validation` | 10 Zod schemas, zodErrorMap, setupZodErrorMap |
-| `@mohasinac/seo` | JSON-LD helpers: productJsonLd, breadcrumbJsonLd, blogPostJsonLd … |
-| `@mohasinac/monitoring` | Error tracking enums/guards, cache metrics |
-| `@mohasinac/security` | generateNonce, buildCSP, rateLimit, RateLimitPresets, requireAuth/Role guards |
+
+| Package                 | Description                                                                                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `@mohasinac/core`       | Logger, Queue, StorageManager, EventBus, CacheManager                                                                                                  |
+| `@mohasinac/http`       | ApiClient, ApiClientError, apiClient singleton                                                                                                         |
+| `@mohasinac/next`       | IAuthVerifier, createApiErrorHandler                                                                                                                   |
+| `@mohasinac/react`      | 10 UI hooks: useMediaQuery, useBreakpoint, useClickOutside, useKeyPress, useLongPress, useGesture, useSwipe, useCamera, usePullToRefresh, useCountdown |
+| `@mohasinac/ui`         | Semantic + Typography primitives with inlined design tokens                                                                                            |
+| `@mohasinac/tokens`     | CSS custom properties + TS constants for all design tokens                                                                                             |
+| `@mohasinac/errors`     | AppError subclasses, ERROR_CODES, handleApiError, isAppError                                                                                           |
+| `@mohasinac/utils`      | Date/number/string formatters, type converters, ID generators                                                                                          |
+| `@mohasinac/validation` | 10 Zod schemas, zodErrorMap, setupZodErrorMap                                                                                                          |
+| `@mohasinac/seo`        | JSON-LD helpers: productJsonLd, breadcrumbJsonLd, blogPostJsonLd …                                                                                     |
+| `@mohasinac/monitoring` | Error tracking enums/guards, cache metrics                                                                                                             |
+| `@mohasinac/security`   | generateNonce, buildCSP, rateLimit, RateLimitPresets, requireAuth/Role guards                                                                          |
 
 ### Layer 3 — CSS Adapters
-| Package | Description |
-|---------|-------------|
+
+| Package                   | Description                                |
+| ------------------------- | ------------------------------------------ |
 | `@mohasinac/css-tailwind` | tailwindAdapter implementing IStyleAdapter |
-| `@mohasinac/css-vanilla` | vanillaAdapter implementing IStyleAdapter |
+| `@mohasinac/css-vanilla`  | vanillaAdapter implementing IStyleAdapter  |
 
 ### Layer 3 — Infrastructure Providers
-| Package | Description |
-|---------|-------------|
-| `@mohasinac/db-firebase` | FirebaseRepository, FirebaseSieveRepository, FirebaseRealtimeRepository |
-| `@mohasinac/auth-firebase` | firebaseAuthProvider, firebaseSessionProvider, createMiddlewareAuthChain |
-| `@mohasinac/email-resend` | createResendProvider implementing IEmailProvider |
-| `@mohasinac/storage-firebase` | firebaseStorageProvider implementing IStorageProvider |
+
+| Package                       | Description                                                              |
+| ----------------------------- | ------------------------------------------------------------------------ |
+| `@mohasinac/db-firebase`      | FirebaseRepository, FirebaseSieveRepository, FirebaseRealtimeRepository  |
+| `@mohasinac/auth-firebase`    | firebaseAuthProvider, firebaseSessionProvider, createMiddlewareAuthChain |
+| `@mohasinac/email-resend`     | createResendProvider implementing IEmailProvider                         |
+| `@mohasinac/storage-firebase` | firebaseStorageProvider implementing IStorageProvider                    |
 
 ### Layer 5 — Feature Packages
-| Package | Description |
-|---------|-------------|
-| `@mohasinac/feat-layout` | Navbar, Footer, Sidebar, BottomNav, TitleBar, Breadcrumbs, LocaleSwitcher |
-| `@mohasinac/feat-forms` | Form, FormGroup, Input, Textarea, Select, Checkbox, Radio, Toggle, Slider |
-| `@mohasinac/feat-filters` | FilterFacetSection, RangeFilter, SwitchFilter, FilterPanel |
-| `@mohasinac/feat-media` | MediaImage, MediaVideo, MediaAvatar, MediaLightbox |
-| `@mohasinac/feat-search` | SearchBar, SearchResults, useSearch hook |
-| `@mohasinac/feat-categories` | CategoryGrid, CategoryCard, CategoryBreadcrumb |
-| `@mohasinac/feat-blog` | BlogList, BlogPost, BlogCard, BlogSidebar |
-| `@mohasinac/feat-reviews` | ReviewList, ReviewCard, ReviewForm, StarRating |
-| `@mohasinac/feat-faq` | FAQAccordion, FAQSearch, FAQCategory |
-| `@mohasinac/feat-auth` | LoginForm, SignupForm, ForgotPasswordForm, AuthGuard |
-| `@mohasinac/feat-account` | ProfilePage, AddressBook, PaymentMethods, OrderHistory |
-| `@mohasinac/feat-homepage` | HeroSection, FeaturedProducts, Testimonials, NewsletterSignup |
-| `@mohasinac/feat-products` | ProductCard, ProductGrid, ProductDetail, ProductVariants |
-| `@mohasinac/feat-wishlist` | WishlistButton, WishlistPage, WishlistDrawer |
-| `@mohasinac/feat-cart` | CartDrawer, CartItem, CartSummary, CartPage |
-| `@mohasinac/feat-payments` | PaymentMethodSelector, PaymentForm, OrderSummary |
-| `@mohasinac/feat-checkout` | CheckoutForm, AddressForm, ShippingOptions, OrderReview |
-| `@mohasinac/feat-orders` | OrderList, OrderDetail, OrderTimeline, OrderTracking |
-| `@mohasinac/feat-admin` | AdminDashboard, AdminTable, AdminForm, AdminStats |
-| `@mohasinac/feat-events` | EventCard, EventList, EventDetail, TicketSelector |
-| `@mohasinac/feat-auctions` | AuctionCard, BidForm, CountdownTimer, AuctionDetail |
-| `@mohasinac/feat-promotions` | PromoBanner, CouponInput, SaleTag, FlashSaleTimer |
-| `@mohasinac/feat-seller` | SellerDashboard, SellerProfile, SellerProducts |
-| `@mohasinac/feat-stores` | StoreList, StoreCard, StoreDetail, NearbyStores |
-| `@mohasinac/feat-pre-orders` | PreOrderButton, PreOrderList, PreOrderStatus |
+
+| Package                        | Description                                                               |
+| ------------------------------ | ------------------------------------------------------------------------- |
+| `@mohasinac/feat-layout`       | Navbar, Footer, Sidebar, BottomNav, TitleBar, Breadcrumbs, LocaleSwitcher |
+| `@mohasinac/feat-forms`        | Form, FormGroup, Input, Textarea, Select, Checkbox, Radio, Toggle, Slider |
+| `@mohasinac/feat-filters`      | FilterFacetSection, RangeFilter, SwitchFilter, FilterPanel                |
+| `@mohasinac/feat-media`        | MediaImage, MediaVideo, MediaAvatar, MediaLightbox                        |
+| `@mohasinac/feat-search`       | SearchBar, SearchResults, useSearch hook                                  |
+| `@mohasinac/feat-categories`   | CategoryGrid, CategoryCard, CategoryBreadcrumb                            |
+| `@mohasinac/feat-blog`         | BlogList, BlogPost, BlogCard, BlogSidebar                                 |
+| `@mohasinac/feat-reviews`      | ReviewList, ReviewCard, ReviewForm, StarRating                            |
+| `@mohasinac/feat-faq`          | FAQAccordion, FAQSearch, FAQCategory                                      |
+| `@mohasinac/feat-auth`         | LoginForm, SignupForm, ForgotPasswordForm, AuthGuard                      |
+| `@mohasinac/feat-account`      | ProfilePage, AddressBook, PaymentMethods, OrderHistory                    |
+| `@mohasinac/feat-homepage`     | HeroSection, FeaturedProducts, Testimonials, NewsletterSignup             |
+| `@mohasinac/feat-products`     | ProductCard, ProductGrid, ProductDetail, ProductVariants                  |
+| `@mohasinac/feat-wishlist`     | WishlistButton, WishlistPage, WishlistDrawer                              |
+| `@mohasinac/feat-cart`         | CartDrawer, CartItem, CartSummary, CartPage                               |
+| `@mohasinac/feat-payments`     | PaymentMethodSelector, PaymentForm, OrderSummary                          |
+| `@mohasinac/feat-checkout`     | CheckoutForm, AddressForm, ShippingOptions, OrderReview                   |
+| `@mohasinac/feat-orders`       | OrderList, OrderDetail, OrderTimeline, OrderTracking                      |
+| `@mohasinac/feat-admin`        | AdminDashboard, AdminTable, AdminForm, AdminStats                         |
+| `@mohasinac/feat-events`       | EventCard, EventList, EventDetail, TicketSelector                         |
+| `@mohasinac/feat-auctions`     | AuctionCard, BidForm, CountdownTimer, AuctionDetail                       |
+| `@mohasinac/feat-promotions`   | PromoBanner, CouponInput, SaleTag, FlashSaleTimer                         |
+| `@mohasinac/feat-seller`       | SellerDashboard, SellerProfile, SellerProducts                            |
+| `@mohasinac/feat-stores`       | StoreList, StoreCard, StoreDetail, NearbyStores                           |
+| `@mohasinac/feat-pre-orders`   | PreOrderButton, PreOrderList, PreOrderStatus                              |
+| `@mohasinac/feat-preorders`    | Seller-side pre-order campaign management                                 |
+| `@mohasinac/feat-collections`  | Curated product collection display                                        |
+| `@mohasinac/feat-loyalty`      | RC virtual currency — balance, redemption, history                        |
+| `@mohasinac/feat-consultation` | Consultation booking and session management                               |
+| `@mohasinac/feat-corporate`    | B2B bulk orders and corporate account flows                               |
+| `@mohasinac/feat-before-after` | Before/after image comparison slider                                      |
+| `@mohasinac/feat-whatsapp-bot` | WhatsApp Business API webhook + notification flows                        |
 
 ### Layer 6 — CLI & Scaffolding
-| Package | Description |
-|---------|-------------|
-| `@mohasinac/cli` | `mohasinac add/remove/list`, `withFeatures()`, `mergeFeatureMessages()` |
-| `@mohasinac/create-app` | `npx @mohasinac/create-app` — interactive Next.js project scaffolder |
-| `eslint-plugin-letitrip` | ESLint rules for @mohasinac/* architecture |
+
+| Package                  | Description                                                             |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `@mohasinac/cli`         | `mohasinac add/remove/list`, `withFeatures()`, `mergeFeatureMessages()` |
+| `@mohasinac/create-app`  | `npx @mohasinac/create-app` — interactive Next.js project scaffolder    |
+| `eslint-plugin-letitrip` | 20+ ESLint rules for @mohasinac/\* architecture                         |
+
+### Infrastructure Providers (Layer 3)
+
+| Package                          | Description                                                |
+| -------------------------------- | ---------------------------------------------------------- |
+| `@mohasinac/payment-razorpay`    | `RazorpayProvider` implementing `IPaymentProvider`         |
+| `@mohasinac/search-algolia`      | Algolia search — indexing helpers + browser client         |
+| `@mohasinac/shipping-shiprocket` | Shiprocket shipping — order, AWB, tracking, serviceability |
 
 ---
 
@@ -126,18 +147,18 @@ npx @mohasinac/cli add feat-blog
 
 Four workflows live in `.github/workflows/`:
 
-| Workflow | Trigger | What it does |
-|----------|---------|--------------|
-| `ci.yml` | push to `main`, pull requests | Typecheck + build all 47 packages |
-| `publish.yml` | tag push `v*.*.*` | Build + publish all packages + create GitHub Release |
-| `manual-publish.yml` | workflow_dispatch | Publish with optional `filter` + `dry_run` inputs |
-| `version-bump.yml` | workflow_dispatch | Bump version in all `package.json` files, commit, tag (triggers publish) |
+| Workflow             | Trigger                       | What it does                                                             |
+| -------------------- | ----------------------------- | ------------------------------------------------------------------------ |
+| `ci.yml`             | push to `main`, pull requests | Typecheck + build all 47 packages                                        |
+| `publish.yml`        | tag push `v*.*.*`             | Build + publish all packages + create GitHub Release                     |
+| `manual-publish.yml` | workflow_dispatch             | Publish with optional `filter` + `dry_run` inputs                        |
+| `version-bump.yml`   | workflow_dispatch             | Bump version in all `package.json` files, commit, tag (triggers publish) |
 
 ### One-time setup
 
 **1. Add `NPM_TOKEN` secret**  
 Generate an npm **Automation** token (bypasses 2FA) at:  
-`https://www.npmjs.com/settings/<username>/tokens`  
+`https://www.npmjs.com/settings/<username>/tokens`
 
 Add it at:  
 `https://github.com/mohasinac/packages/settings/secrets/actions` → New repository secret → Name: `NPM_TOKEN`
@@ -200,9 +221,9 @@ node scripts/build-all.mjs     # build all in dependency order
 
 ## Required GitHub Secrets
 
-| Secret | Required | Description |
-|--------|----------|-------------|
-| `NPM_TOKEN` | **Yes** | npm Automation token — generate at npmjs.com/settings/tokens |
+| Secret      | Required | Description                                                                            |
+| ----------- | -------- | -------------------------------------------------------------------------------------- |
+| `NPM_TOKEN` | **Yes**  | npm Automation token — generate at npmjs.com/settings/tokens                           |
 | `PAT_TOKEN` | Optional | GitHub PAT with `repo` scope — allows `version-bump.yml` push to trigger `publish.yml` |
 
 ---
