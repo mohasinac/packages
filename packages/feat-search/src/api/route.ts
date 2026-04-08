@@ -88,7 +88,7 @@ export async function GET(request: Request): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      data: { ...result, backend: "in-memory" as const },
+      data: { ...result, backend: "firestore" as const },
     });
   } catch (error) {
     console.error("[feat-search] GET /api/search failed", error);

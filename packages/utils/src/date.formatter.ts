@@ -24,7 +24,7 @@ export function resolveDate(value: unknown): Date | null {
 export function formatDate(
   date: Date | string | number | unknown,
   format: "short" | "medium" | "long" | "full" = "medium",
-  locale: string = "en-US",
+  locale: string = "en-IN",
 ): string {
   const dateObj = resolveDate(date);
   if (!dateObj) return "";
@@ -61,7 +61,7 @@ export function formatDate(
 export function formatDateTime(
   date: Date | string | number | unknown,
   format: "short" | "medium" | "long" | "full" = "medium",
-  locale: string = "en-US",
+  locale: string = "en-IN",
 ): string {
   const dateObj = resolveDate(date);
   if (!dateObj) return "";
@@ -111,7 +111,7 @@ export function formatDateTime(
 export function formatTime(
   date: Date | string,
   format: "short" | "long" = "long",
-  locale: string = "en-US",
+  locale: string = "en-IN",
 ): string {
   const dateObj = typeof date === "string" ? new Date(date) : date;
   const options: Intl.DateTimeFormatOptions =
@@ -145,7 +145,7 @@ export function formatRelativeTime(date: Date | string): string {
 
 export function formatMonthYear(
   date: Date | string,
-  locale: string = "en-US",
+  locale: string = "en-IN",
 ): string {
   const dateObj = typeof date === "string" ? new Date(date) : date;
   return dateObj.toLocaleDateString(locale, { month: "long", year: "numeric" });
@@ -154,7 +154,7 @@ export function formatMonthYear(
 export function formatDateRange(
   startDate: Date | string,
   endDate: Date | string,
-  locale: string = "en-US",
+  locale: string = "en-IN",
 ): string {
   const start = typeof startDate === "string" ? new Date(startDate) : startDate;
   const end = typeof endDate === "string" ? new Date(endDate) : endDate;

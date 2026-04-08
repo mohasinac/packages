@@ -4,8 +4,8 @@
 
 export function formatCurrency(
   amount: number,
-  currency: string = "USD",
-  locale: string = "en-US",
+  currency: string = "INR",
+  locale: string = "en-IN",
 ): string {
   return new Intl.NumberFormat(locale, { style: "currency", currency }).format(
     amount,
@@ -14,7 +14,7 @@ export function formatCurrency(
 
 export function formatNumber(
   num: number,
-  locale: string = "en-US",
+  locale: string = "en-IN",
   options?: { decimals?: number },
 ): string {
   return new Intl.NumberFormat(locale, {
