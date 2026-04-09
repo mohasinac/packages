@@ -30,6 +30,9 @@
  *   lir/no-raw-date                      CNST-002
  *   lir/no-fixed-media-height            MEDIA-004
  *   lir/require-xl-breakpoints           STYL-001
+ *   lir/no-hardcoded-grid-cols           STYL-003
+ *   lir/no-unlabelled-icon-button        A11Y-001
+ *   lir/require-tooltip-on-icon-button   A11Y-002
  */
 
 // ─── Path helpers ─────────────────────────────────────────────────────────────
@@ -1203,6 +1206,153 @@ const rules = {
       };
     },
   },
+
+  // ── A11Y-001: IconButton without aria-label ────────────────────────────────
+  "no-unlabelled-icon-button": {
+    meta: {
+      type: "problem",
+      docs: {
+        description:
+          "<IconButton> must always have an aria-label prop. (A11Y-001)",
+      },
+      schema: [],
+      messages: {
+        missingLabel:
+          "<IconButton> is missing a required aria-label prop. Add aria-label=\"...\" or wrap with <Tooltip label=\"...\">.",
+      },
+    },
+    /** @param {import('eslint').Rule.RuleContext} context */
+    create(context) {
+      const filename = getFilename(context);
+      if (isTestFile(filename)) return {};
+      if (filename.includes("/ui/components/IconButton")) return {};
+      return {
+        JSXOpeningElement(node) {
+          if (
+            node.name.type !== "JSXIdentifier" ||
+            node.name.name !== "IconButton"
+          )
+            return;
+          const hasAriaLabel = node.attributes.some(
+            (a) =>
+              a.type === "JSXAttribute" &&
+              a.name &&
+              (a.name.name === "aria-label" ||
+                (a.name.type === "JSXNamespacedName" &&
+                  a.name.namespace.name === "aria" &&
+                  a.name.name.name === "label")),
+          );
+          if (!hasAriaLabel) {
+            context.report({ node, messageId: "missingLabel" });
+          }
+        },
+      };
+    },
+  },
+
+  // ── A11Y-002: IconButton outside <Tooltip> wrapper ─────────────────────────
+  "require-tooltip-on-icon-button": {
+    meta: {
+      type: "suggestion",
+      docs: {
+        description:
+          "<IconButton> should be wrapped in a <Tooltip> for visual discoverability. (A11Y-002)",
+      },
+      schema: [],
+      messages: {
+        missingTooltip:
+          "<IconButton> is not wrapped in <Tooltip>. Use <Tooltip label=\"...\"><IconButton /></Tooltip> for visual discoverability.",
+      },
+    },
+    /** @param {import('eslint').Rule.RuleContext} context */
+    create(context) {
+      const filename = getFilename(context);
+      if (isTestFile(filename)) return {};
+      if (filename.includes("/ui/components/")) return {};
+      return {
+        JSXOpeningElement(node) {
+          if (
+            node.name.type !== "JSXIdentifier" ||
+            node.name.name !== "IconButton"
+          )
+            return;
+          // ESLint 9+ flat config exposes sourceCode.getAncestors
+          const ancestors =
+            // @ts-ignore
+            context.sourceCode?.getAncestors?.(node) ??
+            // @ts-ignore
+            context.getAncestors?.() ??
+            [];
+          const hasTooltipParent = ancestors.some(
+            (a) =>
+              a.type === "JSXElement" &&
+              a.openingElement?.name?.type === "JSXIdentifier" &&
+              a.openingElement?.name?.name === "Tooltip",
+          );
+          if (!hasTooltipParent) {
+            context.report({ node, messageId: "missingTooltip" });
+          }
+        },
+      };
+    },
+  },
+
+  // ── STYL-003: Hardcoded grid-cols-N in className ───────────────────────────
+  "no-hardcoded-grid-cols": {
+    meta: {
+      type: "suggestion",
+      docs: {
+        description:
+          "Avoid hardcoded grid-cols-N classes. Use FLUID_GRID tokens or useContainerGrid() instead. (STYL-003)",
+      },
+      schema: [],
+      messages: {
+        hardcodedGrid:
+          "Hardcoded '{{cls}}' — use FLUID_GRID tokens from @/constants or useContainerGrid() for responsive column counts.",
+      },
+    },
+    /** @param {import('eslint').Rule.RuleContext} context */
+    create(context) {
+      const filename = getFilename(context);
+      if (isTestFile(filename)) return {};
+      // Exempt: Tailwind config, token/theme files, and wrapper definitions
+      if (
+        filename.includes("tailwind.config") ||
+        filename.includes("/tokens/") ||
+        filename.includes("theme.ts") ||
+        filename.includes("THEME_CONSTANTS")
+      )
+        return {};
+      return {
+        JSXAttribute(node) {
+          if (!node.name || node.name.name !== "className") return;
+          const val = node.value;
+          let classStr = null;
+          if (val?.type === "Literal") {
+            classStr = val.value;
+          } else if (val?.type === "JSXExpressionContainer") {
+            if (val.expression?.type === "Literal") {
+              classStr = val.expression.value;
+            } else if (val.expression?.type === "TemplateLiteral") {
+              classStr = val.expression.quasis
+                .map((q) => q.value.raw)
+                .join(" ");
+            }
+          }
+          if (typeof classStr !== "string") return;
+          // Catch bare grid-cols-N (without a responsive prefix like sm: md: lg: xl:)
+          const match = classStr.match(/(?<![a-z]:)\bgrid-cols-([1-9])\b/);
+          if (match) {
+            context.report({
+              node,
+              messageId: "hardcodedGrid",
+              data: { cls: `grid-cols-${match[1]}` },
+            });
+          }
+        },
+      };
+    },
+  },
 };
 
 // ─── Package-workspace rules ─────────────────────────────────────────────────
@@ -1341,6 +1491,9 @@ plugin.configs = {
         "lir/no-module-scope-translations": "warn", // I18N-003
         "lir/no-fixed-media-height": "warn", // MEDIA-004
         "lir/require-xl-breakpoints": "warn", // STYL-001
+        "lir/no-unlabelled-icon-button": "error", // A11Y-001
+        "lir/require-tooltip-on-icon-button": "warn", // A11Y-002
+        "lir/no-hardcoded-grid-cols": "warn", // STYL-003
       },
     },
     // ── Package workspace — feat-* architecture enforcement ──────────────────

@@ -7,61 +7,61 @@
 
 ## Phase Tracker
 
-| Phase | Name                                    | Status         | Key Deliverables                                                                                                                                                                 |
-| ----- | --------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0     | Foundation                              | ✅ 2026-04-09  | Created standalone `d:\proj\appkit` repo; `package.json` full export map; `tsup.config.ts` with esbuild alias map; `tsconfig.json` with paths; README + CHANGELOG               |
-| 1     | Primitive Layer                         | ✅ 2026-04-09  | All 16 primitive packages copied to `src/`; tsc passes                                                                                                                           |
-| 2     | Provider Layer                          | ✅ 2026-04-09  | All 7 provider packages copied to `src/providers/`; tsc passes                                                                                                                   |
-| 3     | Feature Layer                           | ✅ 2026-04-09  | All 31 feat-* packages copied to `src/features/`; pre-orders consolidated; manifest fixes; 0 tsc errors; pushed to `mohasinac/appkit` branch `feat/appkit-phase-0` (e19f5fb)    |
-| 4     | Tooling                                 | ✅ 2026-04-09  | `src/cli/index.ts` — `withFeatures()` + `mergeFeatureMessages()` + `FEATURE_SUBPATH_MAP` implemented; commit 0d6bf4c                                                             |
-| 5     | Deprecation Notices                     | ⏸ Deferred    | Old packages kept as-is per user instruction; will be deprecated after appkit is published                                                                                      |
-| 6     | letitrip.in Migration                   | ⏸ Blocked     | Blocked on appkit npm publish; codemod ready to run after `@mohasinac/appkit@2.0.0` is on npm                                                                                   |
-| 18    | RBAC System                             | ✅ 2026-04-09  | `createRbacHook`, `createRequirePermission`, `createRbacMiddleware`, `<Can>`, `DEFAULT_ROLES`; admin + seller permission maps; commit 0d6bf4c                                    |
-| 19    | Seed Data in appkit                     | ✅ 2026-04-09  | Generic seed runner + 10 factories + 3 defaults + barrel; `./seed` export sub-path; commit 0d6bf4c                                                                              |
-| 20    | Mobile-First UX System                  | ✅ 2026-04-09  | THEME_CONSTANTS extended (LAYOUT+TOUCH+CARD+GRID+MOTION+TEXT); BottomNavItem, BottomSheet, BuyBar; commit 0d6bf4c                                                                |
-| 21    | PII Middleware + Request/Response Chain | ✅ 2026-04-09  | `piiScrubberMiddleware`, `createPiiRedactorMiddleware`, `createApiMiddleware` chain, `runChain`, `buildBaseContext`; commit 0d6bf4c                                               |
-| 22    | Comprehensive Seed Data                 | ✅ 2026-04-09  | 8 new factories (address/cart/bid/notification/session/coupon/payout), full variants + fixtures, `pii-encrypt.ts`, runner PII encryption, `test-utils.ts`; commit 262e3c9          |
-| 23    | Dynamic Fluid Grid                      | ✅ 2026-04-09  | `FLUID_GRID_MIN_WIDTHS` + `FLUID_GRID` tokens, `useContainerGrid` hook, `fluidGrid` in THEME_CONSTANTS; commit 262e3c9                                                             |
-| 24    | Horizontal Scroller + Tab Strip         | ✅ 2026-04-09  | `useVisibleItems` hook, `TabStrip` component; commit 262e3c9                                                                                                                       |
-| 25    | Dynamic Form Layouts                    | ✅ 2026-04-09  | `FormGrid`, `FormField`, `DescriptionField`, `form` tokens in `THEME_CONSTANTS`; commit 262e3c9                                                                                    |
-| 26    | Wrapper and Utils Audit                 | ✅ 2026-04-09  | `IconButton`, `TextLink`, `Tooltip`, `Accordion`, `Form`; `Header`/`Footer` aliases; `Div` wrapper; `tooltip` THEME_CONSTANTS tokens; ESLint rules A11Y-001/002, STYL-003; `scripts/audit-violations.ts` |
--*/
----
+| Phase | Name                                    | Status        | Key Deliverables                                                                                                                                                                                         |
+| ----- | --------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | Foundation                              | ✅ 2026-04-09 | Created standalone `d:\proj\appkit` repo; `package.json` full export map; `tsup.config.ts` with esbuild alias map; `tsconfig.json` with paths; README + CHANGELOG                                        |
+| 1     | Primitive Layer                         | ✅ 2026-04-09 | All 16 primitive packages copied to `src/`; tsc passes                                                                                                                                                   |
+| 2     | Provider Layer                          | ✅ 2026-04-09 | All 7 provider packages copied to `src/providers/`; tsc passes                                                                                                                                           |
+| 3     | Feature Layer                           | ✅ 2026-04-09 | All 31 feat-\* packages copied to `src/features/`; pre-orders consolidated; manifest fixes; 0 tsc errors; pushed to `mohasinac/appkit` branch `feat/appkit-phase-0` (e19f5fb)                            |
+| 4     | Tooling                                 | ✅ 2026-04-09 | `src/cli/index.ts` — `withFeatures()` + `mergeFeatureMessages()` + `FEATURE_SUBPATH_MAP` implemented; commit 0d6bf4c                                                                                     |
+| 5     | Deprecation Notices                     | ⏸ Deferred    | Old packages kept as-is per user instruction; will be deprecated after appkit is published                                                                                                               |
+| 6     | letitrip.in Migration                   | ⏸ Blocked     | Blocked on appkit npm publish; codemod ready to run after `@mohasinac/appkit@2.0.0` is on npm                                                                                                            |
+| 18    | RBAC System                             | ✅ 2026-04-09 | `createRbacHook`, `createRequirePermission`, `createRbacMiddleware`, `<Can>`, `DEFAULT_ROLES`; admin + seller permission maps; commit 0d6bf4c                                                            |
+| 19    | Seed Data in appkit                     | ✅ 2026-04-09 | Generic seed runner + 10 factories + 3 defaults + barrel; `./seed` export sub-path; commit 0d6bf4c                                                                                                       |
+| 20    | Mobile-First UX System                  | ✅ 2026-04-09 | THEME_CONSTANTS extended (LAYOUT+TOUCH+CARD+GRID+MOTION+TEXT); BottomNavItem, BottomSheet, BuyBar; commit 0d6bf4c                                                                                        |
+| 21    | PII Middleware + Request/Response Chain | ✅ 2026-04-09 | `piiScrubberMiddleware`, `createPiiRedactorMiddleware`, `createApiMiddleware` chain, `runChain`, `buildBaseContext`; commit 0d6bf4c                                                                      |
+| 22    | Comprehensive Seed Data                 | ✅ 2026-04-09 | 8 new factories (address/cart/bid/notification/session/coupon/payout), full variants + fixtures, `pii-encrypt.ts`, runner PII encryption, `test-utils.ts`; commit 262e3c9                                |
+| 23    | Dynamic Fluid Grid                      | ✅ 2026-04-09 | `FLUID_GRID_MIN_WIDTHS` + `FLUID_GRID` tokens, `useContainerGrid` hook, `fluidGrid` in THEME_CONSTANTS; commit 262e3c9                                                                                   |
+| 24    | Horizontal Scroller + Tab Strip         | ✅ 2026-04-09 | `useVisibleItems` hook, `TabStrip` component; commit 262e3c9                                                                                                                                             |
+| 25    | Dynamic Form Layouts                    | ✅ 2026-04-09 | `FormGrid`, `FormField`, `DescriptionField`, `form` tokens in `THEME_CONSTANTS`; commit 262e3c9                                                                                                          |
+| 26    | Wrapper and Utils Audit                 | ✅ 2026-04-09 | `IconButton`, `TextLink`, `Tooltip`, `Accordion`, `Form`; `Header`/`Footer` aliases; `Div` wrapper; `tooltip` THEME_CONSTANTS tokens; ESLint rules A11Y-001/002, STYL-003; `scripts/audit-violations.ts` |
+
+## -\*/
 
 ### ⬜ Pending — appkit Completion
 
-| Phase | Name                                        | Status         | Key Deliverables |
-| ----- | ------------------------------------------- | -------------- | ---------------- |
-| 27    | Cron Jobs via Firebase Functions            | ✅ 2026-04-10  | `src/features/cron/` — typed cron job registry, `createCronJob()` factory, `onSchedule` wrappers, pub/sub trigger helpers |
-| 28    | README + Index File Systematic Update       | ✅ 2026-04-10  | README.md created for: contracts/, ui/, tokens/, seed/, features/categories/, features/cron/ |
-| 29    | Rich Text: Events and Blog Extraction       | ✅ 2026-04-10  | `src/ui/rich-text/RichText.tsx` — `highlightCode?: (code, lang) => string` prop added; safe HTML renderer with optional syntax highlighting injection |
-| 30    | Review System — Modals, Public Profiles     | ✅ 2026-04-10  | `ReviewCard` + `ReviewsList` (co-located), `ViewReviewModal`, `ReviewSummary` with breakdown bar; `useReviews` hook; `StarRating` from `@mohasinac/ui` |
-| 31    | Category Cards — Enhanced IA                | ✅ 2026-04-10  | `BreadcrumbTrail` created in `src/features/categories/components/`; uses `CategoryItem.ancestors[]` sorted by tier; exported from components barrel |
-| 32    | Theme and Card Visual Bug Fixes             | ✅ 2026-04-10  | SKELETON shimmer variants added: `shimmer`, `shimmerText`, `shimmerCard` — left-to-right gradient sweep with `animate-shimmer`; JSDoc documents required tailwind keyframe |
-| 33    | Realistic Seed Data Metrics                 | ✅ 2026-04-10  | All 4 factories updated: products (20 Indian product names, INR 99–9999, stock 5–200), users (Indian names), addresses (15 Indian city/state/postal), reviews (weighted 4-5★ 80%); deterministic `irand()` |
-| 34    | Component Diagrams Reference (Section 34)   | ⬜ Not started | Add list-mode ASCII diagram to Section 34; card-grid + fluid-grid + list-mode all documented |
-| 35    | Tooltip + SideModal Responsiveness          | ✅ 2026-04-10  | `Tooltip` — `mobileSheet` + `longPressDelay` props; self-contained bottom sheet `<span>` overlay on long-press (no features/ import); `SideModal` full-screen on mobile already complete; `useModalStack` hook pre-existing |
-| 36    | Locale, Currency & Regional Defaults        | ✅ 2026-04-10  | `LOCALE_CONFIG` added to `src/tokens/index.ts`: defaultLocale en-IN, defaultCurrency INR, defaultTimezone Asia/Kolkata, 6 supported currencies with symbols |
-| 37    | Architecture Rules Reference (Section 37)   | ✅ 2026-04-10  | Section 37 exists in plan (line 7719); ESLint rules, manual rules, wrapper contract, data-layer rules, i18n rules, encoding rules all documented |
-| 38    | appkit Self-Audit (Rules Compliance)        | ✅ 2026-04-09  | `scripts/audit-violations.ts` run; all raw HTML violations in `src/features/**/*.tsx` fixed; commit 8f315b9 |
+| Phase | Name                                      | Status        | Key Deliverables                                                                                                                                                                                                                    |
+| ----- | ----------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 27    | Cron Jobs via Firebase Functions          | ✅ 2026-04-10 | `src/features/cron/` — typed cron job registry, `createCronJob()` factory, `onSchedule` wrappers, pub/sub trigger helpers                                                                                                           |
+| 28    | README + Index File Systematic Update     | ✅ 2026-04-10 | README.md created for: contracts/, ui/, tokens/, seed/, features/categories/, features/cron/                                                                                                                                        |
+| 29    | Rich Text: Events and Blog Extraction     | ✅ 2026-04-10 | `src/ui/rich-text/RichText.tsx` — `highlightCode?: (code, lang) => string` prop added; safe HTML renderer with optional syntax highlighting injection                                                                               |
+| 30    | Review System — Modals, Public Profiles   | ✅ 2026-04-10 | `ReviewCard` + `ReviewsList` (co-located), `ViewReviewModal`, `ReviewSummary` with breakdown bar; `useReviews` hook; `StarRating` from `@mohasinac/ui`                                                                              |
+| 31    | Category Cards — Enhanced IA              | ✅ 2026-04-10 | `BreadcrumbTrail` created in `src/features/categories/components/`; uses `CategoryItem.ancestors[]` sorted by tier; exported from components barrel                                                                                 |
+| 32    | Theme and Card Visual Bug Fixes           | ✅ 2026-04-10 | SKELETON shimmer variants added: `shimmer`, `shimmerText`, `shimmerCard` — left-to-right gradient sweep with `animate-shimmer`; JSDoc documents required tailwind keyframe                                                          |
+| 33    | Realistic Seed Data Metrics               | ✅ 2026-04-10 | All 4 factories updated: products (20 Indian product names, INR 99–9999, stock 5–200), users (Indian names), addresses (15 Indian city/state/postal), reviews (weighted 4-5★ 80%); deterministic `irand()`                          |
+| 34    | Component Diagrams Reference (Section 34) | ✅ 2026-04-10 | `ProductGrid` `view` prop: "card" (fixed 2→3→4→5 cols) / "fluid" (auto-fill 220px) / "list" (compact rows with `ProductListRow`); `ViewToggle` extended to 3 modes; `ItemRow` raw HTML fixed; `categoryName` added to `ProductItem` |
+| 35    | Tooltip + SideModal Responsiveness        | ✅ 2026-04-10 | `Tooltip` — `mobileSheet` + `longPressDelay` props; self-contained bottom sheet `<span>` overlay on long-press (no features/ import); `SideModal` full-screen on mobile already complete; `useModalStack` hook pre-existing         |
+| 36    | Locale, Currency & Regional Defaults      | ✅ 2026-04-10 | `LOCALE_CONFIG` added to `src/tokens/index.ts`: defaultLocale en-IN, defaultCurrency INR, defaultTimezone Asia/Kolkata, 6 supported currencies with symbols                                                                         |
+| 37    | Architecture Rules Reference (Section 37) | ✅ 2026-04-10 | Section 37 exists in plan (line 7719); ESLint rules, manual rules, wrapper contract, data-layer rules, i18n rules, encoding rules all documented                                                                                    |
+| 38    | appkit Self-Audit (Rules Compliance)      | ✅ 2026-04-09 | `scripts/audit-violations.ts` run; all raw HTML violations in `src/features/**/*.tsx` fixed; commit 8f315b9                                                                                                                         |
 
 ---
 
 ### ⬜ Pending — letitrip.in Migration
 
-| Phase | Name                                        | Status         | Key Deliverables |
-| ----- | ------------------------------------------- | -------------- | ---------------- |
-| 39    | Publish appkit to npm                       | ⬜ Not started | Bump to `2.0.0`; `npm run build`; `npm publish --access public`; update `letitrip.in/package.json` to `@mohasinac/appkit@^2.0.0` |
-| 40    | letitrip — Import Codemod (Phase 6)         | ⬜ Not started | Run `scripts/migrate-to-appkit.mjs`; replace all `@mohasinac/feat-*`, `@mohasinac/ui`, `@mohasinac/core` imports with `@mohasinac/appkit/*` subpaths; `npx tsc` passes |
-| 41    | letitrip — DUPLICATE File Cleanup           | ⬜ Not started | Delete 47 files marked DUPLICATE in Section 5 audit; verify no dangling imports; `npx tsc --noEmit` passes |
-| 42    | letitrip — Products Feature Migration       | ⬜ Not started | Replace `src/features/products/components/` with appkit `ProductCard`, `ProductDetailView`, `QuickViewModal` wrappers; Section 39 spec |
-| 43    | letitrip — Categories & Stores Migration    | ⬜ Not started | Replace category/store components with appkit `CategoryCard`, `StoreCard`; Section 40/43 spec |
-| 44    | letitrip — Orders & Checkout Migration      | ⬜ Not started | Replace order components with appkit `OrderCard`, `OrderStatusTimeline`; Section 41 spec |
-| 45    | letitrip — Auctions & Pre-Orders Migration  | ⬜ Not started | Replace auction/pre-order components with appkit counterparts; Sections 42/43 spec |
-| 46    | letitrip — Users, Account & Auth Migration  | ⬜ Not started | Replace profile/account components; Section 44 spec |
-| 47    | letitrip — Events & Blog Migration          | ⬜ Not started | Replace event/blog components with appkit `EventCard`, `BlogCard`; rich-text renderer; Sections 45/46 spec |
-| 48    | letitrip — Admin & CMS Migration            | ⬜ Not started | Replace admin components with appkit `DataTable`, admin views; Section 47 spec |
-| 49    | letitrip — Build Verification & Launch      | ⬜ Not started | `npx tsc --noEmit` → `npm run build` → Vercel deploy green; 0 ts-errors; remove deprecated `@mohasinac/*` v1.x deps |
+| Phase | Name                                       | Status         | Key Deliverables                                                                                                                                                  |
+| ----- | ------------------------------------------ | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 39    | Publish appkit to npm                      | ✅ 2026-04-10  | `@mohasinac/appkit@2.0.0` published (417 files, 8.9 MB); tsup split into 3 batches (primitives/providers/features) to fix DTS OOM; `dts: { resolve: false }`      |
+| 40    | letitrip — Import Codemod (Phase 6)        | ✅ 2026-04-10  | Migration complete in source/root imports to `@mohasinac/appkit/*` (kept local `file:../appkit` dependency); verified with `npx tsc --noEmit` and `npm run build` |
+| 41    | letitrip — DUPLICATE File Cleanup          | 🔄 In progress | Batch 1 complete: removed duplicate `src/helpers/ui` shim + top-level re-export; verified no dangling imports; `npx tsc --noEmit` passes, `npm run build` passes  |
+| 42    | letitrip — Products Feature Migration      | ⬜ Not started | Replace `src/features/products/components/` with appkit `ProductCard`, `ProductDetailView`, `QuickViewModal` wrappers; Section 39 spec                            |
+| 43    | letitrip — Categories & Stores Migration   | ⬜ Not started | Replace category/store components with appkit `CategoryCard`, `StoreCard`; Section 40/43 spec                                                                     |
+| 44    | letitrip — Orders & Checkout Migration     | ⬜ Not started | Replace order components with appkit `OrderCard`, `OrderStatusTimeline`; Section 41 spec                                                                          |
+| 45    | letitrip — Auctions & Pre-Orders Migration | ⬜ Not started | Replace auction/pre-order components with appkit counterparts; Sections 42/43 spec                                                                                |
+| 46    | letitrip — Users, Account & Auth Migration | ⬜ Not started | Replace profile/account components; Section 44 spec                                                                                                               |
+| 47    | letitrip — Events & Blog Migration         | ⬜ Not started | Replace event/blog components with appkit `EventCard`, `BlogCard`; rich-text renderer; Sections 45/46 spec                                                        |
+| 48    | letitrip — Admin & CMS Migration           | ⬜ Not started | Replace admin components with appkit `DataTable`, admin views; Section 47 spec                                                                                    |
+| 49    | letitrip — Build Verification & Launch     | ⬜ Not started | `npx tsc --noEmit` → `npm run build` → Vercel deploy green; 0 ts-errors; remove deprecated `@mohasinac/*` v1.x deps                                               |
 
 ---
 
@@ -7728,90 +7728,90 @@ All rules live in `packages/eslint-plugin-letitrip/index.js` and are active in `
 
 #### Architecture (ARCH)
 
-| Code     | Rule name                       | Level   | Description |
-| -------- | ------------------------------- | ------- | ----------- |
-| ARCH-001 | `no-deep-barrel-import`         | error   | Import from package root (`@mohasinac/appkit/ui`), never from deep internal path (`@mohasinac/appkit/ui/components/Button`) |
-| ARCH-002 | `no-cross-feature-import`       | error   | `feat-*` packages must not import from other `feat-*` packages; use `contracts` interfaces only |
-| ARCH-003 | `no-fat-page`                   | warn    | Page components (files inside `app/`) must stay ≤ 150 lines |
-| ARCH-004 | `no-tier1-feature-import`       | error   | Shell layer (feat-layout / feat-forms) must not import from domain feature packages |
+| Code     | Rule name                 | Level | Description                                                                                                                 |
+| -------- | ------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------- |
+| ARCH-001 | `no-deep-barrel-import`   | error | Import from package root (`@mohasinac/appkit/ui`), never from deep internal path (`@mohasinac/appkit/ui/components/Button`) |
+| ARCH-002 | `no-cross-feature-import` | error | `feat-*` packages must not import from other `feat-*` packages; use `contracts` interfaces only                             |
+| ARCH-003 | `no-fat-page`             | warn  | Page components (files inside `app/`) must stay ≤ 150 lines                                                                 |
+| ARCH-004 | `no-tier1-feature-import` | error | Shell layer (feat-layout / feat-forms) must not import from domain feature packages                                         |
 
 #### Firebase (FIREBASE)
 
-| Code         | Rule name                           | Level | Description |
-| ------------ | ----------------------------------- | ----- | ----------- |
-| FIREBASE-001 | `no-firebase-client-in-ui`          | error | No Firebase client SDK imports inside `components/` or `hooks/` |
-| FIREBASE-002 | `no-firebase-client-in-ui`          | error | No `initializeApp()` / `getFirestore()` / `getAuth()` in UI files |
-| FIREBASE-003 | `no-firebase-admin-outside-backend` | error | Admin SDK only in `app/api/`, `actions/`, `repositories/` |
+| Code         | Rule name                           | Level | Description                                                              |
+| ------------ | ----------------------------------- | ----- | ------------------------------------------------------------------------ |
+| FIREBASE-001 | `no-firebase-client-in-ui`          | error | No Firebase client SDK imports inside `components/` or `hooks/`          |
+| FIREBASE-002 | `no-firebase-client-in-ui`          | error | No `initializeApp()` / `getFirestore()` / `getAuth()` in UI files        |
+| FIREBASE-003 | `no-firebase-admin-outside-backend` | error | Admin SDK only in `app/api/`, `actions/`, `repositories/`                |
 | FIREBASE-004 | `no-direct-firestore-query`         | error | No raw `collection()` / `getDocs()` in API routes — use repository layer |
 
 #### Services / Data Layer (SVC)
 
-| Code    | Rule name                        | Level | Description |
-| ------- | -------------------------------- | ----- | ----------- |
-| SVC-001 | `no-fetch-in-ui`                 | error | No `fetch()` calls in components or pages — use `apiClient` inside a hook |
-| SVC-002 | `no-apiclient-outside-services`  | error | `apiClient` only in hooks / context providers, never in components |
-| SVC-003 | `no-hardcoded-api-path`          | warn  | No `/api/...` literal strings — use `API_ENDPOINTS` constants |
+| Code    | Rule name                       | Level | Description                                                               |
+| ------- | ------------------------------- | ----- | ------------------------------------------------------------------------- |
+| SVC-001 | `no-fetch-in-ui`                | error | No `fetch()` calls in components or pages — use `apiClient` inside a hook |
+| SVC-002 | `no-apiclient-outside-services` | error | `apiClient` only in hooks / context providers, never in components        |
+| SVC-003 | `no-hardcoded-api-path`         | warn  | No `/api/...` literal strings — use `API_ENDPOINTS` constants             |
 
 #### Components (COMP)
 
-| Code     | Rule name              | Level | Description |
-| -------- | ---------------------- | ----- | ----------- |
+| Code     | Rule name              | Level | Description                                                                                   |
+| -------- | ---------------------- | ----- | --------------------------------------------------------------------------------------------- |
 | COMP-001 | `no-raw-html-elements` | error | No `<div>` without using `<Div>`, no `<p>` without `<Text>`, no `<h1-h6>` without `<Heading>` |
-| COMP-002 | `no-raw-html-elements` | error | No raw `<section>` — use `<Section>` |
-| COMP-003 | `no-raw-html-elements` | error | No raw `<article>` — use `<Article>` |
-| COMP-004 | `no-raw-html-elements` | error | No raw `<nav>` — use `<Nav>` |
-| COMP-005 | `no-raw-html-elements` | error | No raw `<ul>` / `<ol>` / `<li>` — use `<Ul>` / `<Ol>` / `<Li>` |
-| COMP-006 | `no-raw-html-elements` | error | No raw `<footer>` / `<header>` — use `<Footer>` / `<Header>` |
-| COMP-007 | `no-raw-html-elements` | error | No raw `<main>` — use `<Main>` |
-| COMP-008 | `no-raw-html-elements` | error | No raw `<aside>` — use `<Aside>` |
-| COMP-009 | `no-raw-html-elements` | error | No raw `<button>` — use `<Button>` or `<IconButton>` |
+| COMP-002 | `no-raw-html-elements` | error | No raw `<section>` — use `<Section>`                                                          |
+| COMP-003 | `no-raw-html-elements` | error | No raw `<article>` — use `<Article>`                                                          |
+| COMP-004 | `no-raw-html-elements` | error | No raw `<nav>` — use `<Nav>`                                                                  |
+| COMP-005 | `no-raw-html-elements` | error | No raw `<ul>` / `<ol>` / `<li>` — use `<Ul>` / `<Ol>` / `<Li>`                                |
+| COMP-006 | `no-raw-html-elements` | error | No raw `<footer>` / `<header>` — use `<Footer>` / `<Header>`                                  |
+| COMP-007 | `no-raw-html-elements` | error | No raw `<main>` — use `<Main>`                                                                |
+| COMP-008 | `no-raw-html-elements` | error | No raw `<aside>` — use `<Aside>`                                                              |
+| COMP-009 | `no-raw-html-elements` | error | No raw `<button>` — use `<Button>` or `<IconButton>`                                          |
 
 #### Media (MEDIA)
 
-| Code      | Rule name               | Level | Description |
-| --------- | ----------------------- | ----- | ----------- |
+| Code      | Rule name               | Level | Description                                            |
+| --------- | ----------------------- | ----- | ------------------------------------------------------ |
 | MEDIA-001 | `no-raw-media-elements` | error | No raw `<img>` — use `<MediaImage>` or `<MediaAvatar>` |
-| MEDIA-002 | `no-raw-media-elements` | error | No raw `<video>` — use `<MediaVideo>` |
-| MEDIA-003 | `no-raw-media-elements` | error | No raw `<a>` anchor — use `<TextLink>` |
+| MEDIA-002 | `no-raw-media-elements` | error | No raw `<video>` — use `<MediaVideo>`                  |
+| MEDIA-003 | `no-raw-media-elements` | error | No raw `<a>` anchor — use `<TextLink>`                 |
 
 #### Styling (STYL)
 
-| Code     | Rule name                  | Level | Description |
-| -------- | -------------------------- | ----- | ----------- |
-| STYL-001 | `require-xl-breakpoints`   | warn  | Responsive classes must include `xl:` variant for widescreen layouts |
-| STYL-002 | `no-inline-static-style`   | warn  | No `style={{ color: "red" }}` with static values — use Tailwind classes |
-| STYL-003 | `no-hardcoded-grid-cols`   | warn  | No `grid-cols-N` literals — use `FLUID_GRID` tokens or `useContainerGrid` |
+| Code     | Rule name                | Level | Description                                                               |
+| -------- | ------------------------ | ----- | ------------------------------------------------------------------------- |
+| STYL-001 | `require-xl-breakpoints` | warn  | Responsive classes must include `xl:` variant for widescreen layouts      |
+| STYL-002 | `no-inline-static-style` | warn  | No `style={{ color: "red" }}` with static values — use Tailwind classes   |
+| STYL-003 | `no-hardcoded-grid-cols` | warn  | No `grid-cols-N` literals — use `FLUID_GRID` tokens or `useContainerGrid` |
 
 #### i18n (I18N)
 
-| Code    | Rule name                       | Level | Description |
-| ------- | ------------------------------- | ----- | ----------- |
-| I18N-001 | `use-i18n-navigation`          | error | Use `next-intl` `Link` / `useRouter` — not `next/navigation` |
-| I18N-002 | `use-i18n-navigation`          | error | Use `next-intl` `redirect` — not `next/navigation` redirect |
-| I18N-003 | `no-module-scope-translations`  | error | `useTranslations()` calls only inside component function bodies, never at module top-level |
+| Code     | Rule name                      | Level | Description                                                                                |
+| -------- | ------------------------------ | ----- | ------------------------------------------------------------------------------------------ |
+| I18N-001 | `use-i18n-navigation`          | error | Use `next-intl` `Link` / `useRouter` — not `next/navigation`                               |
+| I18N-002 | `use-i18n-navigation`          | error | Use `next-intl` `redirect` — not `next/navigation` redirect                                |
+| I18N-003 | `no-module-scope-translations` | error | `useTranslations()` calls only inside component function bodies, never at module top-level |
 
 #### Constants (CNST)
 
-| Code     | Rule name                     | Level | Description |
-| -------- | ----------------------------- | ----- | ----------- |
-| CNST-001 | `no-hardcoded-route`          | warn  | No `/products/...` inline strings — use `ROUTES` constants |
-| CNST-002 | `no-raw-date`                 | warn  | No `new Date()` in React components — use date helpers from `@mohasinac/appkit/utils` |
-| CNST-003 | `no-hardcoded-collection`     | error | No Firestore collection name strings inline — use `COLLECTION_NAMES` |
+| Code     | Rule name                 | Level | Description                                                                           |
+| -------- | ------------------------- | ----- | ------------------------------------------------------------------------------------- |
+| CNST-001 | `no-hardcoded-route`      | warn  | No `/products/...` inline strings — use `ROUTES` constants                            |
+| CNST-002 | `no-raw-date`             | warn  | No `new Date()` in React components — use date helpers from `@mohasinac/appkit/utils` |
+| CNST-003 | `no-hardcoded-collection` | error | No Firestore collection name strings inline — use `COLLECTION_NAMES`                  |
 
 #### Quality (QUAL)
 
-| Code     | Rule name                       | Level | Description |
-| -------- | ------------------------------- | ----- | ----------- |
-| QUAL-001 | `no-console`                    | warn  | `console.log` forbidden — use `logger` (client) / `serverLogger` (API routes) |
-| QUAL-002 | `no-alert`                      | error | `alert()` / `confirm()` forbidden — use `useMessage()` / `ConfirmDeleteModal` |
-| QUAL-003 | `no-debug-statement`            | warn  | `debugger` forbidden |
-| QUAL-004 | `no-firebase-trigger-in-api`   | error | Firestore trigger logic must live in `functions/src/` not in API routes |
+| Code     | Rule name                    | Level | Description                                                                   |
+| -------- | ---------------------------- | ----- | ----------------------------------------------------------------------------- |
+| QUAL-001 | `no-console`                 | warn  | `console.log` forbidden — use `logger` (client) / `serverLogger` (API routes) |
+| QUAL-002 | `no-alert`                   | error | `alert()` / `confirm()` forbidden — use `useMessage()` / `ConfirmDeleteModal` |
+| QUAL-003 | `no-debug-statement`         | warn  | `debugger` forbidden                                                          |
+| QUAL-004 | `no-firebase-trigger-in-api` | error | Firestore trigger logic must live in `functions/src/` not in API routes       |
 
 #### Accessibility (A11Y)
 
-| Code    | Rule name                        | Level | Description |
-| ------- | -------------------------------- | ----- | ----------- |
-| A11Y-001 | `no-unlabelled-icon-button`     | error | `<IconButton>` must always have an `aria-label` prop |
+| Code     | Rule name                        | Level | Description                                                               |
+| -------- | -------------------------------- | ----- | ------------------------------------------------------------------------- |
+| A11Y-001 | `no-unlabelled-icon-button`      | error | `<IconButton>` must always have an `aria-label` prop                      |
 | A11Y-002 | `require-tooltip-on-icon-button` | warn  | `<IconButton>` should be wrapped in a `<Tooltip>` with matching `content` |
 
 ---
@@ -7830,16 +7830,16 @@ These rules are not enforced by ESLint but are required by architecture:
 
 #### Naming Conventions
 
-| Pattern | Convention |
-| ------- | ---------- |
-| React components | `PascalCase.tsx` |
-| Hooks | `use<Name>.ts` (camelCase) |
-| Utility functions | `camelCase.ts` |
-| Constants | `UPPER_SNAKE_CASE` |
-| TypeScript types/interfaces | `PascalCase` with `I` prefix for interfaces |
-| Firestore repositories | `<Name>Repository` class in `src/repositories/<name>.repository.ts` |
-| Server actions | `<verb><Resource>Action` in `src/actions/<name>.actions.ts` |
-| API routes | `src/app/api/<name>/route.ts` — exports `GET`, `POST`, `PATCH`, `DELETE` |
+| Pattern                     | Convention                                                               |
+| --------------------------- | ------------------------------------------------------------------------ |
+| React components            | `PascalCase.tsx`                                                         |
+| Hooks                       | `use<Name>.ts` (camelCase)                                               |
+| Utility functions           | `camelCase.ts`                                                           |
+| Constants                   | `UPPER_SNAKE_CASE`                                                       |
+| TypeScript types/interfaces | `PascalCase` with `I` prefix for interfaces                              |
+| Firestore repositories      | `<Name>Repository` class in `src/repositories/<name>.repository.ts`      |
+| Server actions              | `<verb><Resource>Action` in `src/actions/<name>.actions.ts`              |
+| API routes                  | `src/app/api/<name>/route.ts` — exports `GET`, `POST`, `PATCH`, `DELETE` |
 
 #### Imports and Exports
 
@@ -7880,6 +7880,7 @@ These rules are not enforced by ESLint but are required by architecture:
 #### Build Verification
 
 After every session of changes:
+
 1. `npx tsc --noEmit` — 0 type errors
 2. `npm run build` — production build passes
 3. `npm run lint` — 0 lint errors
@@ -7891,27 +7892,27 @@ After every session of changes:
 
 All presentational wrappers in `@mohasinac/appkit/ui` follow this contract:
 
-| Wrapper | HTML | Usage context |
-| ------- | ---- | ------------- |
-| `<Div>` | `<div>` | Generic layout container |
-| `<Section>` | `<section>` | Page-level content regions |
-| `<Article>` | `<article>` | Self-contained content cards |
-| `<Main>` | `<main>` | Page main content area (one per page) |
-| `<Aside>` | `<aside>` | Sidebar / supplementary content |
-| `<Nav>` | `<nav>` | Navigation landmarks |
-| `<Header>` | `<header>` | Page or section header |
-| `<Footer>` | `<footer>` | Page or section footer |
-| `<Ul>` | `<ul>` | Unordered list |
-| `<Ol>` | `<ol>` | Ordered list |
-| `<Li>` | `<li>` | List item |
-| `<Heading>` | `<h1>`–`<h6>` | Headings (level prop) |
-| `<Text>` | `<p>` | Body paragraphs |
-| `<Label>` | `<label>` | Form labels |
-| `<Caption>` | `<figcaption>` / `<caption>` | Captions / figure descriptions |
-| `<Span>` | `<span>` | Inline text fragments |
-| `<TextLink>` | next/link + `<a>` | All hyperlinks (internal + external) |
-| `<Button>` | `<button>` | Clickable actions with label |
-| `<IconButton>` | `<button>` | Icon-only actions (aria-label required) |
+| Wrapper        | HTML                         | Usage context                           |
+| -------------- | ---------------------------- | --------------------------------------- |
+| `<Div>`        | `<div>`                      | Generic layout container                |
+| `<Section>`    | `<section>`                  | Page-level content regions              |
+| `<Article>`    | `<article>`                  | Self-contained content cards            |
+| `<Main>`       | `<main>`                     | Page main content area (one per page)   |
+| `<Aside>`      | `<aside>`                    | Sidebar / supplementary content         |
+| `<Nav>`        | `<nav>`                      | Navigation landmarks                    |
+| `<Header>`     | `<header>`                   | Page or section header                  |
+| `<Footer>`     | `<footer>`                   | Page or section footer                  |
+| `<Ul>`         | `<ul>`                       | Unordered list                          |
+| `<Ol>`         | `<ol>`                       | Ordered list                            |
+| `<Li>`         | `<li>`                       | List item                               |
+| `<Heading>`    | `<h1>`–`<h6>`                | Headings (level prop)                   |
+| `<Text>`       | `<p>`                        | Body paragraphs                         |
+| `<Label>`      | `<label>`                    | Form labels                             |
+| `<Caption>`    | `<figcaption>` / `<caption>` | Captions / figure descriptions          |
+| `<Span>`       | `<span>`                     | Inline text fragments                   |
+| `<TextLink>`   | next/link + `<a>`            | All hyperlinks (internal + external)    |
+| `<Button>`     | `<button>`                   | Clickable actions with label            |
+| `<IconButton>` | `<button>`                   | Icon-only actions (aria-label required) |
 
 **Rule**: The `<Div>` wrapper should be used for all layout divs that would benefit from future theme application (e.g. cards, containers, panels). Raw `<div>` may still be used for purely structural wrappers inside component internals where no styling key needs to flow through.
 
@@ -7950,54 +7951,54 @@ npx tsc --noEmit                               # must pass 0 errors
 
 **Import mapping table** (automated by the codemod):
 
-| Old import | New import |
-| ---------- | ---------- |
-| `@mohasinac/contracts` | `@mohasinac/appkit/contracts` |
-| `@mohasinac/core` | `@mohasinac/appkit/core` |
-| `@mohasinac/http` | `@mohasinac/appkit/http` |
-| `@mohasinac/ui` | `@mohasinac/appkit/ui` |
-| `@mohasinac/react` | `@mohasinac/appkit/react` |
-| `@mohasinac/next` | `@mohasinac/appkit/next` |
-| `@mohasinac/errors` | `@mohasinac/appkit/errors` |
-| `@mohasinac/validation` | `@mohasinac/appkit/validation` |
-| `@mohasinac/security` | `@mohasinac/appkit/security` |
-| `@mohasinac/tokens` | `@mohasinac/appkit/tokens` |
-| `@mohasinac/monitoring` | `@mohasinac/appkit/monitoring` |
-| `@mohasinac/seo` | `@mohasinac/appkit/seo` |
-| `@mohasinac/db-firebase` | `@mohasinac/appkit/db-firebase` |
-| `@mohasinac/auth-firebase` | `@mohasinac/appkit/auth-firebase` |
-| `@mohasinac/email-resend` | `@mohasinac/appkit/email-resend` |
-| `@mohasinac/storage-firebase` | `@mohasinac/appkit/storage-firebase` |
-| `@mohasinac/payment-razorpay` | `@mohasinac/appkit/payment-razorpay` |
-| `@mohasinac/search-algolia` | `@mohasinac/appkit/search-algolia` |
+| Old import                       | New import                              |
+| -------------------------------- | --------------------------------------- |
+| `@mohasinac/contracts`           | `@mohasinac/appkit/contracts`           |
+| `@mohasinac/core`                | `@mohasinac/appkit/core`                |
+| `@mohasinac/http`                | `@mohasinac/appkit/http`                |
+| `@mohasinac/ui`                  | `@mohasinac/appkit/ui`                  |
+| `@mohasinac/react`               | `@mohasinac/appkit/react`               |
+| `@mohasinac/next`                | `@mohasinac/appkit/next`                |
+| `@mohasinac/errors`              | `@mohasinac/appkit/errors`              |
+| `@mohasinac/validation`          | `@mohasinac/appkit/validation`          |
+| `@mohasinac/security`            | `@mohasinac/appkit/security`            |
+| `@mohasinac/tokens`              | `@mohasinac/appkit/tokens`              |
+| `@mohasinac/monitoring`          | `@mohasinac/appkit/monitoring`          |
+| `@mohasinac/seo`                 | `@mohasinac/appkit/seo`                 |
+| `@mohasinac/db-firebase`         | `@mohasinac/appkit/db-firebase`         |
+| `@mohasinac/auth-firebase`       | `@mohasinac/appkit/auth-firebase`       |
+| `@mohasinac/email-resend`        | `@mohasinac/appkit/email-resend`        |
+| `@mohasinac/storage-firebase`    | `@mohasinac/appkit/storage-firebase`    |
+| `@mohasinac/payment-razorpay`    | `@mohasinac/appkit/payment-razorpay`    |
+| `@mohasinac/search-algolia`      | `@mohasinac/appkit/search-algolia`      |
 | `@mohasinac/shipping-shiprocket` | `@mohasinac/appkit/shipping-shiprocket` |
-| `@mohasinac/feat-auth` | `@mohasinac/appkit/feat-auth` |
-| `@mohasinac/feat-products` | `@mohasinac/appkit/feat-products` |
-| `@mohasinac/feat-categories` | `@mohasinac/appkit/feat-categories` |
-| `@mohasinac/feat-cart` | `@mohasinac/appkit/feat-cart` |
-| `@mohasinac/feat-orders` | `@mohasinac/appkit/feat-orders` |
-| `@mohasinac/feat-blog` | `@mohasinac/appkit/feat-blog` |
-| `@mohasinac/feat-reviews` | `@mohasinac/appkit/feat-reviews` |
-| `@mohasinac/feat-faq` | `@mohasinac/appkit/feat-faq` |
-| `@mohasinac/feat-search` | `@mohasinac/appkit/feat-search` |
-| `@mohasinac/feat-admin` | `@mohasinac/appkit/feat-admin` |
-| `@mohasinac/feat-events` | `@mohasinac/appkit/feat-events` |
-| `@mohasinac/feat-auctions` | `@mohasinac/appkit/feat-auctions` |
-| `@mohasinac/feat-media` | `@mohasinac/appkit/feat-media` |
-| `@mohasinac/feat-account` | `@mohasinac/appkit/feat-account` |
-| `@mohasinac/feat-stores` | `@mohasinac/appkit/feat-stores` |
-| `@mohasinac/feat-checkout` | `@mohasinac/appkit/feat-checkout` |
-| `@mohasinac/feat-wishlist` | `@mohasinac/appkit/feat-wishlist` |
-| `@mohasinac/feat-loyalty` | `@mohasinac/appkit/feat-loyalty` |
-| `@mohasinac/feat-payments` | `@mohasinac/appkit/feat-payments` |
-| `@mohasinac/feat-collections` | `@mohasinac/appkit/feat-collections` |
-| `@mohasinac/feat-pre-orders` | `@mohasinac/appkit/feat-pre-orders` |
-| `@mohasinac/feat-seller` | `@mohasinac/appkit/feat-seller` |
-| `@mohasinac/feat-consultation` | `@mohasinac/appkit/feat-consultation` |
-| `@mohasinac/feat-homepage` | `@mohasinac/appkit/feat-homepage` |
-| `@mohasinac/feat-filters` | `@mohasinac/appkit/feat-filters` |
-| `@mohasinac/feat-forms` | `@mohasinac/appkit/feat-forms` |
-| `@mohasinac/feat-layout` | `@mohasinac/appkit/feat-layout` |
+| `@mohasinac/feat-auth`           | `@mohasinac/appkit/feat-auth`           |
+| `@mohasinac/feat-products`       | `@mohasinac/appkit/feat-products`       |
+| `@mohasinac/feat-categories`     | `@mohasinac/appkit/feat-categories`     |
+| `@mohasinac/feat-cart`           | `@mohasinac/appkit/feat-cart`           |
+| `@mohasinac/feat-orders`         | `@mohasinac/appkit/feat-orders`         |
+| `@mohasinac/feat-blog`           | `@mohasinac/appkit/feat-blog`           |
+| `@mohasinac/feat-reviews`        | `@mohasinac/appkit/feat-reviews`        |
+| `@mohasinac/feat-faq`            | `@mohasinac/appkit/feat-faq`            |
+| `@mohasinac/feat-search`         | `@mohasinac/appkit/feat-search`         |
+| `@mohasinac/feat-admin`          | `@mohasinac/appkit/feat-admin`          |
+| `@mohasinac/feat-events`         | `@mohasinac/appkit/feat-events`         |
+| `@mohasinac/feat-auctions`       | `@mohasinac/appkit/feat-auctions`       |
+| `@mohasinac/feat-media`          | `@mohasinac/appkit/feat-media`          |
+| `@mohasinac/feat-account`        | `@mohasinac/appkit/feat-account`        |
+| `@mohasinac/feat-stores`         | `@mohasinac/appkit/feat-stores`         |
+| `@mohasinac/feat-checkout`       | `@mohasinac/appkit/feat-checkout`       |
+| `@mohasinac/feat-wishlist`       | `@mohasinac/appkit/feat-wishlist`       |
+| `@mohasinac/feat-loyalty`        | `@mohasinac/appkit/feat-loyalty`        |
+| `@mohasinac/feat-payments`       | `@mohasinac/appkit/feat-payments`       |
+| `@mohasinac/feat-collections`    | `@mohasinac/appkit/feat-collections`    |
+| `@mohasinac/feat-pre-orders`     | `@mohasinac/appkit/feat-pre-orders`     |
+| `@mohasinac/feat-seller`         | `@mohasinac/appkit/feat-seller`         |
+| `@mohasinac/feat-consultation`   | `@mohasinac/appkit/feat-consultation`   |
+| `@mohasinac/feat-homepage`       | `@mohasinac/appkit/feat-homepage`       |
+| `@mohasinac/feat-filters`        | `@mohasinac/appkit/feat-filters`        |
+| `@mohasinac/feat-forms`          | `@mohasinac/appkit/feat-forms`          |
+| `@mohasinac/feat-layout`         | `@mohasinac/appkit/feat-layout`         |
 
 ---
 
@@ -8006,6 +8007,7 @@ npx tsc --noEmit                               # must pass 0 errors
 Files marked `DUPLICATE` in Section 5 must be **deleted** after the codemod passes.
 
 **Verification workflow per file**:
+
 1. Check all importers: `grep -r "from.*<filename>" src/` — must be 0 results
 2. Delete file
 3. `npx tsc --noEmit` — still passes
@@ -8013,15 +8015,15 @@ Files marked `DUPLICATE` in Section 5 must be **deleted** after the codemod pass
 
 **Categories of duplicates** (per Section 5 audit):
 
-| Category | Example files | Count |
-| -------- | ------------- | ----- |
-| Generic utility hooks | `useDebounce.ts`, `useLocalStorage.ts`, `useMediaQuery.ts` | ~8 |
-| Generic UI primitives | `Button.tsx`, `Badge.tsx`, `Spinner.tsx` | ~12 |
-| Semantic wrappers | `Heading.tsx`, `Text.tsx`, `Section.tsx` | ~9 |
-| Provider/registry stubs | `providers.config.ts` duplicated logic | ~3 |
-| RBAC helpers | `can.ts`, `usePermission.ts` | ~4 |
-| TypeScript type aliases | Types that match `contracts` interfaces exactly | ~11 |
-| **Total** | | **~47** |
+| Category                | Example files                                              | Count   |
+| ----------------------- | ---------------------------------------------------------- | ------- |
+| Generic utility hooks   | `useDebounce.ts`, `useLocalStorage.ts`, `useMediaQuery.ts` | ~8      |
+| Generic UI primitives   | `Button.tsx`, `Badge.tsx`, `Spinner.tsx`                   | ~12     |
+| Semantic wrappers       | `Heading.tsx`, `Text.tsx`, `Section.tsx`                   | ~9      |
+| Provider/registry stubs | `providers.config.ts` duplicated logic                     | ~3      |
+| RBAC helpers            | `can.ts`, `usePermission.ts`                               | ~4      |
+| TypeScript type aliases | Types that match `contracts` interfaces exactly            | ~11     |
+| **Total**               |                                                            | **~47** |
 
 ---
 
@@ -8037,15 +8039,15 @@ Each feature migration follows this 5-step pattern:
 5. Delete redundant local file
 ```
 
-| Phase | Feature | Files to migrate | Spec |
-| ----- | ------- | ---------------- | ---- |
-| 42 | Products | `ProductCard`, `ProductDetailView`, `ProductListView`, `QuickViewModal`, `ProductFilters` | Section 39 |
-| 43 | Categories + Stores | `CategoryCard`, `CategoryTreeView`, `StoreCard`, `StoreDetailView` | Section 40 |
-| 44 | Orders + Checkout | `OrderCard`, `OrderDetailView`, `OrderStatusTimeline`, `CheckoutStepper` | Section 41 |
-| 45 | Auctions + Pre-Orders | `AuctionCard`, `LiveBidView`, `BidHistoryDrawer`, `PreOrderCard` | Sections 42/43 |
-| 46 | Users + Account + Auth | `ProfileView`, `ProfileEditForm`, `AddressBook`, `AuthModal` | Section 44 |
-| 47 | Events + Blog | `EventCard`, `EventDetailView`, `BlogCard`, `BlogPostView` | Sections 45/46 |
-| 48 | Admin + CMS | `AdminLayout`, `DataTable` usage, admin views | Section 47 |
+| Phase | Feature                | Files to migrate                                                                          | Spec           |
+| ----- | ---------------------- | ----------------------------------------------------------------------------------------- | -------------- |
+| 42    | Products               | `ProductCard`, `ProductDetailView`, `ProductListView`, `QuickViewModal`, `ProductFilters` | Section 39     |
+| 43    | Categories + Stores    | `CategoryCard`, `CategoryTreeView`, `StoreCard`, `StoreDetailView`                        | Section 40     |
+| 44    | Orders + Checkout      | `OrderCard`, `OrderDetailView`, `OrderStatusTimeline`, `CheckoutStepper`                  | Section 41     |
+| 45    | Auctions + Pre-Orders  | `AuctionCard`, `LiveBidView`, `BidHistoryDrawer`, `PreOrderCard`                          | Sections 42/43 |
+| 46    | Users + Account + Auth | `ProfileView`, `ProfileEditForm`, `AddressBook`, `AuthModal`                              | Section 44     |
+| 47    | Events + Blog          | `EventCard`, `EventDetailView`, `BlogCard`, `BlogPostView`                                | Sections 45/46 |
+| 48    | Admin + CMS            | `AdminLayout`, `DataTable` usage, admin views                                             | Section 47     |
 
 ---
 
