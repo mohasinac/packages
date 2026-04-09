@@ -9,26 +9,70 @@
 
 | Phase | Name                                    | Status         | Key Deliverables                                                                                                                                                                 |
 | ----- | --------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0     | Foundation                              | ⬜ Not started | Create `packages/appkit/`, sub-path map, build pipeline, stub exports                                                                                                            |
-| 1     | Primitive Layer                         | ⬜ Not started | Absorb `core`, `http`, `errors`, `validation`, `security`, `tokens`, `monitoring`, `seo`, `react`, `ui`, `next`, `css-*`                                                         |
-| 2     | Provider Layer                          | ⬜ Not started | Absorb `db-firebase`, `auth-firebase`, `email-resend`, `storage-firebase`, `payment-razorpay`, `search-algolia`, `shipping-shiprocket`                                           |
-| 3     | Feature Layer                           | ⬜ Not started | Absorb all 30+ `feat-*` packages under `appkit/features/*` sub-paths                                                                                                             |
-| 4     | Tooling                                 | ⬜ Not started | Absorb `cli`, `create-app`, `eslint-plugin-letitrip`                                                                                                                             |
-| 5     | Deprecation Notices                     | ⬜ Not started | Add deprecation stubs to all 58 old packages pointing to `appkit` sub-paths                                                                                                      |
-| 6     | letitrip.in Migration                   | ⬜ Not started | Update all imports in `letitrip.in`; delete duplicate local files; verify build                                                                                                  |
-| 18    | RBAC System                             | ⬜ Not started | `createRbacHook`, `createRequirePermission`, `createRbacMiddleware`, `<Can>`, `DEFAULT_ROLES`; admin + seller permission maps; letitrip wires `RBAC_CONFIG` + custom claims sync |
-| 19    | Seed Data in appkit                     | ⬜ Not started | Generic seed runner + faker-based factories in `appkit/seed`; letitrip extends with marketplace fixtures                                                                         |
-| 20    | Mobile-First UX System                  | ⬜ Not started | Full-width grid, no whitespace rules, touch targets, bottom nav, spacing tokens, motion tokens, theme completeness audit                                                         |
-| 21    | PII Middleware + Request/Response Chain | ⬜ Not started | `PiiScrubber` response middleware, `createApiMiddleware` chain, structured request context, PII never reaches client                                                             |
+| 0     | Foundation                              | ✅ 2026-04-09  | Created standalone `d:\proj\appkit` repo; `package.json` full export map; `tsup.config.ts` with esbuild alias map; `tsconfig.json` with paths; README + CHANGELOG               |
+| 1     | Primitive Layer                         | ✅ 2026-04-09  | All 16 primitive packages copied to `src/`; tsc passes                                                                                                                           |
+| 2     | Provider Layer                          | ✅ 2026-04-09  | All 7 provider packages copied to `src/providers/`; tsc passes                                                                                                                   |
+| 3     | Feature Layer                           | ✅ 2026-04-09  | All 31 feat-* packages copied to `src/features/`; pre-orders consolidated; manifest fixes; 0 tsc errors; pushed to `mohasinac/appkit` branch `feat/appkit-phase-0` (e19f5fb)    |
+| 4     | Tooling                                 | ✅ 2026-04-09  | `src/cli/index.ts` — `withFeatures()` + `mergeFeatureMessages()` + `FEATURE_SUBPATH_MAP` implemented; commit 0d6bf4c                                                             |
+| 5     | Deprecation Notices                     | ⏸ Deferred    | Old packages kept as-is per user instruction; will be deprecated after appkit is published                                                                                      |
+| 6     | letitrip.in Migration                   | ⏸ Blocked     | Blocked on appkit npm publish; codemod ready to run after `@mohasinac/appkit@2.0.0` is on npm                                                                                   |
+| 18    | RBAC System                             | ✅ 2026-04-09  | `createRbacHook`, `createRequirePermission`, `createRbacMiddleware`, `<Can>`, `DEFAULT_ROLES`; admin + seller permission maps; commit 0d6bf4c                                    |
+| 19    | Seed Data in appkit                     | ✅ 2026-04-09  | Generic seed runner + 10 factories + 3 defaults + barrel; `./seed` export sub-path; commit 0d6bf4c                                                                              |
+| 20    | Mobile-First UX System                  | ✅ 2026-04-09  | THEME_CONSTANTS extended (LAYOUT+TOUCH+CARD+GRID+MOTION+TEXT); BottomNavItem, BottomSheet, BuyBar; commit 0d6bf4c                                                                |
+| 21    | PII Middleware + Request/Response Chain | ✅ 2026-04-09  | `piiScrubberMiddleware`, `createPiiRedactorMiddleware`, `createApiMiddleware` chain, `runChain`, `buildBaseContext`; commit 0d6bf4c                                               |
+| 22    | Comprehensive Seed Data                 | ✅ 2026-04-09  | 8 new factories (address/cart/bid/notification/session/coupon/payout), full variants + fixtures, `pii-encrypt.ts`, runner PII encryption, `test-utils.ts`; commit 262e3c9          |
+| 23    | Dynamic Fluid Grid                      | ✅ 2026-04-09  | `FLUID_GRID_MIN_WIDTHS` + `FLUID_GRID` tokens, `useContainerGrid` hook, `fluidGrid` in THEME_CONSTANTS; commit 262e3c9                                                             |
+| 24    | Horizontal Scroller + Tab Strip         | ✅ 2026-04-09  | `useVisibleItems` hook, `TabStrip` component; commit 262e3c9                                                                                                                       |
+| 25    | Dynamic Form Layouts                    | ✅ 2026-04-09  | `FormGrid`, `FormField`, `DescriptionField`, `form` tokens in `THEME_CONSTANTS`; commit 262e3c9                                                                                    |
+| 26    | Wrapper and Utils Audit                 | ✅ 2026-04-09  | `IconButton`, `TextLink`, `Tooltip`, `Accordion`, `Form`; `Header`/`Footer` aliases; `Div` wrapper; `tooltip` THEME_CONSTANTS tokens; ESLint rules A11Y-001/002, STYL-003; `scripts/audit-violations.ts` |
+
+---
+
+### ⬜ Pending — appkit Completion
+
+| Phase | Name                                        | Status         | Key Deliverables |
+| ----- | ------------------------------------------- | -------------- | ---------------- |
+| 27    | Cron Jobs via Firebase Functions            | ⬜ Not started | `src/features/cron/` — typed cron job registry, `createCronJob()` factory, `onSchedule` wrappers, pub/sub trigger helpers |
+| 28    | README + Index File Systematic Update       | ⬜ Not started | Every `src/**` sub-path gets a `README.md`; top-level README has feature matrix table; `src/index.ts` exports reviewed |
+| 29    | Rich Text: Events and Blog Extraction       | ⬜ Not started | Extract ProseMirror renderer to `src/ui/rich-text/`; `<RichText>` component; safe HTML renderer, code block syntax highlighting |
+| 30    | Review System — Modals, Public Profiles     | ⬜ Not started | `<ReviewCard>`, `<StarRating>`, `<ReviewModal>`, `<ReviewSummary>` with breakdown bar; `useReviews` hook; public seller/product profile UX (Section 30 spec) |
+| 31    | Category Cards — Enhanced IA                | ⬜ Not started | `<CategoryCard>` (icon + label + count variants), `<CategoryTree>`, `<BreadcrumbTrail>`; responsive nested category nav |
+| 32    | Theme and Card Visual Bug Fixes             | ⬜ Not started | Fix identified THEME_CONSTANTS inconsistencies; dark-mode contrast audit; card hover states; skeleton shimmer direction |
+| 33    | Realistic Seed Data Metrics                 | ⬜ Not started | Update seed factories with realistic numeric ranges (prices, stock, rating-counts); locale-aware phone/address generation |
+| 34    | Component Diagrams Reference (Section 34)   | ⬜ Not started | Add list-mode ASCII diagram to Section 34; card-grid + fluid-grid + list-mode all documented |
+| 35    | Tooltip + SideModal Responsiveness          | ⬜ Not started | `Tooltip` — mobile fallback (long-press opens bottom sheet); `SideModal` — full-screen on mobile; `useModalStack` hook |
+| 36    | Locale, Currency & Regional Defaults        | ⬜ Not started | `LOCALE_CONFIG`, `formatCurrency` defaults applied in `@mohasinac/utils`; multi-currency support; INR as default for letitrip |
+| 37    | Architecture Rules Reference (Section 37)   | ⬜ Not started | New Section 37 in plan: complete rule index (ESLint, naming, wrapper, data-layer, i18n, file encoding) |
+| 38    | appkit Self-Audit (Rules Compliance)        | ⬜ Not started | Run `scripts/audit-violations.ts` against `d:\proj\appkit\src`; fix all violations; no raw HTML elements in appkit itself |
+
+---
+
+### ⬜ Pending — letitrip.in Migration
+
+| Phase | Name                                        | Status         | Key Deliverables |
+| ----- | ------------------------------------------- | -------------- | ---------------- |
+| 39    | Publish appkit to npm                       | ⬜ Not started | Bump to `2.0.0`; `npm run build`; `npm publish --access public`; update `letitrip.in/package.json` to `@mohasinac/appkit@^2.0.0` |
+| 40    | letitrip — Import Codemod (Phase 6)         | ⬜ Not started | Run `scripts/migrate-to-appkit.mjs`; replace all `@mohasinac/feat-*`, `@mohasinac/ui`, `@mohasinac/core` imports with `@mohasinac/appkit/*` subpaths; `npx tsc` passes |
+| 41    | letitrip — DUPLICATE File Cleanup           | ⬜ Not started | Delete 47 files marked DUPLICATE in Section 5 audit; verify no dangling imports; `npx tsc --noEmit` passes |
+| 42    | letitrip — Products Feature Migration       | ⬜ Not started | Replace `src/features/products/components/` with appkit `ProductCard`, `ProductDetailView`, `QuickViewModal` wrappers; Section 39 spec |
+| 43    | letitrip — Categories & Stores Migration    | ⬜ Not started | Replace category/store components with appkit `CategoryCard`, `StoreCard`; Section 40/43 spec |
+| 44    | letitrip — Orders & Checkout Migration      | ⬜ Not started | Replace order components with appkit `OrderCard`, `OrderStatusTimeline`; Section 41 spec |
+| 45    | letitrip — Auctions & Pre-Orders Migration  | ⬜ Not started | Replace auction/pre-order components with appkit counterparts; Sections 42/43 spec |
+| 46    | letitrip — Users, Account & Auth Migration  | ⬜ Not started | Replace profile/account components; Section 44 spec |
+| 47    | letitrip — Events & Blog Migration          | ⬜ Not started | Replace event/blog components with appkit `EventCard`, `BlogCard`; rich-text renderer; Sections 45/46 spec |
+| 48    | letitrip — Admin & CMS Migration            | ⬜ Not started | Replace admin components with appkit `DataTable`, admin views; Section 47 spec |
+| 49    | letitrip — Build Verification & Launch      | ⬜ Not started | `npx tsc --noEmit` → `npm run build` → Vercel deploy green; 0 ts-errors; remove deprecated `@mohasinac/*` v1.x deps |
+
+---
 
 ### ✅ Completed pre-appkit cleanup stages
 
-| Stage | Description | Status |
-|---|---|---|
-| H2 | **Helper shim directories deleted** — `src/helpers/data/` (7 files) and `src/helpers/ui/` (3 files) removed; `buildSieveFilters` imported from `@mohasinac/utils`; `classNames` from `@mohasinac/ui`; `applySieveToArray` in-memory adapter removed (Firestore only now) | ✅ 2026-04-09 |
-| H2-utils | **`@/utils` barrel slim-down** — `src/utils/index.ts` no longer re-exports `@mohasinac/utils` symbols; callers import directly from the package | ✅ 2026-04-09 |
-| H2-locale | **`@mohasinac/utils` defaults updated** — `formatCurrency`/`formatNumber`/`formatDate` etc. default to `INR`/`en-IN`; `LOCALE_CONFIG` constant added to `src/constants/config.ts` as single source of regional truth | ✅ 2026-04-09 |
-| H2-auth | **Firebase auth null guard** — `getCurrentUser()` and `onAuthStateChanged()` in `auth-helpers.ts` now return gracefully when Firebase client SDK is not initialized (SSR / missing env vars) | ✅ 2026-04-09 |
+| Stage     | Description                                                                                                                                                                                                                                                              | Status        |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| H2        | **Helper shim directories deleted** — `src/helpers/data/` (7 files) and `src/helpers/ui/` (3 files) removed; `buildSieveFilters` imported from `@mohasinac/utils`; `classNames` from `@mohasinac/ui`; `applySieveToArray` in-memory adapter removed (Firestore only now) | ✅ 2026-04-09 |
+| H2-utils  | **`@/utils` barrel slim-down** — `src/utils/index.ts` no longer re-exports `@mohasinac/utils` symbols; callers import directly from the package                                                                                                                          | ✅ 2026-04-09 |
+| H2-locale | **`@mohasinac/utils` defaults updated** — `formatCurrency`/`formatNumber`/`formatDate` etc. default to `INR`/`en-IN`; `LOCALE_CONFIG` constant added to `src/constants/config.ts` as single source of regional truth                                                     | ✅ 2026-04-09 |
+| H2-auth   | **Firebase auth null guard** — `getCurrentUser()` and `onAuthStateChanged()` in `auth-helpers.ts` now return gracefully when Firebase client SDK is not initialized (SSR / missing env vars)                                                                             | ✅ 2026-04-09 |
 
 > **Tag legend for file audit below**: `EXTRACT` — move as-is · `EXTRACT-SHELL` — VIEW layer to appkit · `EXTRACT-DATA` — DATA layer: base hooks/actions/schemas + letitrip config override · `EXTRACT-RULE` — MARKETPLACE RULES: extract strategy factory + letitrip injects config · `DUPLICATE` — already in appkit; delete local copy · `CMS_CONTENT` — shell to appkit; content to Firestore · `STAY` — 100% letitrip-specific (credentials, seed data, letitrip discriminated unions; no generic equivalent possible)
 
@@ -140,12 +184,16 @@ All paths are tree-shakeable via `tsup` `splitting: true`.
 
 ### Phase 0 — Foundation (half day)
 
+> **Repo change (2026-04-09)**: `appkit` is a **standalone git repo** at `d:\proj\appkit`
+> (https://github.com/mohasinac/appkit), NOT a subdirectory of the packages monorepo.
+> Steps 3-4 below are replaced by the standalone repo's own `tsconfig.json` + build setup.
+
 Tasks:
 
-1. Create `packages/appkit/` directory with `package.json`, `tsconfig.json`, `tsup.config.ts`
+1. Create `package.json`, `tsconfig.json`, `tsup.config.ts` in `d:\proj\appkit`
 2. Define the complete `exports` map in `package.json` (all sub-paths above)
-3. Add `appkit` to `BUILD_ORDER` in `scripts/build-all.mjs` (build LAST, after all others)
-4. Add path alias `@mohasinac/appkit => ./packages/appkit/src` to root `tsconfig.json`
+3. Create branch `feat/appkit-phase-0` and push initial scaffold
+4. Add path alias `@mohasinac/appkit => ./src` to `tsconfig.json` (standalone repo)
 
 `package.json` shape:
 
@@ -796,17 +844,17 @@ export interface ProductDocument extends BaseProductDocument {
 
 **Deleted shim directories:**
 
-| Deleted file | Was a thin shim for | Now import from |
-|---|---|---|
-| `helpers/data/array.helper.ts` | `@mohasinac/utils` `groupBy`, `unique`, `sortBy`, … | `@mohasinac/utils` directly |
-| `helpers/data/filter.helper.ts` | `buildSieveFilters` — now in `@mohasinac/utils` | `@mohasinac/utils` directly |
-| `helpers/data/object.helper.ts` | `@mohasinac/utils` `deepMerge`, `pick`, `omit`, … | `@mohasinac/utils` directly |
-| `helpers/data/pagination.helper.ts` | `@mohasinac/utils` `calculatePagination` | `@mohasinac/utils` directly |
-| `helpers/data/sieve.helper.ts` | In-memory `applySieveToArray` — **deleted, no replacement** | Use `firebase-sieve.ts` (Firestore-native) |
-| `helpers/data/sorting.helper.ts` | `@mohasinac/utils` `sort` | `@mohasinac/utils` directly |
-| `helpers/ui/style.helper.ts` | `classNames` — now in `@mohasinac/ui` | `@mohasinac/ui` directly |
-| `helpers/ui/color.helper.ts` | `@mohasinac/utils` color helpers | `@mohasinac/utils` directly |
-| `helpers/ui/animation.helper.ts` | `@mohasinac/utils` easings | `@mohasinac/utils` directly |
+| Deleted file                        | Was a thin shim for                                         | Now import from                            |
+| ----------------------------------- | ----------------------------------------------------------- | ------------------------------------------ |
+| `helpers/data/array.helper.ts`      | `@mohasinac/utils` `groupBy`, `unique`, `sortBy`, …         | `@mohasinac/utils` directly                |
+| `helpers/data/filter.helper.ts`     | `buildSieveFilters` — now in `@mohasinac/utils`             | `@mohasinac/utils` directly                |
+| `helpers/data/object.helper.ts`     | `@mohasinac/utils` `deepMerge`, `pick`, `omit`, …           | `@mohasinac/utils` directly                |
+| `helpers/data/pagination.helper.ts` | `@mohasinac/utils` `calculatePagination`                    | `@mohasinac/utils` directly                |
+| `helpers/data/sieve.helper.ts`      | In-memory `applySieveToArray` — **deleted, no replacement** | Use `firebase-sieve.ts` (Firestore-native) |
+| `helpers/data/sorting.helper.ts`    | `@mohasinac/utils` `sort`                                   | `@mohasinac/utils` directly                |
+| `helpers/ui/style.helper.ts`        | `classNames` — now in `@mohasinac/ui`                       | `@mohasinac/ui` directly                   |
+| `helpers/ui/color.helper.ts`        | `@mohasinac/utils` color helpers                            | `@mohasinac/utils` directly                |
+| `helpers/ui/animation.helper.ts`    | `@mohasinac/utils` easings                                  | `@mohasinac/utils` directly                |
 
 **Remaining helpers (4 files — letitrip-specific logic):**
 
@@ -826,10 +874,10 @@ export interface ProductDocument extends BaseProductDocument {
 > row is now obsolete — defaults in `@mohasinac/utils` are `INR`/`en-IN` (updated 2026-04-09),
 > so no letitrip-specific locale override is needed.
 
-| Files                                          | Tag          | Decision                                                                        |
-| ---------------------------------------------- | ------------ | ------------------------------------------------------------------------------- |
-| General formatters, converters, date helpers   | ✅ COMPLETED | Barrel shims removed; all callers import from `@mohasinac/utils` directly       |
-| INR currency formatter, `en-IN` locale helpers | ✅ COMPLETED | `@mohasinac/utils` defaults now set to `INR`/`en-IN`; no letitrip copy needed  |
+| Files                                          | Tag          | Decision                                                                      |
+| ---------------------------------------------- | ------------ | ----------------------------------------------------------------------------- |
+| General formatters, converters, date helpers   | ✅ COMPLETED | Barrel shims removed; all callers import from `@mohasinac/utils` directly     |
+| INR currency formatter, `en-IN` locale helpers | ✅ COMPLETED | `@mohasinac/utils` defaults now set to `INR`/`en-IN`; no letitrip copy needed |
 
 ---
 
@@ -6788,25 +6836,143 @@ Algorithm:
 
 ---
 
+### 34.4 — Listing Layout Modes
+
+All product/store/event lists support three switch-able layout modes: **Card Grid**, **Fluid Grid**, and **List**.
+The active mode is stored in the URL (`?view=card|fluid|list`) via `useUrlTable`.
+
+---
+
+#### Card Grid (fixed columns)
+
+Uses CSS `grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5` — fixed breakpoint steps.
+
+```
+┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐
+│ [image]    │ │ [image]    │ │ [image]    │ │ [image]    │
+│            │ │            │ │            │ │            │
+│ Title      │ │ Title      │ │ Title      │ │ Title      │
+│ ⭐ 4.2    │ │ ⭐ 4.5    │ │ ⭐ 3.9    │ │ ⭐ 4.7    │
+│ ₹1,299    │ │ ₹2,499    │ │ ₹899      │ │ ₹3,199    │
+│ [Add Cart] │ │ [Add Cart] │ │ [Add Cart] │ │ [Add Cart] │
+└────────────┘ └────────────┘ └────────────┘ └────────────┘
+┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐
+│ ...        │ │ ...        │ │ ...        │ │ ...        │
+└────────────┘ └────────────┘ └────────────┘ └────────────┘
+```
+
+---
+
+#### Fluid Grid (`useContainerGrid` — auto column count)
+
+Columns fill based on container width. Minimum column width = 220 px. Gap = 16 px.
+
+```
+Container 900 px → cols = floor((900 + 16) / (220 + 16)) = 3 cols
+┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+│ [image 3/4]    │ │ [image 3/4]    │ │ [image 3/4]    │
+│                │ │                │ │                │
+│ Title 2 lines  │ │ Title 2 lines  │ │ Title 2 lines  │
+│ ⭐ 4.2 (12)   │ │ ⭐ 4.5 (30)   │ │ ⭐ 3.9 (5)    │
+│ ₹1,299 ~~₹2k~~│ │ ₹2,499        │ │ ₹899 35% off  │
+└────────────────┘ └────────────────┘ └────────────────┘
+
+Container 460 px → cols = floor((460 + 16) / (220 + 16)) = 2 cols
+┌──────────────────┐ ┌──────────────────┐
+│ [image 3/4]      │ │ [image 3/4]      │
+│ Title            │ │ Title            │
+│ ⭐ 4.2   ₹1,299 │ │ ⭐ 4.5   ₹2,499 │
+└──────────────────┘ └──────────────────┘
+
+Container 230 px → cols = 1 (minCols clamp)
+┌──────────────────────────────────────┐
+│ [image aspect-[3/4]]                 │
+│ Title                                │
+│ ⭐ 4.2   ₹1,299                     │
+└──────────────────────────────────────┘
+```
+
+---
+
+#### List Mode (compact rows)
+
+Horizontal rows. Image thumbnail 72 × 72 px, all text inline.
+Ideal for search results, admin panels, and "previously viewed" strips.
+
+```
+Mobile (< 640 px) — 2-line stack per row:
+┌─────────────────────────────────────────────────────┐
+│ [72px │ Title (h4 truncate)           ₹1,299      ] │
+│  img] │ Category · ⭐ 4.3 (12)   [Add Cart]  [♥]  │
+├───────┼─────────────────────────────────────────────┤
+│ [72px │ Another Product               ₹2,499      ] │
+│  img] │ Electronics · ⭐ 4.5 (30)  [Add Cart]  [♥] │
+├───────┼─────────────────────────────────────────────┤
+│ [72px │ Short Product Name            ₹899       ] │
+│  img] │ Handmade · ⭐ 3.9 (5)     [Add Cart]  [♥]  │
+└─────────────────────────────────────────────────────┘
+
+Desktop (≥ 640 px) — single-row per item:
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ [72px img] │ Title (h4, flex-1, truncate)  │ Category  │ ⭐ 4.3 │ ₹1,299 │[↗]│
+├────────────┼───────────────────────────────┼───────────┼────────┼────────┼────┤
+│ [72px img] │ Another Product (flex-1)       │ Fashion   │ ⭐ 4.0 │ ₹899  │[↗]│
+├────────────┼───────────────────────────────┼───────────┼────────┼────────┼────┤
+│ [72px img] │ Blue Ceramic Vase              │ Handmade  │ ⭐ 4.8 │ ₹3,199│[↗]│
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+Column widths (desktop):
+  thumbnail   : w-[72px] h-[72px]  flex-shrink-0  rounded-lg  object-cover
+  title       : flex-1   min-w-0   truncate       font-medium
+  category    : w-[110px] text-sm muted   hidden sm:block
+  rating      : w-[72px]  text-sm         hidden sm:block
+  price       : w-[80px]  text-sm font-semibold text-right
+  action      : w-[36px]  flex-shrink-0  (icon button → quick-view or open detail)
+
+Row classes:
+  flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800/60
+  border-b border-zinc-100 dark:border-zinc-800 last:border-0
+```
+
+**ViewToggle component** (switches between modes):
+
+```
+Desktop:
+┌──────────────────────┐
+│  [⊞ Card] [⊟ List]  │  ← icon buttons with aria-label, active = primary bg
+└──────────────────────┘
+
+Mobile: hidden (always shows card mode on < sm)
+
+Input:
+  view:     "card" | "fluid" | "list"
+  onChange: (view: "card" | "fluid" | "list") => void
+
+Each toggle button:
+  <IconButton aria-label="Card view" icon={<GridIcon />} variant={"primary" if active else "ghost"} />
+```
+
+---
+
 ## 35 — Tooltip Integration + Side Modal Responsiveness
 
 ### 35.1 Goals
 
-| Item | Requirement |
-|---|---|
-| Tooltip on Button | Show on hover; never block click |
-| Tooltip on form fields | Show on hover/focus-visible; never block typing or tap |
-| SideModal desktop width | 60 % of viewport width |
-| SideModal mobile width | 100 % of viewport width (full-sheet) |
-| SideModal overflow | Form content scrolls independently inside modal body |
+| Item                               | Requirement                                               |
+| ---------------------------------- | --------------------------------------------------------- |
+| Tooltip on Button                  | Show on hover; never block click                          |
+| Tooltip on form fields             | Show on hover/focus-visible; never block typing or tap    |
+| SideModal desktop width            | 60 % of viewport width                                    |
+| SideModal mobile width             | 100 % of viewport width (full-sheet)                      |
+| SideModal overflow                 | Form content scrolls independently inside modal body      |
 | Viewport 200 px (small but usable) | Shrink modal via `min(60vw, 280px)` → graceful at ~180 px |
-| Viewport ≤ 128 px | Render `<TooSmallScreen>` guard — no app content |
+| Viewport ≤ 128 px                  | Render `<TooSmallScreen>` guard — no app content          |
 
 ---
 
 ### 35.2 Tooltip Design Rules
 
-**Core rule: Tooltips are *informational ornaments*, never interactive blockers.**
+**Core rule: Tooltips are _informational ornaments_, never interactive blockers.**
 
 ```
 Tooltip trigger taxonomy
@@ -6834,6 +7000,7 @@ FileInput      → trigger = "hover" on label/button wrapper (never on native in
 ```
 
 **What a tooltip MUST NOT do**
+
 - Cover the element being hovered (always offset 8 px minimum)
 - Appear on `pointerdown` / `touchstart` — only on hover settle + focus-visible
 - Appear when the element is `disabled` (misleading; show disabled reason inline instead)
@@ -6871,8 +7038,12 @@ ASCII layout (placement="top"):
 "use client";
 
 import React, {
-  cloneElement, isValidElement, useCallback, useId,
-  useRef, useState,
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useId,
+  useRef,
+  useState,
 } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "@/helpers";
@@ -6881,8 +7052,8 @@ interface TooltipProps {
   children: React.ReactElement;
   content: React.ReactNode;
   placement?: "top" | "right" | "bottom" | "left";
-  delay?: number;          // hover settle delay   (default 500 ms)
-  autoDismiss?: number;    // 0 = never            (default 0)
+  delay?: number; // hover settle delay   (default 500 ms)
+  autoDismiss?: number; // 0 = never            (default 0)
   disabled?: boolean;
   className?: string;
 }
@@ -6908,27 +7079,43 @@ export function Tooltip({
     clearTimeout(dismissTimer.current);
   };
 
-  const computeCoords = useCallback((el: HTMLElement) => {
-    const rect = el.getBoundingClientRect();
-    const OFFSET = 8;
-    switch (placement) {
-      case "top":    return { top: rect.top - OFFSET,              left: rect.left + rect.width / 2 };
-      case "bottom": return { top: rect.bottom + OFFSET,           left: rect.left + rect.width / 2 };
-      case "right":  return { top: rect.top + rect.height / 2,     left: rect.right + OFFSET };
-      case "left":   return { top: rect.top + rect.height / 2,     left: rect.left - OFFSET };
-    }
-  }, [placement]);
-
-  const open = useCallback((el: HTMLElement) => {
-    clearTimers();
-    openTimer.current = setTimeout(() => {
-      setCoords(computeCoords(el));
-      setVisible(true);
-      if (autoDismiss > 0) {
-        dismissTimer.current = setTimeout(() => setVisible(false), autoDismiss);
+  const computeCoords = useCallback(
+    (el: HTMLElement) => {
+      const rect = el.getBoundingClientRect();
+      const OFFSET = 8;
+      switch (placement) {
+        case "top":
+          return { top: rect.top - OFFSET, left: rect.left + rect.width / 2 };
+        case "bottom":
+          return {
+            top: rect.bottom + OFFSET,
+            left: rect.left + rect.width / 2,
+          };
+        case "right":
+          return { top: rect.top + rect.height / 2, left: rect.right + OFFSET };
+        case "left":
+          return { top: rect.top + rect.height / 2, left: rect.left - OFFSET };
       }
-    }, delay);
-  }, [computeCoords, delay, autoDismiss]);
+    },
+    [placement],
+  );
+
+  const open = useCallback(
+    (el: HTMLElement) => {
+      clearTimers();
+      openTimer.current = setTimeout(() => {
+        setCoords(computeCoords(el));
+        setVisible(true);
+        if (autoDismiss > 0) {
+          dismissTimer.current = setTimeout(
+            () => setVisible(false),
+            autoDismiss,
+          );
+        }
+      }, delay);
+    },
+    [computeCoords, delay, autoDismiss],
+  );
 
   const close = useCallback(() => {
     clearTimers();
@@ -6937,35 +7124,40 @@ export function Tooltip({
 
   if (disabled || !isValidElement(children)) return children;
 
-  const trigger = cloneElement(children as React.ReactElement<React.HTMLAttributes<HTMLElement>>, {
-    ref: (node: HTMLElement | null) => { triggerRef.current = node; },
-    "aria-describedby": tooltipId,
-    onMouseEnter(e: React.MouseEvent<HTMLElement>) {
-      open(e.currentTarget);
-      (children.props as React.HTMLAttributes<HTMLElement>).onMouseEnter?.(e);
+  const trigger = cloneElement(
+    children as React.ReactElement<React.HTMLAttributes<HTMLElement>>,
+    {
+      ref: (node: HTMLElement | null) => {
+        triggerRef.current = node;
+      },
+      "aria-describedby": tooltipId,
+      onMouseEnter(e: React.MouseEvent<HTMLElement>) {
+        open(e.currentTarget);
+        (children.props as React.HTMLAttributes<HTMLElement>).onMouseEnter?.(e);
+      },
+      onMouseLeave(e: React.MouseEvent<HTMLElement>) {
+        close();
+        (children.props as React.HTMLAttributes<HTMLElement>).onMouseLeave?.(e);
+      },
+      onFocus(e: React.FocusEvent<HTMLElement>) {
+        // Only on keyboard focus (focus-visible polyfill approach)
+        if (!(e.target as HTMLElement).matches(":focus-visible")) return;
+        open(e.currentTarget);
+        (children.props as React.HTMLAttributes<HTMLElement>).onFocus?.(e);
+      },
+      onBlur(e: React.FocusEvent<HTMLElement>) {
+        close();
+        (children.props as React.HTMLAttributes<HTMLElement>).onBlur?.(e);
+      },
     },
-    onMouseLeave(e: React.MouseEvent<HTMLElement>) {
-      close();
-      (children.props as React.HTMLAttributes<HTMLElement>).onMouseLeave?.(e);
-    },
-    onFocus(e: React.FocusEvent<HTMLElement>) {
-      // Only on keyboard focus (focus-visible polyfill approach)
-      if (!(e.target as HTMLElement).matches(":focus-visible")) return;
-      open(e.currentTarget);
-      (children.props as React.HTMLAttributes<HTMLElement>).onFocus?.(e);
-    },
-    onBlur(e: React.FocusEvent<HTMLElement>) {
-      close();
-      (children.props as React.HTMLAttributes<HTMLElement>).onBlur?.(e);
-    },
-  });
+  );
 
   // Placement-based transform
   const transformMap: Record<string, string> = {
-    top:    "translate(-50%, -100%)",
+    top: "translate(-50%, -100%)",
     bottom: "translate(-50%, 0)",
-    right:  "translate(0, -50%)",
-    left:   "translate(-100%, -50%)",
+    right: "translate(0, -50%)",
+    left: "translate(-100%, -50%)",
   };
 
   const bubble = visible
@@ -6978,7 +7170,7 @@ export function Tooltip({
             top: coords.top,
             left: coords.left,
             transform: transformMap[placement],
-            pointerEvents: "none",   // ← CRITICAL: never intercept clicks
+            pointerEvents: "none", // ← CRITICAL: never intercept clicks
             zIndex: 9999,
           }}
           className={cn(
@@ -7009,12 +7201,16 @@ export function Tooltip({
 ```tsx
 // @mohasinac/ui   Button.tsx  — add `tooltip` prop
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  tooltip?: string;        // if provided, auto-wraps with <Tooltip>
+  tooltip?: string; // if provided, auto-wraps with <Tooltip>
   tooltipPlacement?: "top" | "right" | "bottom" | "left";
   // ... existing props
 }
 
-export function Button({ tooltip, tooltipPlacement = "top", ...props }: ButtonProps) {
+export function Button({
+  tooltip,
+  tooltipPlacement = "top",
+  ...props
+}: ButtonProps) {
   const btn = <button {...props} />;
   if (!tooltip) return btn;
   return (
@@ -7026,6 +7222,7 @@ export function Button({ tooltip, tooltipPlacement = "top", ...props }: ButtonPr
 ```
 
 Usage — zero extra markup at call site:
+
 ```tsx
 <Button tooltip="Save your changes">Save</Button>
 <Button tooltip="Permanently delete this item" tooltipPlacement="bottom">Delete</Button>
@@ -7035,7 +7232,7 @@ Usage — zero extra markup at call site:
 
 ### 35.5 Form Field — Tooltip Integration
 
-**Rule**: Form field tooltips describe the field's *purpose* or *constraints* — they are NOT validation error messages (those appear inline below the field).
+**Rule**: Form field tooltips describe the field's _purpose_ or _constraints_ — they are NOT validation error messages (those appear inline below the field).
 
 ```
 TextInput with tooltip (placement="right" — does NOT overlap cursor):
@@ -7054,9 +7251,9 @@ TextInput with tooltip (placement="right" — does NOT overlap cursor):
 // FormField.tsx — add `hint` prop (tooltip trigger on label hover)
 interface FormFieldProps {
   label: string;
-  hint?: string;      // short tooltip text; appears on label hover / input focus-visible
+  hint?: string; // short tooltip text; appears on label hover / input focus-visible
   error?: string;
-  children: React.ReactElement;   // the actual input/select/textarea
+  children: React.ReactElement; // the actual input/select/textarea
 }
 
 export function FormField({ label, hint, error, children }: FormFieldProps) {
@@ -7069,7 +7266,7 @@ export function FormField({ label, hint, error, children }: FormFieldProps) {
     <Tooltip
       content={hint}
       placement={isMobile ? "top" : "right"}
-      delay={300}        // fast on label hover — user is reading, not acting
+      delay={300} // fast on label hover — user is reading, not acting
     >
       <label htmlFor={id} className="block text-sm font-medium">
         {label}
@@ -7086,12 +7283,14 @@ export function FormField({ label, hint, error, children }: FormFieldProps) {
     <Tooltip
       content={hint}
       placement={isMobile ? "top" : "right"}
-      delay={800}          // longer delay — user may already be typing
-      autoDismiss={4000}   // auto-close so it doesn't fight with input
+      delay={800} // longer delay — user may already be typing
+      autoDismiss={4000} // auto-close so it doesn't fight with input
     >
       {input}
     </Tooltip>
-  ) : input;
+  ) : (
+    input
+  );
 
   return (
     <div className="flex flex-col gap-1">
@@ -7207,11 +7406,12 @@ export function SideModal({
   footer,
   width = "default",
 }: SideModalProps) {
-
   // Escape key
   useEffect(() => {
     if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, [isOpen, onClose]);
@@ -7219,7 +7419,9 @@ export function SideModal({
   // Body scroll lock
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -7249,10 +7451,10 @@ export function SideModal({
           width === "full"
             ? "w-full"
             : [
-                "w-full",                      // mobile default: 100%
-                "sm:w-[60vw]",                 // desktop: 60vw
-                "sm:min-w-[280px]",            // never squeeze below 280px on sm+
-                "min-w-0",                     // but on sub-sm just reflow freely
+                "w-full", // mobile default: 100%
+                "sm:w-[60vw]", // desktop: 60vw
+                "sm:min-w-[280px]", // never squeeze below 280px on sm+
+                "min-w-0", // but on sub-sm just reflow freely
               ],
           // slide-in animation
           "translate-x-0 transition-transform duration-300",
@@ -7331,12 +7533,18 @@ export function TooSmallScreen({ children }: { children: React.ReactNode }) {
       <div
         style={{
           // inline styles intentional — Tailwind may not load at this viewport
-          position: "fixed", inset: 0,
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-          background: "#18181b", color: "#fafafa",
-          padding: "1rem", textAlign: "center",
-          fontFamily: "system-ui, sans-serif", fontSize: "0.75rem",
+          position: "fixed",
+          inset: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#18181b",
+          color: "#fafafa",
+          padding: "1rem",
+          textAlign: "center",
+          fontFamily: "system-ui, sans-serif",
+          fontSize: "0.75rem",
         }}
       >
         <span style={{ fontSize: "2rem" }}>⚠️</span>
@@ -7358,7 +7566,11 @@ Mount once in root layout — wraps everything:
 // src/app/[locale]/layout.tsx
 import { TooSmallScreen } from "@/components/TooSmallScreen";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
@@ -7401,17 +7613,17 @@ If form fields themselves have min-width (e.g. an input with min-w-[280px]):
 
 ### 35.10 Summary Table
 
-| Item | Implementation | Location |
-|---|---|---|
-| `Tooltip` component | Portal-based, `pointer-events: none`, delay+autoDismiss | `@mohasinac/ui` / `src/components/Tooltip.tsx` |
-| Button tooltip | `tooltip?` prop on `Button`; wraps with `<Tooltip>` | `@mohasinac/ui Button.tsx` |
-| FormField hint tooltip | `hint?` prop; label hover (fast) + input focus-visible (slow+autoDismiss) | `src/components/FormField.tsx` |
-| Tooltip mobile placement | Auto-swaps `right` → `top` on `sm` breakpoint | `FormField` + `useMediaQuery` |
-| `SideModal` width | `w-full` mobile, `sm:w-[60vw] sm:min-w-[280px]` desktop | `src/components/SideModal.tsx` |
-| `SideModal` body overflow | `flex-1 min-h-0 overflow-y-auto` — independent scroll region | `SideModal` body div |
-| Very-small viewport reflow | `min-w-0` — no hard floor below sm breakpoint | `SideModal` className |
-| `TooSmallScreen` guard | Checks `window.innerWidth/Height ≤ 128`; inline styles (no Tailwind dep) | `src/components/TooSmallScreen.tsx` |
-| Root layout mount | `<TooSmallScreen>` wraps entire `<body>` content | `src/app/[locale]/layout.tsx` |
+| Item                       | Implementation                                                            | Location                                       |
+| -------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------- |
+| `Tooltip` component        | Portal-based, `pointer-events: none`, delay+autoDismiss                   | `@mohasinac/ui` / `src/components/Tooltip.tsx` |
+| Button tooltip             | `tooltip?` prop on `Button`; wraps with `<Tooltip>`                       | `@mohasinac/ui Button.tsx`                     |
+| FormField hint tooltip     | `hint?` prop; label hover (fast) + input focus-visible (slow+autoDismiss) | `src/components/FormField.tsx`                 |
+| Tooltip mobile placement   | Auto-swaps `right` → `top` on `sm` breakpoint                             | `FormField` + `useMediaQuery`                  |
+| `SideModal` width          | `w-full` mobile, `sm:w-[60vw] sm:min-w-[280px]` desktop                   | `src/components/SideModal.tsx`                 |
+| `SideModal` body overflow  | `flex-1 min-h-0 overflow-y-auto` — independent scroll region              | `SideModal` body div                           |
+| Very-small viewport reflow | `min-w-0` — no hard floor below sm breakpoint                             | `SideModal` className                          |
+| `TooSmallScreen` guard     | Checks `window.innerWidth/Height ≤ 128`; inline styles (no Tailwind dep)  | `src/components/TooSmallScreen.tsx`            |
+| Root layout mount          | `<TooSmallScreen>` wraps entire `<body>` content                          | `src/app/[locale]/layout.tsx`                  |
 
 ---
 
@@ -7433,15 +7645,15 @@ When a second locale or currency is added, only `LOCALE_CONFIG` and
 
 ```ts
 export const LOCALE_CONFIG = {
-  DEFAULT_LOCALE:    "en-IN",   // BCP 47 — used by all Intl formatters
-  DEFAULT_CURRENCY:  "INR",     // ISO 4217
-  CURRENCY_SYMBOL:   "₹",       // Unicode symbol for display
-  DEFAULT_COUNTRY:   "India",
-  DEFAULT_CITY:      "Mumbai",
-  DEFAULT_COUNTRY_CODE: "IN",   // ISO 3166-1 alpha-2
-  DEFAULT_PHONE_CODE: "+91",    // ITU-T dialling prefix
-  TIMEZONE:          "Asia/Kolkata",   // must match BUSINESS_DAY_CONFIG.TIMEZONE
-  SUPPORTED_LOCALES: ["en"] as const,  // mirrors src/i18n/routing.ts locales
+  DEFAULT_LOCALE: "en-IN", // BCP 47 — used by all Intl formatters
+  DEFAULT_CURRENCY: "INR", // ISO 4217
+  CURRENCY_SYMBOL: "₹", // Unicode symbol for display
+  DEFAULT_COUNTRY: "India",
+  DEFAULT_CITY: "Mumbai",
+  DEFAULT_COUNTRY_CODE: "IN", // ISO 3166-1 alpha-2
+  DEFAULT_PHONE_CODE: "+91", // ITU-T dialling prefix
+  TIMEZONE: "Asia/Kolkata", // must match BUSINESS_DAY_CONFIG.TIMEZONE
+  SUPPORTED_LOCALES: ["en"] as const, // mirrors src/i18n/routing.ts locales
 } as const;
 ```
 
@@ -7449,18 +7661,19 @@ export const LOCALE_CONFIG = {
 
 ### 36.3 Changes Applied
 
-| File | What changed |
-|---|---|
-| `src/constants/config.ts` | Added `LOCALE_CONFIG` block (new export) |
-| `src/constants/site.ts` | `contact.phone` → `"+91 22 4567 8900"` · `contact.address` → `"Mumbai, Maharashtra, India"` |
-| `src/lib/monitoring/analytics.ts` | 3× `currency: "USD"` → `currency: "INR"` (view_item, add_to_cart, purchase GA4 events) |
-| `src/features/user/components/PublicProfileView.tsx` | 2× `"en-US"` → `"en-IN"` in `formatNumber()` calls |
-| `src/features/products/components/ProductReviews.tsx` | 1× `"en-US"` → `"en-IN"` in `formatNumber()` call |
-| `src/features/seller/components/SellerStorefrontView.tsx` | 2× `"en-US"` → `"en-IN"` in `formatNumber()` calls |
-| `packages/utils/src/number.formatter.ts` | Default `currency="USD"` → `"INR"` · default `locale="en-US"` → `"en-IN"` (both `formatCurrency` and `formatNumber`) |
-| `packages/utils/src/date.formatter.ts` | Default `locale="en-US"` → `"en-IN"` on all 5 functions: `formatDate`, `formatDateTime`, `formatTime`, `formatMonthYear`, `formatDateRange` |
+| File                                                      | What changed                                                                                                                                |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/constants/config.ts`                                 | Added `LOCALE_CONFIG` block (new export)                                                                                                    |
+| `src/constants/site.ts`                                   | `contact.phone` → `"+91 22 4567 8900"` · `contact.address` → `"Mumbai, Maharashtra, India"`                                                 |
+| `src/lib/monitoring/analytics.ts`                         | 3× `currency: "USD"` → `currency: "INR"` (view_item, add_to_cart, purchase GA4 events)                                                      |
+| `src/features/user/components/PublicProfileView.tsx`      | 2× `"en-US"` → `"en-IN"` in `formatNumber()` calls                                                                                          |
+| `src/features/products/components/ProductReviews.tsx`     | 1× `"en-US"` → `"en-IN"` in `formatNumber()` call                                                                                           |
+| `src/features/seller/components/SellerStorefrontView.tsx` | 2× `"en-US"` → `"en-IN"` in `formatNumber()` calls                                                                                          |
+| `packages/utils/src/number.formatter.ts`                  | Default `currency="USD"` → `"INR"` · default `locale="en-US"` → `"en-IN"` (both `formatCurrency` and `formatNumber`)                        |
+| `packages/utils/src/date.formatter.ts`                    | Default `locale="en-US"` → `"en-IN"` on all 5 functions: `formatDate`, `formatDateTime`, `formatTime`, `formatMonthYear`, `formatDateRange` |
 
 **Already correct — no change needed:**
+
 - `src/constants/seo.ts` — `locale: "en_IN"` ✓
 - `src/i18n/routing.ts` — `localePrefix: "never"` · `"en"` URL slug kept (no URL-level locale prefix; formatter uses `en-IN`) ✓
 - `src/lib/validation/schemas.ts` — `currency.default("INR")`, `country.default("India")`, 6-digit postal code ✓
@@ -7500,3 +7713,955 @@ now format as **₹ Indian Rupee** automatically. Callers that already passed ex
 `Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" })` produces
 `₹1,00,000` (Indian numbering system with lakh/crore groupings), which is correct
 for the Indian market.
+
+---
+
+## 37. Architecture Rules Reference
+
+This section is the **canonical rule index** for all active architectural constraints across the `appkit` + `letitrip.in` codebase. ESLint rules are enforced automatically; manual rules require code-review enforcement.
+
+---
+
+### 37.1 — ESLint Rules (auto-enforced)
+
+All rules live in `packages/eslint-plugin-letitrip/index.js` and are active in `.eslintrc` via `plugin:letitrip/recommended`.
+
+#### Architecture (ARCH)
+
+| Code     | Rule name                       | Level   | Description |
+| -------- | ------------------------------- | ------- | ----------- |
+| ARCH-001 | `no-deep-barrel-import`         | error   | Import from package root (`@mohasinac/appkit/ui`), never from deep internal path (`@mohasinac/appkit/ui/components/Button`) |
+| ARCH-002 | `no-cross-feature-import`       | error   | `feat-*` packages must not import from other `feat-*` packages; use `contracts` interfaces only |
+| ARCH-003 | `no-fat-page`                   | warn    | Page components (files inside `app/`) must stay ≤ 150 lines |
+| ARCH-004 | `no-tier1-feature-import`       | error   | Shell layer (feat-layout / feat-forms) must not import from domain feature packages |
+
+#### Firebase (FIREBASE)
+
+| Code         | Rule name                           | Level | Description |
+| ------------ | ----------------------------------- | ----- | ----------- |
+| FIREBASE-001 | `no-firebase-client-in-ui`          | error | No Firebase client SDK imports inside `components/` or `hooks/` |
+| FIREBASE-002 | `no-firebase-client-in-ui`          | error | No `initializeApp()` / `getFirestore()` / `getAuth()` in UI files |
+| FIREBASE-003 | `no-firebase-admin-outside-backend` | error | Admin SDK only in `app/api/`, `actions/`, `repositories/` |
+| FIREBASE-004 | `no-direct-firestore-query`         | error | No raw `collection()` / `getDocs()` in API routes — use repository layer |
+
+#### Services / Data Layer (SVC)
+
+| Code    | Rule name                        | Level | Description |
+| ------- | -------------------------------- | ----- | ----------- |
+| SVC-001 | `no-fetch-in-ui`                 | error | No `fetch()` calls in components or pages — use `apiClient` inside a hook |
+| SVC-002 | `no-apiclient-outside-services`  | error | `apiClient` only in hooks / context providers, never in components |
+| SVC-003 | `no-hardcoded-api-path`          | warn  | No `/api/...` literal strings — use `API_ENDPOINTS` constants |
+
+#### Components (COMP)
+
+| Code     | Rule name              | Level | Description |
+| -------- | ---------------------- | ----- | ----------- |
+| COMP-001 | `no-raw-html-elements` | error | No `<div>` without using `<Div>`, no `<p>` without `<Text>`, no `<h1-h6>` without `<Heading>` |
+| COMP-002 | `no-raw-html-elements` | error | No raw `<section>` — use `<Section>` |
+| COMP-003 | `no-raw-html-elements` | error | No raw `<article>` — use `<Article>` |
+| COMP-004 | `no-raw-html-elements` | error | No raw `<nav>` — use `<Nav>` |
+| COMP-005 | `no-raw-html-elements` | error | No raw `<ul>` / `<ol>` / `<li>` — use `<Ul>` / `<Ol>` / `<Li>` |
+| COMP-006 | `no-raw-html-elements` | error | No raw `<footer>` / `<header>` — use `<Footer>` / `<Header>` |
+| COMP-007 | `no-raw-html-elements` | error | No raw `<main>` — use `<Main>` |
+| COMP-008 | `no-raw-html-elements` | error | No raw `<aside>` — use `<Aside>` |
+| COMP-009 | `no-raw-html-elements` | error | No raw `<button>` — use `<Button>` or `<IconButton>` |
+
+#### Media (MEDIA)
+
+| Code      | Rule name               | Level | Description |
+| --------- | ----------------------- | ----- | ----------- |
+| MEDIA-001 | `no-raw-media-elements` | error | No raw `<img>` — use `<MediaImage>` or `<MediaAvatar>` |
+| MEDIA-002 | `no-raw-media-elements` | error | No raw `<video>` — use `<MediaVideo>` |
+| MEDIA-003 | `no-raw-media-elements` | error | No raw `<a>` anchor — use `<TextLink>` |
+
+#### Styling (STYL)
+
+| Code     | Rule name                  | Level | Description |
+| -------- | -------------------------- | ----- | ----------- |
+| STYL-001 | `require-xl-breakpoints`   | warn  | Responsive classes must include `xl:` variant for widescreen layouts |
+| STYL-002 | `no-inline-static-style`   | warn  | No `style={{ color: "red" }}` with static values — use Tailwind classes |
+| STYL-003 | `no-hardcoded-grid-cols`   | warn  | No `grid-cols-N` literals — use `FLUID_GRID` tokens or `useContainerGrid` |
+
+#### i18n (I18N)
+
+| Code    | Rule name                       | Level | Description |
+| ------- | ------------------------------- | ----- | ----------- |
+| I18N-001 | `use-i18n-navigation`          | error | Use `next-intl` `Link` / `useRouter` — not `next/navigation` |
+| I18N-002 | `use-i18n-navigation`          | error | Use `next-intl` `redirect` — not `next/navigation` redirect |
+| I18N-003 | `no-module-scope-translations`  | error | `useTranslations()` calls only inside component function bodies, never at module top-level |
+
+#### Constants (CNST)
+
+| Code     | Rule name                     | Level | Description |
+| -------- | ----------------------------- | ----- | ----------- |
+| CNST-001 | `no-hardcoded-route`          | warn  | No `/products/...` inline strings — use `ROUTES` constants |
+| CNST-002 | `no-raw-date`                 | warn  | No `new Date()` in React components — use date helpers from `@mohasinac/appkit/utils` |
+| CNST-003 | `no-hardcoded-collection`     | error | No Firestore collection name strings inline — use `COLLECTION_NAMES` |
+
+#### Quality (QUAL)
+
+| Code     | Rule name                       | Level | Description |
+| -------- | ------------------------------- | ----- | ----------- |
+| QUAL-001 | `no-console`                    | warn  | `console.log` forbidden — use `logger` (client) / `serverLogger` (API routes) |
+| QUAL-002 | `no-alert`                      | error | `alert()` / `confirm()` forbidden — use `useMessage()` / `ConfirmDeleteModal` |
+| QUAL-003 | `no-debug-statement`            | warn  | `debugger` forbidden |
+| QUAL-004 | `no-firebase-trigger-in-api`   | error | Firestore trigger logic must live in `functions/src/` not in API routes |
+
+#### Accessibility (A11Y)
+
+| Code    | Rule name                        | Level | Description |
+| ------- | -------------------------------- | ----- | ----------- |
+| A11Y-001 | `no-unlabelled-icon-button`     | error | `<IconButton>` must always have an `aria-label` prop |
+| A11Y-002 | `require-tooltip-on-icon-button` | warn  | `<IconButton>` should be wrapped in a `<Tooltip>` with matching `content` |
+
+---
+
+### 37.2 — Manual / Code-Review Rules
+
+These rules are not enforced by ESLint but are required by architecture:
+
+#### File Organization
+
+- Pages: `src/app/[locale]/*/page.tsx` — RSC only, ≤ 150 lines, passes `initialData` to a `*View.tsx`
+- Feature modules: `src/features/<name>/` — components/, hooks/, types/, constants/, index.ts
+- Shared: `src/components/`, `src/hooks/`, `src/utils/` — Tier 1 only
+- No feature may import from another feature (ARCH-002)
+- No `src/services/` directory — deleted; all data in hooks + actions
+
+#### Naming Conventions
+
+| Pattern | Convention |
+| ------- | ---------- |
+| React components | `PascalCase.tsx` |
+| Hooks | `use<Name>.ts` (camelCase) |
+| Utility functions | `camelCase.ts` |
+| Constants | `UPPER_SNAKE_CASE` |
+| TypeScript types/interfaces | `PascalCase` with `I` prefix for interfaces |
+| Firestore repositories | `<Name>Repository` class in `src/repositories/<name>.repository.ts` |
+| Server actions | `<verb><Resource>Action` in `src/actions/<name>.actions.ts` |
+| API routes | `src/app/api/<name>/route.ts` — exports `GET`, `POST`, `PATCH`, `DELETE` |
+
+#### Imports and Exports
+
+- Always import from barrel file (`@/components`, `@/hooks`, `@/features/products`)
+- Never import from deep internal path (`@/components/ui/Button.tsx`)
+- Feature `index.ts` must re-export all public components, hooks, types
+- No circular dependencies between features
+
+#### Forms
+
+- Always use `react-hook-form` + `zodResolver`
+- Schema in `src/db/schema/<name>.schema.ts`
+- No custom form state management (`useState` for individual fields)
+- Validation errors shown via field-level `formState.errors`
+
+#### State Management
+
+- Server state: TanStack Query `useQuery` (reads) + `useMutation` (mutations)
+- URL state: `useUrlTable` — filter, sort, page always in URL for shareable links
+- UI state: `useState` (local) or `useContext` (cross-component)
+- No Redux, MobX, or Zustand (not in stack)
+
+#### Security
+
+- Rate limiting on all public API routes via `rateLimit()` from `@mohasinac/security`
+- Auth verification via `requireAuth()` on protected routes
+- RBAC via `requireRole()` / `<Can>` component
+- No direct Firestore access outside repositories
+- PII fields (email, phone) always encrypted before write via `encryptPiiFields()`
+- Environment variables never logged or returned in responses
+
+#### Encoding (Rule 28-B)
+
+- All files written by PowerShell or Python to `src/`, `messages/`, or `scripts/seed-data/` **must** use explicit UTF-8-no-BOM encoding
+- After any programmatic write: verify with `Get-Content -Encoding UTF8` and check for mojibake characters
+- If garbled characters appear (`ãÆ`, `â€™`, `Ã©`, `ï¿½`): stop and fix immediately with `replace_string_in_file`
+
+#### Build Verification
+
+After every session of changes:
+1. `npx tsc --noEmit` — 0 type errors
+2. `npm run build` — production build passes
+3. `npm run lint` — 0 lint errors
+4. Push to `main` → Vercel deploy green
+
+---
+
+### 37.3 — Wrapper Component Contract
+
+All presentational wrappers in `@mohasinac/appkit/ui` follow this contract:
+
+| Wrapper | HTML | Usage context |
+| ------- | ---- | ------------- |
+| `<Div>` | `<div>` | Generic layout container |
+| `<Section>` | `<section>` | Page-level content regions |
+| `<Article>` | `<article>` | Self-contained content cards |
+| `<Main>` | `<main>` | Page main content area (one per page) |
+| `<Aside>` | `<aside>` | Sidebar / supplementary content |
+| `<Nav>` | `<nav>` | Navigation landmarks |
+| `<Header>` | `<header>` | Page or section header |
+| `<Footer>` | `<footer>` | Page or section footer |
+| `<Ul>` | `<ul>` | Unordered list |
+| `<Ol>` | `<ol>` | Ordered list |
+| `<Li>` | `<li>` | List item |
+| `<Heading>` | `<h1>`–`<h6>` | Headings (level prop) |
+| `<Text>` | `<p>` | Body paragraphs |
+| `<Label>` | `<label>` | Form labels |
+| `<Caption>` | `<figcaption>` / `<caption>` | Captions / figure descriptions |
+| `<Span>` | `<span>` | Inline text fragments |
+| `<TextLink>` | next/link + `<a>` | All hyperlinks (internal + external) |
+| `<Button>` | `<button>` | Clickable actions with label |
+| `<IconButton>` | `<button>` | Icon-only actions (aria-label required) |
+
+**Rule**: The `<Div>` wrapper should be used for all layout divs that would benefit from future theme application (e.g. cards, containers, panels). Raw `<div>` may still be used for purely structural wrappers inside component internals where no styling key needs to flow through.
+
+---
+
+## 38. letitrip.in Migration Roadmap
+
+This section describes the **complete migration plan** that gets `letitrip.in` from its current state (using `@mohasinac/*` v1.4.x individual packages) to using `@mohasinac/appkit@2.0.0`.
+
+**Current state**: Zero migration work done. All 58 `@mohasinac/*` v1.4.x imports are still active.
+
+---
+
+### 38.1 — Pre-Migration Checklist
+
+Before running any codemod or file deletion:
+
+- [ ] `@mohasinac/appkit` published to npm at `2.0.0`
+- [ ] `letitrip.in/package.json` updated: `"@mohasinac/appkit": "^2.0.0"` added
+- [ ] Old `@mohasinac/*` v1.4.x entries still present (parallel until migration complete)
+- [ ] `npm install` on letitrip.in clean
+- [ ] `npx tsc --noEmit` baseline passing before migration starts
+- [ ] Git branch: `feat/appkit-migration` created from `main`
+
+---
+
+### 38.2 — Phase 40: Import Codemod (automated)
+
+Run the codemod script to rewrite all `@mohasinac/<old-package>` imports to `@mohasinac/appkit/<subpath>`:
+
+```bash
+node scripts/migrate-to-appkit.mjs --dry-run   # preview changes
+node scripts/migrate-to-appkit.mjs --apply     # apply changes
+npx tsc --noEmit                               # must pass 0 errors
+```
+
+**Import mapping table** (automated by the codemod):
+
+| Old import | New import |
+| ---------- | ---------- |
+| `@mohasinac/contracts` | `@mohasinac/appkit/contracts` |
+| `@mohasinac/core` | `@mohasinac/appkit/core` |
+| `@mohasinac/http` | `@mohasinac/appkit/http` |
+| `@mohasinac/ui` | `@mohasinac/appkit/ui` |
+| `@mohasinac/react` | `@mohasinac/appkit/react` |
+| `@mohasinac/next` | `@mohasinac/appkit/next` |
+| `@mohasinac/errors` | `@mohasinac/appkit/errors` |
+| `@mohasinac/validation` | `@mohasinac/appkit/validation` |
+| `@mohasinac/security` | `@mohasinac/appkit/security` |
+| `@mohasinac/tokens` | `@mohasinac/appkit/tokens` |
+| `@mohasinac/monitoring` | `@mohasinac/appkit/monitoring` |
+| `@mohasinac/seo` | `@mohasinac/appkit/seo` |
+| `@mohasinac/db-firebase` | `@mohasinac/appkit/db-firebase` |
+| `@mohasinac/auth-firebase` | `@mohasinac/appkit/auth-firebase` |
+| `@mohasinac/email-resend` | `@mohasinac/appkit/email-resend` |
+| `@mohasinac/storage-firebase` | `@mohasinac/appkit/storage-firebase` |
+| `@mohasinac/payment-razorpay` | `@mohasinac/appkit/payment-razorpay` |
+| `@mohasinac/search-algolia` | `@mohasinac/appkit/search-algolia` |
+| `@mohasinac/shipping-shiprocket` | `@mohasinac/appkit/shipping-shiprocket` |
+| `@mohasinac/feat-auth` | `@mohasinac/appkit/feat-auth` |
+| `@mohasinac/feat-products` | `@mohasinac/appkit/feat-products` |
+| `@mohasinac/feat-categories` | `@mohasinac/appkit/feat-categories` |
+| `@mohasinac/feat-cart` | `@mohasinac/appkit/feat-cart` |
+| `@mohasinac/feat-orders` | `@mohasinac/appkit/feat-orders` |
+| `@mohasinac/feat-blog` | `@mohasinac/appkit/feat-blog` |
+| `@mohasinac/feat-reviews` | `@mohasinac/appkit/feat-reviews` |
+| `@mohasinac/feat-faq` | `@mohasinac/appkit/feat-faq` |
+| `@mohasinac/feat-search` | `@mohasinac/appkit/feat-search` |
+| `@mohasinac/feat-admin` | `@mohasinac/appkit/feat-admin` |
+| `@mohasinac/feat-events` | `@mohasinac/appkit/feat-events` |
+| `@mohasinac/feat-auctions` | `@mohasinac/appkit/feat-auctions` |
+| `@mohasinac/feat-media` | `@mohasinac/appkit/feat-media` |
+| `@mohasinac/feat-account` | `@mohasinac/appkit/feat-account` |
+| `@mohasinac/feat-stores` | `@mohasinac/appkit/feat-stores` |
+| `@mohasinac/feat-checkout` | `@mohasinac/appkit/feat-checkout` |
+| `@mohasinac/feat-wishlist` | `@mohasinac/appkit/feat-wishlist` |
+| `@mohasinac/feat-loyalty` | `@mohasinac/appkit/feat-loyalty` |
+| `@mohasinac/feat-payments` | `@mohasinac/appkit/feat-payments` |
+| `@mohasinac/feat-collections` | `@mohasinac/appkit/feat-collections` |
+| `@mohasinac/feat-pre-orders` | `@mohasinac/appkit/feat-pre-orders` |
+| `@mohasinac/feat-seller` | `@mohasinac/appkit/feat-seller` |
+| `@mohasinac/feat-consultation` | `@mohasinac/appkit/feat-consultation` |
+| `@mohasinac/feat-homepage` | `@mohasinac/appkit/feat-homepage` |
+| `@mohasinac/feat-filters` | `@mohasinac/appkit/feat-filters` |
+| `@mohasinac/feat-forms` | `@mohasinac/appkit/feat-forms` |
+| `@mohasinac/feat-layout` | `@mohasinac/appkit/feat-layout` |
+
+---
+
+### 38.3 — Phase 41: DUPLICATE File Cleanup
+
+Files marked `DUPLICATE` in Section 5 must be **deleted** after the codemod passes.
+
+**Verification workflow per file**:
+1. Check all importers: `grep -r "from.*<filename>" src/` — must be 0 results
+2. Delete file
+3. `npx tsc --noEmit` — still passes
+4. Commit deletion
+
+**Categories of duplicates** (per Section 5 audit):
+
+| Category | Example files | Count |
+| -------- | ------------- | ----- |
+| Generic utility hooks | `useDebounce.ts`, `useLocalStorage.ts`, `useMediaQuery.ts` | ~8 |
+| Generic UI primitives | `Button.tsx`, `Badge.tsx`, `Spinner.tsx` | ~12 |
+| Semantic wrappers | `Heading.tsx`, `Text.tsx`, `Section.tsx` | ~9 |
+| Provider/registry stubs | `providers.config.ts` duplicated logic | ~3 |
+| RBAC helpers | `can.ts`, `usePermission.ts` | ~4 |
+| TypeScript type aliases | Types that match `contracts` interfaces exactly | ~11 |
+| **Total** | | **~47** |
+
+---
+
+### 38.4 — Phase 42–48: Feature-by-Feature Migration
+
+Each feature migration follows this 5-step pattern:
+
+```
+1. Identify local components          → src/features/<name>/components/
+2. Compare with appkit equivalents    → @mohasinac/appkit/feat-<name>
+3. Replace local component with appkit import
+4. Pass letitrip-specific config as props (no forking)
+5. Delete redundant local file
+```
+
+| Phase | Feature | Files to migrate | Spec |
+| ----- | ------- | ---------------- | ---- |
+| 42 | Products | `ProductCard`, `ProductDetailView`, `ProductListView`, `QuickViewModal`, `ProductFilters` | Section 39 |
+| 43 | Categories + Stores | `CategoryCard`, `CategoryTreeView`, `StoreCard`, `StoreDetailView` | Section 40 |
+| 44 | Orders + Checkout | `OrderCard`, `OrderDetailView`, `OrderStatusTimeline`, `CheckoutStepper` | Section 41 |
+| 45 | Auctions + Pre-Orders | `AuctionCard`, `LiveBidView`, `BidHistoryDrawer`, `PreOrderCard` | Sections 42/43 |
+| 46 | Users + Account + Auth | `ProfileView`, `ProfileEditForm`, `AddressBook`, `AuthModal` | Section 44 |
+| 47 | Events + Blog | `EventCard`, `EventDetailView`, `BlogCard`, `BlogPostView` | Sections 45/46 |
+| 48 | Admin + CMS | `AdminLayout`, `DataTable` usage, admin views | Section 47 |
+
+---
+
+### 38.5 — Phase 49: Final Build Verification
+
+After all migrations complete:
+
+```powershell
+# 1. Type check
+npx tsc --noEmit
+
+# 2. Lint
+npm run lint
+
+# 3. Tests
+npm test
+
+# 4. Production build
+npm run build
+
+# 5. Remove old package deps from package.json
+# Delete all @mohasinac/* v1.4.x entries (replaced by appkit@2.0.0)
+
+# 6. Final npm install
+npm install
+
+# 7. Repeat steps 1-4
+
+# 8. Deploy
+git add . ; git commit -m "feat: complete appkit migration" ; git push origin main
+```
+
+---
+
+## 39. Products — UX Design & Component Diagrams
+
+### 39.1 — Overview
+
+The Products domain covers the buyer-facing product discovery, detail, and cart-add flows.
+
+**Components**: `ProductCard`, `ProductDetailView`, `ProductListView`, `QuickViewModal`, `ProductFilters`, `ProductImageGallery`, `ProductBadge`
+
+---
+
+### 39.2 — ProductCard (grid mode)
+
+```
+┌──────────────────────────────────────┐
+│  [♥ wishlist btn — top right]        │
+│  [BADGE — "Sale" / "New" — top left] │
+│                                      │
+│  ┌──────────────────────────────┐    │
+│  │  IMAGE  aspect-[3/4]          │   │
+│  │  (next/image object-cover)    │   │
+│  └──────────────────────────────┘    │
+│                                      │
+│  Handmade Ceramics   ← category tag  │
+│  Blue Ocean Vase     ← h4 2-lines    │
+│  ⭐ 4.3  (12 reviews)               │
+│  ₹1,299  ~~₹1,999~~  35% off        │
+│                                      │
+│  [Add to Cart ←→]  [Quick View ⊞]   │
+└──────────────────────────────────────┘
+
+States:
+  default    → shadow-sm
+  hover      → shadow-md, image scale 1.03
+  wishlist   → heart icon filled (primary color)
+  out-of-stock → overlay "Out of Stock" + cart btn disabled
+  loading    → Skeleton shimmer (same card shape)
+```
+
+### 39.3 — ProductDetailView
+
+```
+Desktop (lg+):
+┌────────────────────────────────────────────────────────────────┐
+│ [BACK]  Breadcrumb: Home / Ceramics / Blue Ocean Vase          │
+├─────────────────────────────┬──────────────────────────────────┤
+│  GALLERY                    │  PRODUCT INFO                    │
+│  ┌───────────────────────┐  │  Category: Handmade Ceramics     │
+│  │ Main image aspect-[1] │  │  Blue Ocean Vase    h1           │
+│  └───────────────────────┘  │  ⭐ 4.3 · 12 reviews · [Write]  │
+│  [thumb][thumb][thumb][+2]  │  ₹1,299  ~~₹1,999~~  35% off    │
+│                             │  ─────────────────────────────── │
+│                             │  Quantity: [−] 2 [+]             │
+│                             │  Variants: [Blue] [Green] [Red]  │
+│                             │  ─────────────────────────────── │
+│                             │  [Add to Cart]  [Buy Now]        │
+│                             │  [♥ Wishlist]  [📤 Share]       │
+│                             │  ─────────────────────────────── │
+│                             │  Delivery: Estimated 3-5 days    │
+│                             │  Sold by: [Store Name]           │
+└─────────────────────────────┴──────────────────────────────────┘
+│ TABS: [Description] [Specifications] [Reviews (12)] [Q&A (3)] │
+│ ──────────────────────────────────────────────────────────────│
+│ Tab content area                                               │
+└────────────────────────────────────────────────────────────────┘
+│  Similar Products  (HorizontalScroller)                        │
+│  [ProductCard] [ProductCard] [ProductCard] [ProductCard] →     │
+└────────────────────────────────────────────────────────────────┘
+
+Mobile: gallery (full-width aspect-[1]) → info stacked below → sticky BuyBar at bottom
+```
+
+### 39.4 — QuickViewModal
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  [X close]                                                    │
+├───────────────────────┬──────────────────────────────────────┤
+│  IMAGE aspect-[1]     │  Product Name (h2)                   │
+│  [thumb strip]        │  Category  ⭐ 4.3 (12)              │
+│                       │  ₹1,299  ~~₹1,999~~                  │
+│                       │  Variants: [Blue ●] [Green] [Red]    │
+│                       │  Qty: [−] 1 [+]                      │
+│                       │  [Add to Cart]  [View Full Details →] │
+└───────────────────────┴──────────────────────────────────────┘
+
+Modal: SideModal on desktop (w-[60vw] max-w-2xl), full-screen drawer on mobile
+```
+
+### 39.5 — ProductFilters (sidebar + mobile drawer)
+
+```
+Desktop sidebar (w-64, sticky):
+┌───────────────────────────┐
+│ Filters            [Clear] │
+│ ─────────────────────────  │
+│ ▼ Category                │
+│   ☑ Ceramics (12)         │
+│   ☐ Textiles (8)          │
+│   ☐ Jewellery (25)        │
+│ ─────────────────────────  │
+│ ▼ Price Range             │
+│ [₹0 ────●──────── ₹5000]  │
+│   ₹500         ₹3,000      │
+│ ─────────────────────────  │
+│ ▼ Rating                  │
+│   ⭐⭐⭐⭐⭐ (5)  ○         │
+│   ⭐⭐⭐⭐  (4+) ●         │
+│ ─────────────────────────  │
+│ ▼ Availability            │
+│   ☑ In stock only         │
+└───────────────────────────┘
+
+Mobile: FilterDrawer (bottom sheet) with [Apply Filters] CTA
+```
+
+---
+
+## 40. Categories & Stores — UX Design
+
+### 40.1 — CategoryCard (browse grid)
+
+```
+┌──────────────────────────────────────┐
+│  ┌──────────────────────────────┐    │
+│  │  IMAGE aspect-[4/3]           │   │
+│  │  ── gradient overlay ──       │   │
+│  │  [ICON 32px]  Category Name  │   │
+│  │  1,240 items · From ₹99      │   │
+│  └──────────────────────────────┘    │
+│  Sub-categories (chip strip):        │
+│  [Earrings] [Necklaces] [Rings] →    │
+└──────────────────────────────────────┘
+```
+
+### 40.2 — CategoryTreeView (nested nav)
+
+```
+All Categories
+├── Handmade & Crafts
+│   ├── Ceramics
+│   ├── Textiles → active (bold, primary-color dot)
+│   └── Jewellery (25)
+├── Electronics
+│   ├── Phones
+│   └── Accessories
+└── Fashion (collapse/expand chevron)
+```
+
+### 40.3 — StoreCard
+
+```
+┌──────────────────────────────────────┐
+│  ┌──────────────────────────────┐    │
+│  │  COVER IMAGE aspect-[5/3]    │    │
+│  │  ── gradient overlay 40% ──  │    │
+│  │  [LOGO 48px circle]          │    │
+│  │  Store Name   (white bold)   │    │
+│  │  ⭐ 4.6 · 128 reviews        │    │
+│  └──────────────────────────────┘    │
+│  bg-white dark:bg-zinc-900           │
+│  [Handmade & Crafts]  chip           │
+│  "Short description max 2 lines"     │
+│  47 products  [Visit Store →]        │
+└──────────────────────────────────────┘
+```
+
+### 40.4 — StoreDetailView
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│  COVER IMAGE (aspect-[5/2] full-width)                         │
+│  ──────────────────────────────────────────────────────────── │
+│  [LOGO 80px] Store Name (h1)  ⭐ 4.6  128 reviews             │
+│  [Handmade & Crafts]  [Follow]  [Message]  [Share]            │
+├────────────────────────────────────────────────────────────────┤
+│  TABS: [Products] [About] [Reviews]                            │
+│  ─────────────────────────────────────────────────────────── │
+│  Products tab: FilterPanel + ProductListView (same as /products)│
+└────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 41. Orders & Checkout — UX Design
+
+### 41.1 — OrderCard (list item)
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ Order #ORD-2893  ·  12 Apr 2026  ·  [SHIPPED ●green badge]   │
+├─────────┬────────────────────────────────────────────────────┤
+│ [72px]  │  Blue Ocean Vase (×1)           ₹1,299             │
+│ [img]   │  Hand-printed Cotton Kurti (×2) ₹2,498             │
+│         │  + 1 more item                                      │
+├─────────┴────────────────────────────────────────────────────┤
+│  Total: ₹3,797  (incl. ₹79 delivery)    [Track Order] [Help] │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### 41.2 — OrderDetailView + StatusTimeline
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ Order #ORD-2893   [SHIPPED ●green]   12 Apr 2026               │
+├─────────────────────────────────────────────────────────────── │
+│ Status Timeline:                                               │
+│  ●──────●──────●──────○──────○                                 │
+│  Placed  Paid  Shipped  Delivered  Returned                    │
+│  12 Apr  12 Apr 13 Apr   (Expected)                            │
+├─────────────────────────────────────────────────────────────── │
+│ Items ordered:                                                 │
+│  [img 48px] Blue Ocean Vase (×1)  ₹1,299  [Write Review]      │
+│  [img 48px] Kurti (×2)           ₹2,498  [Write Review]       │
+├─────────────────────────────────────────────────────────────── │
+│ Delivery address | Payment method | Seller: [Store Name]       │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### 41.3 — CheckoutStepper
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ Checkout   Step 1 ●── Step 2 ──○  Step 3 ──○                  │
+│            Address      Payment     Review                      │
+├────────────────────────────────────────────────────────────────┤
+│ STEP 1: Delivery Address                                       │
+│   [Saved Address Card ●] [+ Add New Address]                   │
+│   [Continue to Payment →]                                      │
+├────────────────────────────────────────────────────────────────┤
+│ ORDER SUMMARY (sticky right on desktop / collapsed on mobile)  │
+│  Blue Vase (×1)  ₹1,299                                        │
+│  Delivery        ₹79                                           │
+│  ─────────────────────                                         │
+│  Total           ₹1,378                                        │
+└────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 42. Auctions — UX Design
+
+### 42.1 — AuctionCard
+
+```
+┌──────────────────────────────────────┐
+│  [image aspect-[3/4]]                │
+│  [LIVE badge — pulsing green dot]    │
+│  ─────────────────────────────────── │
+│  Antique Brass Lamp   (h4)           │
+│  Current Bid: ₹4,500                 │
+│  [⏱ 02h 14m 33s]  ← countdown      │
+│  23 bids                             │
+│  [Bid Now ₹4,600+]                  │
+└──────────────────────────────────────┘
+
+Ended state:
+│  [ENDED badge — zinc/grey]           │
+│  Final Bid: ₹5,200                   │
+│  Winner: user@***.com (masked)       │
+│  [See Results]                       │
+```
+
+### 42.2 — LiveBidView (real-time)
+
+```
+Desktop:
+┌────────────────────────────────────────────────────────────────┐
+│  [GALLERY left]           [BID PANEL right]                    │
+│  aspect-[1] image         Antique Brass Lamp (h2)              │
+│  + thumb strip            Started: ₹1,000  Reserve: ₹3,000    │
+│                           Current Highest: ₹4,500 (user:abc)  │
+│                           ─────────────────────────────────    │
+│                           [⏱ 02:14:33]  ← LIVE countdown      │
+│                           ─────────────────────────────────    │
+│                           Your Bid:  [₹ ──────] (min ₹4,600)  │
+│                           [Place Bid]  [Set Auto-Bid]          │
+│                           ─────────────────────────────────    │
+│                           Bid History   (last 5 bids)          │
+│                           ● user:xyz   ₹4,500  2m ago         │
+│                           ● user:abc   ₹4,200  5m ago         │
+│                           ● user:def   ₹4,000  8m ago         │
+│                           [View Full History ↓]                │
+└────────────────────────────────────────────────────────────────┘
+
+Mobile: gallery → bid panel → bid history (stacked, sticky BuyBar for Place Bid)
+```
+
+### 42.3 — BidHistoryDrawer
+
+```
+┌────────────────────────────────────────────────┐
+│  Bid History — Antique Brass Lamp        [✕]   │
+├────────────────────────────────────────────────┤
+│  [AVT] user:xyz   ₹4,500   2 min ago  ← WINNING│
+│  [AVT] user:abc   ₹4,200   5 min ago           │
+│  [AVT] user:def   ₹4,000   8 min ago           │
+│  [AVT] user:ghi   ₹3,800  12 min ago           │
+│  [AVT] user:jkl   ₹3,500  20 min ago           │
+│  ──────────────────────────────────────────────│
+│  Total bids: 23   Reserve met: ✓ Yes           │
+└────────────────────────────────────────────────┘
+```
+
+---
+
+## 43. Pre-Orders — UX Design
+
+### 43.1 — PreOrderCard
+
+```
+┌──────────────────────────────────────┐
+│  [image aspect-[3/4]]                │
+│  [PRE-ORDER badge — amber]           │
+│  ─────────────────────────────────── │
+│  Handwoven Silk Saree   (h4)         │
+│  Expected: May 2026                  │
+│  ₹4,999  (10% deposit: ₹499)        │
+│  [Pre-Order Now]                     │
+└──────────────────────────────────────┘
+```
+
+### 43.2 — PreOrderDetailView
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│  [gallery]              [PRE-ORDER INFO]                       │
+│                         Handwoven Silk Saree  (h1)             │
+│                         Expected shipping: May 2026             │
+│                         Available units: 50 left (of 200)      │
+│                         ─────────────────────────────────────  │
+│                         Deposit: ₹499 (10% of ₹4,999)         │
+│                         Balance: ₹4,500 on shipping            │
+│                         ─────────────────────────────────────  │
+│                         [Pre-Order Now — Pay ₹499 Deposit]     │
+│   FAQ: What is a pre-order? ↓                                  │
+└────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 44. Users & Account — UX Design
+
+### 44.1 — ProfileView (public)
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ [AVATAR 96px]  Display Name  ⭐ 4.7 seller rating             │
+│ Joined: March 2024   47 sales   [Message]  [Follow]            │
+├────────────────────────────────────────────────────────────────┤
+│ TABS: [Listings (12)] [Reviews (30)] [About]                   │
+│ Listings tab: ProductListView in fluid-grid mode               │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### 44.2 — AccountDashboard (private)
+
+```
+Desktop sidebar layout:
+┌──────────────────┬─────────────────────────────────────────────┐
+│ SIDEBAR          │ CONTENT AREA                                │
+│ [AVT] Name       │ My Orders (recent 3)                        │
+│                  │  ─────────────────────────────────────────  │
+│ My Orders        │ [OrderCard] [OrderCard] [OrderCard]         │
+│ Wishlist         │  [View All Orders →]                        │
+│ Reviews          │  ─────────────────────────────────────────  │
+│ Addresses        │ My Addresses                                 │
+│ Payment Methods  │  [AddressCard ●default] [AddressCard]       │
+│ Notifications    │  [+ Add Address]                            │
+│ Profile Settings │                                             │
+│ ─────────────── │  ─────────────────────────────────────────  │
+│ Log Out           │ Recent Reviews                              │
+└──────────────────┴─────────────────────────────────────────────┘
+
+Mobile: tab-strip at top (My Orders / Wishlist / Profile / Settings)
+```
+
+### 44.3 — AuthModal (login / sign-up)
+
+```
+┌────────────────────────────────────────┐
+│       Log in to LetItRip         [✕]   │
+├────────────────────────────────────────┤
+│  [Continue with Google  ▶]             │
+│  ── or ────────────────────────────── │
+│  Email    [_____________________]       │
+│  Password [_____________________] [👁]  │
+│  [Forgot password?]                    │
+│  [Log In]                              │
+│  ────────────────────────────────────  │
+│  Don't have an account? [Sign Up]      │
+└────────────────────────────────────────┘
+```
+
+---
+
+## 45. Events — UX Design
+
+### 45.1 — EventCard
+
+```
+┌──────────────────────────────────────┐
+│  [image aspect-[16/9]]               │
+│  [ONLINE / IN-PERSON badge]          │
+│  ─────────────────────────────────── │
+│  Pottery Workshop Series  (h4)       │
+│  📅 Sat, 24 May 2026 · 2:00 PM      │
+│  📍 Delhi / Online                   │
+│  Hosted by: [AVT] Craft Corner       │
+│  [Free] / [₹299 / seat]             │
+│  [Register Now]  [♥ Save]           │
+└──────────────────────────────────────┘
+```
+
+### 45.2 — EventDetailView
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│  HERO IMAGE (aspect-[16/9] full-width)                         │
+│  ─────────────────────────────────── ─────────────────────────│
+│  [ONLINE]  Pottery Workshop Series  (h1)                       │
+│  📅 Sat, 24 May 2026 · 2:00 PM IST   📍 Delhi (Online)        │
+│  Hosted by: [AVT 32px] Craft Corner Store  [Follow]            │
+├───────────────────────────────────┬────────────────────────────┤
+│  DESCRIPTION (rich text)          │  REGISTRATION PANEL        │
+│  About this event...              │  ₹299 / seat               │
+│  ─────────────────────────────── │  Seats left: 12 of 50      │
+│  AGENDA (timeline)               │  [Register Now]             │
+│  10:00 Intro                     │  ─────────────────────────  │
+│  11:00 Hands-on session          │  Date: 24 May 2026          │
+│  13:00 Lunch break               │  Time: 2:00 PM – 5:00 PM   │
+│  ─────────────────────────────── │  Mode: Online (Zoom link    │
+│  PARTICIPANTS (avatar strip)     │  sent after registration)   │
+│  [AVT][AVT][AVT] +12 going       │                             │
+└───────────────────────────────────┴────────────────────────────┘
+│  PollSection (if event has polls)                              │
+│  More Events by Craft Corner  (HorizontalScroller)            │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### 45.3 — PollVotingSection
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│  POLL: Which slot works best for you?          [Closes: 3 days]│
+├────────────────────────────────────────────────────────────────┤
+│  ○ Morning (9 AM – 12 PM)   ██████████████░░░░░  62%  (31)    │
+│  ○ Afternoon (2 PM – 5 PM)  ███████░░░░░░░░░░░░  38%  (19)    │
+│  [Vote]                             Total votes: 50            │
+└────────────────────────────────────────────────────────────────┘
+
+After voting:
+│  ● Morning (9 AM – 12 PM)   ██████████████░░░░░  62%  (31) ✓  │ ← your vote
+│  ○ Afternoon (2 PM – 5 PM)  ███████░░░░░░░░░░░░  38%  (19)    │
+```
+
+---
+
+## 46. Blog — UX Design
+
+### 46.1 — BlogCard (grid)
+
+```
+┌──────────────────────────────────────┐
+│  [image aspect-[16/9]]               │
+│  ─────────────────────────────────── │
+│  [Tag: Craft Tips]                   │
+│  How to Care for Handmade Ceramics   │ ← h4, 2 lines
+│  By Priya S. · 5 min read · 3d ago  │
+│  Short excerpt, max 2 lines, then... │
+│  [Read More →]                       │
+└──────────────────────────────────────┘
+```
+
+### 46.2 — BlogListView (list mode)
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ [120px img] │ How to Care for Handmade Ceramics (h3)           │
+│             │ By Priya S. · 5 min read · 3 days ago · Craft   │
+│             │ Short excerpt text showing here in one line...   │
+├─────────────┼──────────────────────────────────────────────────┤
+│ [120px img] │ 5 Indian Textiles You Should Know (h3)           │
+│             │ By Admin · 8 min read · 1 week ago · Textiles    │
+│             │ Short excerpt...                                  │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### 46.3 — BlogPostView
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│  Breadcrumb: Blog / Craft Tips / How to Care for...            │
+│  [Tag: Craft Tips]                                             │
+│  How to Care for Handmade Ceramics     ← h1                    │
+│  By [AVT] Priya S. · 12 Apr 2026 · 5 min read                 │
+│  ─────────────────────────────────────────────────────────── │
+│  HERO IMAGE (aspect-[16/9])                                    │
+│  ─────────────────────────────────────────────────────────── │
+│  BODY (RichText renderer — ProseMirror output)                 │
+│  ...rich text content...                                       │
+│  ─────────────────────────────────────────────────────────── │
+│  Tags: [Ceramics] [Care] [Handmade]                           │
+│  ─────────────────────────────────────────────────────────── │
+│  Related Posts  (HorizontalScroller)                          │
+│  [BlogCard] [BlogCard] [BlogCard] →                           │
+└────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 47. Admin — UX Design
+
+### 47.1 — AdminLayout
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ TOPBAR: [☰ Menu]  LetItRip Admin     [🔔 3]  [AVT] Admin Name  │
+├────────────┬────────────────────────────────────────────────────┤
+│ SIDEBAR    │ CONTENT AREA                                        │
+│ ─────────  │                                                    │
+│ Dashboard  │  (page-specific DataTable or form)                 │
+│ ─────────  │                                                    │
+│ Products   │                                                    │
+│  ├ List    │                                                    │
+│  ├ Add     │                                                    │
+│  └ Pending │                                                    │
+│ Orders     │                                                    │
+│ Users      │                                                    │
+│ Stores     │                                                    │
+│ Reviews    │                                                    │
+│ Events     │                                                    │
+│ Blog       │                                                    │
+│ FAQs       │                                                    │
+│ ─────────  │                                                    │
+│ Settings   │                                                    │
+│ Logs       │                                                    │
+└────────────┴────────────────────────────────────────────────────┘
+```
+
+### 47.2 — Admin DataTable (generic)
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ [🔍 Search]  [Filter ▼]  [Sort by ▼]  [+ Add New]  [Export]   │
+├─────────────────────────────────────────────────────────────── │
+│ □ │ ID     │ Name              │ Status   │ Price  │ Actions   │
+├───┼─────────┼───────────────────┼──────────┼────────┼──────────┤
+│ □ │ PRD-001 │ Blue Ocean Vase   │ ●active  │ ₹1,299 │ [✎][🗑]  │
+│ □ │ PRD-002 │ Kurti Print       │ ●active  │ ₹999   │ [✎][🗑]  │
+│ □ │ PRD-003 │ Antique Lamp      │ ○draft   │ ₹4,500 │ [✎][🗑]  │
+├───┴─────────┴───────────────────┴──────────┴────────┴──────────┤
+│ [◀ Prev]   Page 1 of 12   [Next ▶]          Showing 1-20/240  │
+└────────────────────────────────────────────────────────────────┘
+
+Features:
+  - Bulk select (checkbox column) → Bulk actions menu
+  - Column sorting (click header)
+  - URL-synced pagination + filters (useUrlTable)
+  - Row-level action menu ([✎] edit, [🗑] delete with ConfirmDeleteModal)
+  - Status badge color: active=green, draft=zinc, suspended=red, pending=amber
+```
+
+### 47.3 — Admin Form Pattern
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ ← Back to list     Edit Product: Blue Ocean Vase               │
+├────────────────────────────────────────────────────────────────┤
+│  FORM (react-hook-form + zodResolver)                          │
+│  ┌────────────────────┬───────────────────────────────────┐   │
+│  │ Title (full)       │ [                               ]  │   │
+│  ├────────────────────┼───────────────────────────────────┤   │
+│  │ Category (half)    │ Price (half)                       │   │
+│  │ [Select ▼]         │ [₹ ──────]                        │   │
+│  ├────────────────────┴───────────────────────────────────┤   │
+│  │ Description (full — rich text editor)                  │   │
+│  ├────────────────────────────────────────────────────────┤   │
+│  │ Images               (drag-and-drop upload zone)        │   │
+│  │ [🖼 existing] [🖼 existing]  [+ Upload Image]           │   │
+│  ├────────────────────────────────────────────────────────┤   │
+│  │ Status    [Active ▼]   Stock [──────] units            │   │
+│  └────────────────────────────────────────────────────────┘   │
+│  [Cancel]                                  [Save Changes]      │
+└────────────────────────────────────────────────────────────────┘
+```
