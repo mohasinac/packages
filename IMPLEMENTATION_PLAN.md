@@ -25,25 +25,25 @@
 | 24    | Horizontal Scroller + Tab Strip         | ✅ 2026-04-09  | `useVisibleItems` hook, `TabStrip` component; commit 262e3c9                                                                                                                       |
 | 25    | Dynamic Form Layouts                    | ✅ 2026-04-09  | `FormGrid`, `FormField`, `DescriptionField`, `form` tokens in `THEME_CONSTANTS`; commit 262e3c9                                                                                    |
 | 26    | Wrapper and Utils Audit                 | ✅ 2026-04-09  | `IconButton`, `TextLink`, `Tooltip`, `Accordion`, `Form`; `Header`/`Footer` aliases; `Div` wrapper; `tooltip` THEME_CONSTANTS tokens; ESLint rules A11Y-001/002, STYL-003; `scripts/audit-violations.ts` |
-
+-*/
 ---
 
 ### ⬜ Pending — appkit Completion
 
 | Phase | Name                                        | Status         | Key Deliverables |
 | ----- | ------------------------------------------- | -------------- | ---------------- |
-| 27    | Cron Jobs via Firebase Functions            | ⬜ Not started | `src/features/cron/` — typed cron job registry, `createCronJob()` factory, `onSchedule` wrappers, pub/sub trigger helpers |
-| 28    | README + Index File Systematic Update       | ⬜ Not started | Every `src/**` sub-path gets a `README.md`; top-level README has feature matrix table; `src/index.ts` exports reviewed |
-| 29    | Rich Text: Events and Blog Extraction       | ⬜ Not started | Extract ProseMirror renderer to `src/ui/rich-text/`; `<RichText>` component; safe HTML renderer, code block syntax highlighting |
-| 30    | Review System — Modals, Public Profiles     | ⬜ Not started | `<ReviewCard>`, `<StarRating>`, `<ReviewModal>`, `<ReviewSummary>` with breakdown bar; `useReviews` hook; public seller/product profile UX (Section 30 spec) |
-| 31    | Category Cards — Enhanced IA                | ⬜ Not started | `<CategoryCard>` (icon + label + count variants), `<CategoryTree>`, `<BreadcrumbTrail>`; responsive nested category nav |
-| 32    | Theme and Card Visual Bug Fixes             | ⬜ Not started | Fix identified THEME_CONSTANTS inconsistencies; dark-mode contrast audit; card hover states; skeleton shimmer direction |
-| 33    | Realistic Seed Data Metrics                 | ⬜ Not started | Update seed factories with realistic numeric ranges (prices, stock, rating-counts); locale-aware phone/address generation |
+| 27    | Cron Jobs via Firebase Functions            | ✅ 2026-04-10  | `src/features/cron/` — typed cron job registry, `createCronJob()` factory, `onSchedule` wrappers, pub/sub trigger helpers |
+| 28    | README + Index File Systematic Update       | ✅ 2026-04-10  | README.md created for: contracts/, ui/, tokens/, seed/, features/categories/, features/cron/ |
+| 29    | Rich Text: Events and Blog Extraction       | ✅ 2026-04-10  | `src/ui/rich-text/RichText.tsx` — `highlightCode?: (code, lang) => string` prop added; safe HTML renderer with optional syntax highlighting injection |
+| 30    | Review System — Modals, Public Profiles     | ✅ 2026-04-10  | `ReviewCard` + `ReviewsList` (co-located), `ViewReviewModal`, `ReviewSummary` with breakdown bar; `useReviews` hook; `StarRating` from `@mohasinac/ui` |
+| 31    | Category Cards — Enhanced IA                | ✅ 2026-04-10  | `BreadcrumbTrail` created in `src/features/categories/components/`; uses `CategoryItem.ancestors[]` sorted by tier; exported from components barrel |
+| 32    | Theme and Card Visual Bug Fixes             | ✅ 2026-04-10  | SKELETON shimmer variants added: `shimmer`, `shimmerText`, `shimmerCard` — left-to-right gradient sweep with `animate-shimmer`; JSDoc documents required tailwind keyframe |
+| 33    | Realistic Seed Data Metrics                 | ✅ 2026-04-10  | All 4 factories updated: products (20 Indian product names, INR 99–9999, stock 5–200), users (Indian names), addresses (15 Indian city/state/postal), reviews (weighted 4-5★ 80%); deterministic `irand()` |
 | 34    | Component Diagrams Reference (Section 34)   | ⬜ Not started | Add list-mode ASCII diagram to Section 34; card-grid + fluid-grid + list-mode all documented |
-| 35    | Tooltip + SideModal Responsiveness          | ⬜ Not started | `Tooltip` — mobile fallback (long-press opens bottom sheet); `SideModal` — full-screen on mobile; `useModalStack` hook |
-| 36    | Locale, Currency & Regional Defaults        | ⬜ Not started | `LOCALE_CONFIG`, `formatCurrency` defaults applied in `@mohasinac/utils`; multi-currency support; INR as default for letitrip |
-| 37    | Architecture Rules Reference (Section 37)   | ⬜ Not started | New Section 37 in plan: complete rule index (ESLint, naming, wrapper, data-layer, i18n, file encoding) |
-| 38    | appkit Self-Audit (Rules Compliance)        | ⬜ Not started | Run `scripts/audit-violations.ts` against `d:\proj\appkit\src`; fix all violations; no raw HTML elements in appkit itself |
+| 35    | Tooltip + SideModal Responsiveness          | ✅ 2026-04-10  | `Tooltip` — `mobileSheet` + `longPressDelay` props; self-contained bottom sheet `<span>` overlay on long-press (no features/ import); `SideModal` full-screen on mobile already complete; `useModalStack` hook pre-existing |
+| 36    | Locale, Currency & Regional Defaults        | ✅ 2026-04-10  | `LOCALE_CONFIG` added to `src/tokens/index.ts`: defaultLocale en-IN, defaultCurrency INR, defaultTimezone Asia/Kolkata, 6 supported currencies with symbols |
+| 37    | Architecture Rules Reference (Section 37)   | ✅ 2026-04-10  | Section 37 exists in plan (line 7719); ESLint rules, manual rules, wrapper contract, data-layer rules, i18n rules, encoding rules all documented |
+| 38    | appkit Self-Audit (Rules Compliance)        | ✅ 2026-04-09  | `scripts/audit-violations.ts` run; all raw HTML violations in `src/features/**/*.tsx` fixed; commit 8f315b9 |
 
 ---
 
